@@ -251,7 +251,7 @@ CTFileName fn5 = CTFILENAME("Textures\\Interface\\Crosshairs\\Crosshair5.tex");
 CTFileName fn6 = CTFILENAME("Textures\\Interface\\Crosshairs\\Crosshair6.tex");
 CTFileName fn7 = CTFILENAME("Textures\\Interface\\Crosshairs\\Crosshair7.tex");
 
-void CPlayerWeapons_Precache(ULONG ulAvailable)
+void CPlayerWeapons_Precache(unsigned long ulAvailable)
 {
   CDLLEntityClass *pdec = &CPlayerWeapons_DLLClass;
 
@@ -453,7 +453,7 @@ void CPlayerWeapons_Precache(ULONG ulAvailable)
   }
 
   // precache animator too
-  extern void CPlayerAnimator_Precache(ULONG ulAvailable);
+  extern void CPlayerAnimator_Precache(unsigned long ulAvailable);
   CPlayerAnimator_Precache(ulAvailable);
 }
 
@@ -1366,7 +1366,7 @@ functions:
     hud_fCrosshairScale   = Clamp( hud_fCrosshairScale,   0.1f, 2.0f);
     hud_fCrosshairRatio   = Clamp( hud_fCrosshairRatio,   0.1f, 1.0f);
     hud_fCrosshairOpacity = Clamp( hud_fCrosshairOpacity, 0.1f, 1.0f);
-    const ULONG ulAlpha = NormFloatToByte( hud_fCrosshairOpacity);
+    const unsigned long ulAlpha = NormFloatToByte( hud_fCrosshairOpacity);
     // draw crosshair if needed
     if( iCrossHair>0) {
       // determine crosshair size
@@ -1391,23 +1391,23 @@ functions:
     TIME tmDelta = m_tmLastTarget - tmNow;
     if( tmDelta>0) {
       // printout current target info
-      SLONG slDPWidth  = pdp->GetWidth();
-      SLONG slDPHeight = pdp->GetHeight();
+      long slDPWidth  = pdp->GetWidth();
+      long slDPHeight = pdp->GetHeight();
       FLOAT fScaling   = (FLOAT)slDPWidth/640.0f;
       // set font and scale
       pdp->SetFont( _pfdDisplayFont);
       pdp->SetTextScaling( fScaling);
       pdp->SetTextAspect( 1.0f);
       // do faded printout
-      ULONG ulA = (ULONG) ((FLOAT)ulAlpha * Clamp( 2*tmDelta, 0.0f, 1.0f));
+      unsigned long ulA = (unsigned long) ((FLOAT)ulAlpha * Clamp( 2*tmDelta, 0.0f, 1.0f));
       pdp->PutTextC( m_strLastTarget, slDPWidth*0.5f, slDPHeight*0.75f, SE_COL_BLUE_NEUTRAL|ulA);
     }
 
     // printout crosshair world coordinates if needed
     if( hud_bShowCoords) { 
       CTString strCoords;
-      SLONG slDPWidth  = pdp->GetWidth();
-      SLONG slDPHeight = pdp->GetHeight();
+      long slDPWidth  = pdp->GetWidth();
+      long slDPHeight = pdp->GetHeight();
       // set font and scale
       pdp->SetFont( _pfdDisplayFont);
       pdp->SetTextAspect( 1.0f);
@@ -1538,7 +1538,7 @@ functions:
 
 
   // play light animation
-  void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
+  void PlayLightAnim(INDEX iAnim, unsigned long ulFlags) {
     CPlayer &pl = (CPlayer&)*m_penPlayer;
     if (pl.m_aoLightAnimation.GetData()!=NULL) {
       pl.m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
@@ -2428,14 +2428,14 @@ functions:
   {
     ResetWeaponMovingOffset();
     // remember old weapons
-    ULONG ulOldWeapons = m_iAvailableWeapons;
+    unsigned long ulOldWeapons = m_iAvailableWeapons;
     // give/take weapons
     m_iAvailableWeapons &= ~iTakeWeapons;
     m_iAvailableWeapons |= 0x03|iGiveWeapons;
     m_iAvailableWeapons &= WEAPONS_ALLAVAILABLEMASK;
     // m_iAvailableWeapons &= ~WEAPONS_DISABLEDMASK;
     // find which weapons are new
-    ULONG ulNewWeapons = m_iAvailableWeapons&~ulOldWeapons;
+    unsigned long ulNewWeapons = m_iAvailableWeapons&~ulOldWeapons;
     // for each new weapon
     for(INDEX iWeapon=WEAPON_KNIFE; iWeapon<WEAPON_LAST; iWeapon++) {
       if ( ulNewWeapons & (1<<(iWeapon-1)) ) {
@@ -2751,7 +2751,7 @@ functions:
       Ewi.iWeapon = WEAPON_DOUBLECOLT;
     }
 
-    ULONG ulOldWeapons = m_iAvailableWeapons;
+    unsigned long ulOldWeapons = m_iAvailableWeapons;
     m_iAvailableWeapons |= 1<<(Ewi.iWeapon-1);
 //    m_iAvailableWeapons &= ~WEAPONS_DISABLEDMASK;
 

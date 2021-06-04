@@ -171,7 +171,7 @@ functions:
     m_lsLightSource.SetLightSource(lsNew);
   }
   // play light animation
-  void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
+  void PlayLightAnim(INDEX iAnim, unsigned long ulFlags) {
     if (m_aoLightAnimation.GetData()!=NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }

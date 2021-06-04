@@ -86,7 +86,7 @@ procedures:
             m_aRotateSpeed = m_fAttackRotateRunInto;
             m_fMoveSpeed = 0.0f;
             // adjust direction and speed
-            ULONG ulFlags = SetDesiredMovement(); 
+            unsigned long ulFlags = SetDesiredMovement(); 
             MovementAnimation(ulFlags);
           } else {
             m_aRotateSpeed = 0.0f;
@@ -122,7 +122,7 @@ procedures:
           m_fMoveSpeed = m_fWalkSpeed;
           m_aRotateSpeed = m_aWalkRotateSpeed;
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
         }
         on (ESound) : { resume; }     // ignore all sounds

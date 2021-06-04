@@ -246,7 +246,7 @@ functions:
   }
 
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==offsetof(CModelHolder2, m_iModelAnimation)) {
       return GetModelObject()->GetData();
@@ -309,7 +309,7 @@ functions:
         // if there is color animation
         if (m_aoLightAnimation.GetData()!=NULL) {
           // get lerping info
-          SLONG colFrame0, colFrame1; FLOAT fRatio;
+          long colFrame0, colFrame1; FLOAT fRatio;
           m_aoLightAnimation.GetFrame( colFrame0, colFrame1, fRatio);
           UBYTE ubAnimR0, ubAnimG0, ubAnimB0;
           UBYTE ubAnimR1, ubAnimG1, ubAnimB1;
@@ -346,9 +346,9 @@ functions:
         ColorToRGB( colLight,   lR, lG, lB);
         ColorToRGB( colAmbient, aR, aG, aB);
         colLight = 0;
-        rR = (UBYTE) Clamp( (ULONG)lR+aR, (ULONG)0, (ULONG)255);
-        rG = (UBYTE) Clamp( (ULONG)lG+aG, (ULONG)0, (ULONG)255);
-        rB = (UBYTE) Clamp( (ULONG)lB+aB, (ULONG)0, (ULONG)255);
+        rR = (UBYTE) Clamp( (unsigned long)lR+aR, (unsigned long)0, (unsigned long)255);
+        rG = (UBYTE) Clamp( (unsigned long)lG+aG, (unsigned long)0, (unsigned long)255);
+        rB = (UBYTE) Clamp( (unsigned long)lB+aB, (unsigned long)0, (unsigned long)255);
         colAmbient = RGBToColor( rR, rG, rB);
         break;
       }

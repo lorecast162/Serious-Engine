@@ -113,7 +113,7 @@ functions:
     }
   }
 
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if( slPropertyOffset == _offsetof(CEnemySpawner, m_penTarget))
     {
@@ -245,10 +245,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CEnemySpawner) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CEnemySpawner) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strDescription.Length();
     slUsedMemory += m_strName.Length();

@@ -142,7 +142,7 @@ functions:
   }
 
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==_offsetof(CShooter, m_iModelPreFireAnimation) ||
         slPropertyOffset==_offsetof(CShooter, m_iModelPostFireAnimation)) {

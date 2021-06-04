@@ -219,7 +219,7 @@ functions:
     FLOAT &fCurrentVolume = (&m_fCurrentVolume0a)[mtType*2+iSubChannel];
 
     // setup looping/non looping flags
-    ULONG ulFlags;
+    unsigned long ulFlags;
     if (mtType==MT_EVENT) {
       ulFlags = SOF_MUSIC;
     } else {

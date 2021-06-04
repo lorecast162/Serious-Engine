@@ -68,10 +68,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CMarker) - sizeof(CEntity) + CEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CMarker) - sizeof(CEntity) + CEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     slUsedMemory += m_strDescription.Length();

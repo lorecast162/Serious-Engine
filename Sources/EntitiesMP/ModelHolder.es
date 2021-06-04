@@ -54,7 +54,7 @@ components:
 
 functions:
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==_offsetof(CModelHolder, m_iModelAnimation)) {
       return GetModelObject()->GetData();
@@ -74,7 +74,7 @@ functions:
       // if there is color animation
       if (m_aoLightAnimation.GetData()!=NULL) {
         // get lerping info
-        SLONG colFrame0, colFrame1; FLOAT fRatio;
+        long colFrame0, colFrame1; FLOAT fRatio;
         m_aoLightAnimation.GetFrame( colFrame0, colFrame1, fRatio);
         UBYTE ubAnimR0, ubAnimG0, ubAnimB0;
         UBYTE ubAnimR1, ubAnimG1, ubAnimB1;

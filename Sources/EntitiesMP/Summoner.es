@@ -205,7 +205,7 @@ functions:
     m_emEmiter.Write_t(*istr);
   }
  
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if ( slPropertyOffset >= _offsetof(CSummoner, m_penGroup01Template01) &&
       slPropertyOffset <= _offsetof(CSummoner, m_penGroup03Template06))

@@ -660,7 +660,7 @@ functions:
     }
   }
 
-  export void Copy(CEntity &enOther, ULONG ulFlags)
+  export void Copy(CEntity &enOther, unsigned long ulFlags)
   {
     CMovableModelEntity::Copy(enOther, ulFlags);
     CProjectile *penOther = (CProjectile *)(&enOther);
@@ -1840,7 +1840,7 @@ void BeastDebris(void)
   SetModel(MODEL_BEAST_FIRE);
   GetModelObject()->StretchModel(FLOAT3D(0.75f, 0.75f, 0.75f));
   SetModelMainTexture(TEXTURE_BEAST_FIRE);
-  GetModelObject()->StartAnim(1+(ULONG)FRnd()*5.0f);
+  GetModelObject()->StartAnim(1+(unsigned long)FRnd()*5.0f);
 
   ModelChangeNotify();
   // start moving
@@ -1869,7 +1869,7 @@ void BeastBigDebris(void)
   SetModel(MODEL_BEAST_FIRE);
   SetModelMainTexture(TEXTURE_BEAST_BIG_FIRE);
   GetModelObject()->StretchModel(FLOAT3D(1.0f, 1.0f, 1.0f));
-  GetModelObject()->StartAnim(1+(ULONG)FRnd()*5.0f);
+  GetModelObject()->StartAnim(1+(unsigned long)FRnd()*5.0f);
   
   ModelChangeNotify();
   // start moving

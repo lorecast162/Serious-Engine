@@ -234,7 +234,7 @@ procedures:
           if (IsDerivedFromClass(ePass.penOther, "Player")) {
             CPlayer *penPlayer = (CPlayer*)&*ePass.penOther;
             // if he has the key
-            ULONG ulKey = (1<<INDEX(m_kitKey));
+            unsigned long ulKey = (1<<INDEX(m_kitKey));
             if (penPlayer->m_ulKeys&ulKey) {
               // use the key
               penPlayer->m_ulKeys&=~ulKey;

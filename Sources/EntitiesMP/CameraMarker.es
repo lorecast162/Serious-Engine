@@ -62,7 +62,7 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     return( sizeof(CCameraMarker) - sizeof(CMarker) + CMarker::GetUsedMemory());
   }

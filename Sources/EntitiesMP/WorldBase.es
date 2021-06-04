@@ -1030,20 +1030,20 @@ components:
 functions:
 
   // get visibility tweaking bits
-  ULONG GetVisTweaks(void)
+  unsigned long GetVisTweaks(void)
   {
     return m_cbClassificationBits|m_vbVisibilityBits;
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {
       return FALSE;
     }
     
-    ULONG ulFirst, ulLast;
+    unsigned long ulFirst, ulLast;
     CTString strClass;
 
     // if gradient marker
@@ -1327,10 +1327,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CWorldBase) - sizeof(CEntity) + CEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CWorldBase) - sizeof(CEntity) + CEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     slUsedMemory += m_strDescription.Length();

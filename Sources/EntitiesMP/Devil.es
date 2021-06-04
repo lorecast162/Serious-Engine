@@ -315,7 +315,7 @@ functions:
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {
@@ -357,7 +357,7 @@ functions:
     m_lsLightSource.SetLightSource(lsNew);
   }
   // play light animation
-  void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
+  void PlayLightAnim(INDEX iAnim, unsigned long ulFlags) {
     if (m_aoLightAnimation.GetData()!=NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }
@@ -1034,7 +1034,7 @@ functions:
     PlayLightAnim(LIGHT_ANIM_FIRE, AOF_LOOPING);
   };
 
-  void PlayWeaponSound( ULONG idSound)
+  void PlayWeaponSound( unsigned long idSound)
   {
     CSoundObject &so = (&m_soWeapon0)[m_iNextChannel];
     m_iNextChannel = (m_iNextChannel+1)%5;
@@ -1183,7 +1183,7 @@ procedures:
       wait (m_fMoveFrequency) {
         on (EBegin) : { 
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
           resume;
         }
@@ -1681,7 +1681,7 @@ procedures:
             m_aRotateSpeed = 0.0f;
           }*/
           // adjust direction and speed
-          //ULONG ulFlags = SetDesiredMovement(); 
+          //unsigned long ulFlags = SetDesiredMovement(); 
           //MovementAnimation(ulFlags);
           resume;
         }

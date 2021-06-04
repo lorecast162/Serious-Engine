@@ -85,7 +85,7 @@ functions:
 
 
   // play attachmnet anim
-  void PlayAttachmentAnim(INDEX iAttachment, INDEX iAnim, ULONG ulFlags) {
+  void PlayAttachmentAnim(INDEX iAttachment, INDEX iAnim, unsigned long ulFlags) {
     CAttachmentModelObject *amo = GetModelObject()->GetAttachmentModel(iAttachment);
     if (amo!=NULL) {
       amo->amo_moModelObject.PlayAnim(iAnim, ulFlags);

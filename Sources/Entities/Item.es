@@ -6,7 +6,7 @@
 
 %{
 // used to render certain entities only for certain players (like picked items, etc.)
-extern ULONG _ulPlayerRenderingMask;
+extern unsigned long _ulPlayerRenderingMask;
 %}
 
 class export CItem : CMovableModelEntity {
@@ -162,20 +162,20 @@ functions:
  *                   SET MODEL AND ATTACHMENT               *
  ************************************************************/
   // Add item
-  void AddItem(ULONG ulIDModel, ULONG ulIDTexture,
-               ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddItem(unsigned long ulIDModel, unsigned long ulIDTexture,
+               unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     AddAttachmentToModel(this, *GetModelObject(), ITEMHOLDER_ATTACHMENT_ITEM, ulIDModel, ulIDTexture,
                          ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
   };
-  void AddItemSpecial(INDEX iAttachmentPos, ULONG ulIDModel, ULONG ulIDTexture,
-               ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddItemSpecial(INDEX iAttachmentPos, unsigned long ulIDModel, unsigned long ulIDTexture,
+               unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     AddAttachmentToModel(this, *GetModelObject(), iAttachmentPos, ulIDModel, ulIDTexture,
                          ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
   };
 
   // Add attachment to item
-  void AddItemAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                         ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddItemAttachment(INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture,
+                         unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     CModelObject &mo = GetModelObject()->GetAttachmentModel(ITEMHOLDER_ATTACHMENT_ITEM)->amo_moModelObject;
     AddAttachmentToModel(this, mo, iAttachment, ulIDModel, ulIDTexture,
                          ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
@@ -190,7 +190,7 @@ functions:
   }
 
   // Add flare
-  void AddFlare(ULONG ulIDModel, ULONG ulIDTexture, 
+  void AddFlare(unsigned long ulIDModel, unsigned long ulIDTexture, 
     const FLOAT3D &vPos, const FLOAT3D &vStretch)
   {
     // add flare to items if not respawn

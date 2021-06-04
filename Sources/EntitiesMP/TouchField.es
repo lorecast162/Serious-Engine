@@ -76,10 +76,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CTouchField) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CTouchField) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     return slUsedMemory;

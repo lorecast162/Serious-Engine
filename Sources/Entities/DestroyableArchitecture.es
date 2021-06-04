@@ -11,8 +11,8 @@ uses "Entities/Effector";
 
 %{
 struct DebrisInfo {
-  ULONG ulModelID;
-  ULONG ulTextureID;
+  unsigned long ulModelID;
+  unsigned long ulTextureID;
   FLOAT vOffset[3];
 };
 
@@ -134,7 +134,7 @@ functions:
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {

@@ -271,7 +271,7 @@ functions:
     ASSERT(m_penWatcher!=NULL);
     return (CWatcher*)&*m_penWatcher;
   }
-  export void Copy(CEntity &enOther, ULONG ulFlags)
+  export void Copy(CEntity &enOther, unsigned long ulFlags)
   {
     CMovableModelEntity::Copy(enOther, ulFlags);
     CEnemyBase *penOther = (CEnemyBase *)(&enOther);
@@ -544,7 +544,7 @@ functions:
   }
 
   // create a checksum value for sync-check
-  void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck) {
+  void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck) {
     CMovableModelEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
   }
   // dump sync data to text file
@@ -1017,7 +1017,7 @@ functions:
   }
 
   // get movement animation for given flags with current movement type
-  virtual void MovementAnimation(ULONG ulFlags)
+  virtual void MovementAnimation(unsigned long ulFlags)
   {
     if (ulFlags&MF_MOVEZ) {
       if (m_fMoveSpeed==GetProp(m_fAttackRunSpeed) || m_fMoveSpeed==GetProp(m_fCloseRunSpeed)
@@ -1039,9 +1039,9 @@ functions:
 
   // set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
-  virtual ULONG SetDesiredMovement(void) 
+  virtual unsigned long SetDesiredMovement(void) 
   {
-    ULONG ulFlags = 0;
+    unsigned long ulFlags = 0;
 
     // get delta to desired position
     FLOAT3D vDelta = m_vDesiredPosition - GetPlacement().pl_PositionVector;
@@ -1451,8 +1451,8 @@ functions:
       // readout blood type
       const INDEX iBloodType = GetSP()->sp_iBlood;
       // determine debris texture (color)
-      ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
-      ULONG ulFleshModel   = MODEL_FLESH;
+      unsigned long ulFleshTexture = TEXTURE_FLESH_GREEN;
+      unsigned long ulFleshModel   = MODEL_FLESH;
       if( iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
       // spawn debris
       Debris_Begin(EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, m_fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
@@ -1685,7 +1685,7 @@ procedures:
       wait (m_fMoveFrequency) {
         on (EBegin) : { 
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
           resume;
         }
@@ -2123,7 +2123,7 @@ procedures:
           SetSpeedsToDesiredPosition(vPosDelta, fPosDistance, m_dtDestination==DT_PLAYERCURRENT);
 
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
           resume;
         }
@@ -2248,7 +2248,7 @@ procedures:
             m_aRotateSpeed = 0.0f;
           }
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           //MovementAnimation(ulFlags);  don't do this, or they start to jive
           resume;
         }

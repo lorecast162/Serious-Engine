@@ -56,7 +56,7 @@ functions:
   }
 
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (m_penLight==NULL) {
       return NULL;

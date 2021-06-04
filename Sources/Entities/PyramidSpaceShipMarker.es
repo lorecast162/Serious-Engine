@@ -29,7 +29,7 @@ components:
 
 
 functions:
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {

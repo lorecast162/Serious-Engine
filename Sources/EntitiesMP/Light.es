@@ -106,7 +106,7 @@ components:
 
 functions:
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==_offsetof(CLight, m_iLightAnimation))
     {
@@ -319,10 +319,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CLight) - sizeof(CEntity) + CEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CLight) - sizeof(CEntity) + CEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strDescription.Length();
     slUsedMemory += m_strName.Length();

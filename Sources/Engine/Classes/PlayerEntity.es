@@ -72,7 +72,7 @@ functions:
   }
 
   /* Copy entity from another entity of same class. */
-  export void Copy(CEntity &enOther, ULONG ulFlags)
+  export void Copy(CEntity &enOther, unsigned long ulFlags)
   {
     CMovableModelEntity::Copy(enOther, ulFlags);
 
@@ -117,7 +117,7 @@ functions:
   export virtual void GetMSLegacyPlayerInf( INDEX iPlayer, CTString &strOut) { };
   
   // create a checksum value for sync-check
-  export void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+  export void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
   {
     CMovableModelEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
     CRC_AddBlock(ulCRC, en_pcCharacter.pc_aubGUID, sizeof(en_pcCharacter.pc_aubGUID));

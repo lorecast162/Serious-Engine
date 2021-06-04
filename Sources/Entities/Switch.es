@@ -38,7 +38,7 @@ components:
 
 functions:                                        
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==offsetof(CSwitch, m_iModelONAnimation) ||
         slPropertyOffset==offsetof(CSwitch, m_iModelOFFAnimation)) {

@@ -40,7 +40,7 @@ functions:
     return TRUE;
   };
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) {
+  CAnimData *GetAnimData(long slPropertyOffset) {
     if(slPropertyOffset==offsetof(CEnvironmentMarker, m_iAnim)) {
       return m_moAnimData.GetData();
 

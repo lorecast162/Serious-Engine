@@ -399,7 +399,7 @@ procedures:
             stop;
           }
           // adjust direction and speed
-          ULONG ulFlags = SetDesiredMovement(); 
+          unsigned long ulFlags = SetDesiredMovement(); 
           MovementAnimation(ulFlags);
           resume;
         }

@@ -59,7 +59,7 @@ components:
 functions:                                        
 
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if (slPropertyOffset==_offsetof(CSwitch, m_iModelONAnimation) ||
         slPropertyOffset==_offsetof(CSwitch, m_iModelOFFAnimation)) {
@@ -88,10 +88,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CSwitch) - sizeof(CModelHolder2) + CModelHolder2::GetUsedMemory();
+    long slUsedMemory = sizeof(CSwitch) - sizeof(CModelHolder2) + CModelHolder2::GetUsedMemory();
     // add some more
     slUsedMemory += m_strMessage.Length();
     return slUsedMemory;

@@ -73,7 +73,7 @@ components:
 
 functions:
  
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if( slPropertyOffset == _offsetof(CExotechLarvaCharger, m_penBattery01) ||
         slPropertyOffset == _offsetof(CExotechLarvaCharger, m_penBattery02) ||

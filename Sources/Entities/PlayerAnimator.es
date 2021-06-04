@@ -65,7 +65,7 @@ extern FLOAT wpn_fRecoilFactorP[17];
 extern FLOAT wpn_fRecoilFactorZ[17];
 
 
-void CPlayerAnimator_Precache(ULONG ulAvailable)
+void CPlayerAnimator_Precache(unsigned long ulAvailable)
 {
   CDLLEntityClass *pdec = &CPlayerAnimator_DLLClass;
 
@@ -432,8 +432,8 @@ functions:
   }
 
   // Set components
-  void SetComponents(CModelObject *mo, ULONG ulIDModel, ULONG ulIDTexture,
-                     ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void SetComponents(CModelObject *mo, unsigned long ulIDModel, unsigned long ulIDTexture,
+                     unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     // model data
     mo->SetData(GetModelDataForComponent(ulIDModel));
     // texture data
@@ -460,15 +460,15 @@ functions:
   };
 
   // Add attachment model
-  void AddAttachmentModel(CModelObject *mo, INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                          ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddAttachmentModel(CModelObject *mo, INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture,
+                          unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     SetComponents(&mo->AddAttachmentModel(iAttachment)->amo_moModelObject, ulIDModel, 
                   ulIDTexture, ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
   };
 
   // Add weapon attachment
-  void AddWeaponAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                           ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddWeaponAttachment(INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture,
+                           unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     AddAttachmentModel(pmoModel, iAttachment, ulIDModel, ulIDTexture,
                        ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
   };
@@ -715,7 +715,7 @@ functions:
   }
 
   // set player body animation
-  void SetBodyAnimation(INDEX iAnimation, ULONG ulFlags) {
+  void SetBodyAnimation(INDEX iAnimation, unsigned long ulFlags) {
     // on weapon change skip anim
     if (m_bChangeWeapon) { return; }
     // on firing skip anim
@@ -1183,7 +1183,7 @@ functions:
   };
 
   // fire/attack
-  void FireAnimation(INDEX iAnim, ULONG ulFlags) {
+  void FireAnimation(INDEX iAnim, unsigned long ulFlags) {
     if (m_bSwim) {
       INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
       switch (iWeapon) {
@@ -1221,7 +1221,7 @@ functions:
  *                  CHANGE BODY ANIMATION                   *
  ************************************************************/
   // body animation template
-  void BodyAnimationTemplate(INDEX iNone, INDEX iColt, INDEX iShotgun, INDEX iMinigun, ULONG ulFlags) {
+  void BodyAnimationTemplate(INDEX iNone, INDEX iColt, INDEX iShotgun, INDEX iMinigun, unsigned long ulFlags) {
     INDEX iWeapon = ((CPlayerWeapons&)*(((CPlayer&)*m_penPlayer).m_penWeapons)).m_iCurrentWeapon;
     switch (iWeapon) {
       case WEAPON_NONE:

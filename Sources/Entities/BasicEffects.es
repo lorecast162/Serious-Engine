@@ -421,13 +421,13 @@ functions:
       FLOAT m_fTimeRemain = m_fFadeStartTime + m_fFadeTime - _pTimer->CurrentTick();
       if (m_fTimeRemain < 0.0f) { m_fTimeRemain = 0.0f; }
       COLOR col = GetModelColor() & ~CT_AMASK;
-      col |= (ULONG)(m_fFadeStartAlpha* m_fTimeRemain/m_fFadeTime *255.0f);
+      col |= (unsigned long)(m_fFadeStartAlpha* m_fTimeRemain/m_fFadeTime *255.0f);
       SetModelColor(col);
     } else if (m_fFadeInSpeed>0) {
       TIME tmAge = _pTimer->GetLerpedCurrentTick()-m_tmSpawn;
       COLOR col = GetModelColor() ;
       col = (col &~CT_AMASK) |
-        (ULONG)((255)*Clamp(tmAge*m_fFadeInSpeed/m_fWaitTime, 0.0f, 1.0f));
+        (unsigned long)((255)*Clamp(tmAge*m_fFadeInSpeed/m_fWaitTime, 0.0f, 1.0f));
       SetModelColor(col);
     }
 

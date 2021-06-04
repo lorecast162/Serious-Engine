@@ -202,7 +202,7 @@ components:
 
 functions:                                        
   
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if( slPropertyOffset == _offsetof(CExotechLarva, m_penMarkerNew))
     {
@@ -670,9 +670,9 @@ functions:
     return 0.0f;
   }
 
-  ULONG SetDesiredMovement(void) 
+  unsigned long SetDesiredMovement(void) 
   {
-    ULONG ulFlags = 0;
+    unsigned long ulFlags = 0;
     FLOAT3D vPos;
     CEntity *penMarker = m_penMarkerNew;
     CEntity *penTarget;

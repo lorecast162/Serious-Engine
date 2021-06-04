@@ -370,7 +370,7 @@ functions:
     en_boxMovingEstimate = FLOATaabbox3D();
     CRationalEntity::OnEnd();
   }
-  export void Copy(CEntity &enOther, ULONG ulFlags)
+  export void Copy(CEntity &enOther, unsigned long ulFlags)
   {
     CRationalEntity::Copy(enOther, ulFlags);
     CMovableEntity *pmenOther = (CMovableEntity *)(&enOther);
@@ -420,7 +420,7 @@ functions:
   }
 
   // create a checksum value for sync-check
-  export void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+  export void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
   {
     CRationalEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
     if (iExtensiveSyncCheck>0) {
@@ -463,37 +463,37 @@ functions:
         en_vDesiredTranslationRelative(1),
         en_vDesiredTranslationRelative(2),
         en_vDesiredTranslationRelative(3),
-        (ULONG&)en_vDesiredTranslationRelative(1),
-        (ULONG&)en_vDesiredTranslationRelative(2),
-        (ULONG&)en_vDesiredTranslationRelative(3));
+        (unsigned long&)en_vDesiredTranslationRelative(1),
+        (unsigned long&)en_vDesiredTranslationRelative(2),
+        (unsigned long&)en_vDesiredTranslationRelative(3));
       strm.FPrintF_t("desired rotation: %g, %g, %g (%08X %08X %08X)\n",
         en_aDesiredRotationRelative(1),
         en_aDesiredRotationRelative(2),
         en_aDesiredRotationRelative(3),
-        (ULONG&)en_aDesiredRotationRelative(1),
-        (ULONG&)en_aDesiredRotationRelative(2),
-        (ULONG&)en_aDesiredRotationRelative(3));
+        (unsigned long&)en_aDesiredRotationRelative(1),
+        (unsigned long&)en_aDesiredRotationRelative(2),
+        (unsigned long&)en_aDesiredRotationRelative(3));
       strm.FPrintF_t("current translation: %g, %g, %g (%08X %08X %08X)\n",
         en_vCurrentTranslationAbsolute(1),
         en_vCurrentTranslationAbsolute(2),
         en_vCurrentTranslationAbsolute(3),
-        (ULONG&)en_vCurrentTranslationAbsolute(1),
-        (ULONG&)en_vCurrentTranslationAbsolute(2),
-        (ULONG&)en_vCurrentTranslationAbsolute(3));
+        (unsigned long&)en_vCurrentTranslationAbsolute(1),
+        (unsigned long&)en_vCurrentTranslationAbsolute(2),
+        (unsigned long&)en_vCurrentTranslationAbsolute(3));
       strm.FPrintF_t("current rotation: %g, %g, %g (%08X %08X %08X)\n",
         en_aCurrentRotationAbsolute(1),
         en_aCurrentRotationAbsolute(2),
         en_aCurrentRotationAbsolute(3),
-        (ULONG&)en_aCurrentRotationAbsolute(1),
-        (ULONG&)en_aCurrentRotationAbsolute(2),
-        (ULONG&)en_aCurrentRotationAbsolute(3));
+        (unsigned long&)en_aCurrentRotationAbsolute(1),
+        (unsigned long&)en_aCurrentRotationAbsolute(2),
+        (unsigned long&)en_aCurrentRotationAbsolute(3));
       strm.FPrintF_t("reference plane: %g, %g, %g (%08X %08X %08X)\n",
         en_vReferencePlane(1),
         en_vReferencePlane(2),
         en_vReferencePlane(3),
-        (ULONG&)en_vReferencePlane(1),
-        (ULONG&)en_vReferencePlane(2),
-        (ULONG&)en_vReferencePlane(3));
+        (unsigned long&)en_vReferencePlane(1),
+        (unsigned long&)en_vReferencePlane(2),
+        (unsigned long&)en_vReferencePlane(3));
       strm.FPrintF_t("reference surface: %d\n", en_iReferenceSurface);
       strm.FPrintF_t("reference entity: ");
       if (en_penReference!=NULL) {
@@ -1639,7 +1639,7 @@ out:;
     }
 
     // test if rotation can be ignored
-    ULONG ulCIFlags = en_pciCollisionInfo->ci_ulFlags;
+    unsigned long ulCIFlags = en_pciCollisionInfo->ci_ulFlags;
     BOOL bIgnoreRotation = !bRotate ||
       ((ulCIFlags&CIF_IGNOREROTATION)|| 
       ( (ulCIFlags&CIF_IGNOREHEADING) && 
@@ -3101,10 +3101,10 @@ out:;
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // init
-    SLONG slUsedMemory = sizeof(CMovableEntity) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CMovableEntity) - sizeof(CRationalEntity) + CRationalEntity::GetUsedMemory();
     // add some more
     slUsedMemory += en_apbpoNearPolygons.sa_Count * sizeof(CBrushPolygon*);
     return slUsedMemory;

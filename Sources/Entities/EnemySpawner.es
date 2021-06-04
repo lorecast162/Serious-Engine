@@ -81,7 +81,7 @@ functions:
     }
   }
 
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if( slPropertyOffset == offsetof(CEnemySpawner, m_penTarget))
     {

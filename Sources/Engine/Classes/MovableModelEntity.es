@@ -41,7 +41,7 @@ components:
 functions:
 
   // create a checksum value for sync-check
-  export void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+  export void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
   {
     CMovableEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
     if (iExtensiveSyncCheck>0) {
@@ -176,7 +176,7 @@ functions:
   }
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     return( sizeof(CMovableModelEntity) - sizeof(CMovableEntity) + CMovableEntity::GetUsedMemory());
   }

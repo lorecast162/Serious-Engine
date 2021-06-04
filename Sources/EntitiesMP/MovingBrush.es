@@ -156,7 +156,7 @@ components:
 functions:
 
  // get visibility tweaking bits
-  ULONG GetVisTweaks(void)
+  unsigned long GetVisTweaks(void)
   {
     return m_cbClassificationBits|m_vbVisibilityBits;
   }
@@ -571,10 +571,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CMovingBrush) - sizeof(CMovableBrushEntity) + CMovableBrushEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CMovingBrush) - sizeof(CMovableBrushEntity) + CMovableBrushEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     slUsedMemory += m_strDescription.Length();

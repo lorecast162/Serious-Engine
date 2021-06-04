@@ -26,8 +26,8 @@ uses "EntitiesMP/Effector";
 
 %{
 struct DebrisInfo {
-  ULONG ulModelID;
-  ULONG ulTextureID;
+  unsigned long ulModelID;
+  unsigned long ulTextureID;
   FLOAT vOffset[3];
 };
 
@@ -153,7 +153,7 @@ functions:
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {
@@ -368,10 +368,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CDestroyableArchitecture) - sizeof(CMovableBrushEntity) + CMovableBrushEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CDestroyableArchitecture) - sizeof(CMovableBrushEntity) + CMovableBrushEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     return slUsedMemory;

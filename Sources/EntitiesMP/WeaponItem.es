@@ -63,7 +63,7 @@ event EWeaponItem {
 };
 
 %{
-extern void CPlayerWeapons_Precache(ULONG ulAvailable);
+extern void CPlayerWeapons_Precache(unsigned long ulAvailable);
 %}
 
 

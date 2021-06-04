@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 uses "EntitiesMP/Marker";
 
 %{
-  extern void CPlayerWeapons_Precache(ULONG ulAvailable);
+  extern void CPlayerWeapons_Precache(unsigned long ulAvailable);
 %}
 
 class CPlayerMarker: CMarker {

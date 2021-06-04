@@ -192,10 +192,10 @@ functions:
 
 
   // returns bytes of memory used by this object
-  SLONG GetUsedMemory(void)
+  long GetUsedMemory(void)
   {
     // initial
-    SLONG slUsedMemory = sizeof(CParticlesHolder) - sizeof(CMovableModelEntity) + CMovableModelEntity::GetUsedMemory();
+    long slUsedMemory = sizeof(CParticlesHolder) - sizeof(CMovableModelEntity) + CMovableModelEntity::GetUsedMemory();
     // add some more
     slUsedMemory += m_strName.Length();
     slUsedMemory += m_strDescription.Length();

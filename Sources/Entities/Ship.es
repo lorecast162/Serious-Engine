@@ -73,7 +73,7 @@ functions:
     return m_strDescription;
   }
   /* Get anim data for given animation property - return NULL for none. */
-  CAnimData *GetAnimData(SLONG slPropertyOffset) 
+  CAnimData *GetAnimData(long slPropertyOffset) 
   {
     if((slPropertyOffset==offsetof(CShip, m_iSailUpAnim)
       ||slPropertyOffset==offsetof(CShip, m_iSailDownAnim)

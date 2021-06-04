@@ -141,7 +141,7 @@ functions:
 
   // set desired rotation and translation to go/orient towards desired position
   // and get the resulting movement type
-  virtual ULONG SetDesiredMovement(void) 
+  virtual unsigned long SetDesiredMovement(void) 
   {
     // if not in air
     if (!m_bInAir) {
@@ -150,7 +150,7 @@ functions:
     }
 
     // get base rotation from base class
-    ULONG ulFlags = CEnemyBase::SetDesiredMovement();
+    unsigned long ulFlags = CEnemyBase::SetDesiredMovement();
 
     // if we may move
     if (m_fMoveSpeed>0.0f) {

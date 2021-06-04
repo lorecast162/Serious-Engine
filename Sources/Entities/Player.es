@@ -89,7 +89,7 @@ extern void EndHUD(void);
 static CTimerValue _tvProbingLast;
 
 // used to render certain entities only for certain players (like picked items, etc.)
-ULONG _ulPlayerRenderingMask = 0;
+unsigned long _ulPlayerRenderingMask = 0;
 
 #define NAME name
 
@@ -397,7 +397,7 @@ DECL_DLL INDEX plr_iHiScore = 0.0f;
 
 // these define address and size of player controls structure
 DECL_DLL void *ctl_pvPlayerControls = &pctlCurrent;
-DECL_DLL const SLONG ctl_slPlayerControlsSize = sizeof(pctlCurrent);
+DECL_DLL const long ctl_slPlayerControlsSize = sizeof(pctlCurrent);
 
 // called to compose action packet from current controls
 DECL_DLL void ctl_ComposeActionPacket(const CPlayerCharacter &pc, CPlayerAction &paAction, BOOL bPreScan)
@@ -1036,9 +1036,9 @@ properties:
   ShellLaunchData ShellLaunchData_array;  // array of data describing flying empty shells
   INDEX m_iFirstEmptySLD;                         // index of last added empty shell
 
-  ULONG ulButtonsNow;  ULONG ulButtonsBefore;
-  ULONG ulNewButtons;
-  ULONG ulReleasedButtons;
+  unsigned long ulButtonsNow;  unsigned long ulButtonsBefore;
+  unsigned long ulNewButtons;
+  unsigned long ulReleasedButtons;
 
   // listener
   CSoundListener sliSound;
@@ -1166,7 +1166,7 @@ functions:
     return (CPlayerSettings *)en_pcCharacter.pc_aubAppearance;
   }
 
-  export void Copy(CEntity &enOther, ULONG ulFlags)
+  export void Copy(CEntity &enOther, unsigned long ulFlags)
   {
     CPlayerEntity::Copy(enOther, ulFlags);
     CPlayer *penOther = (CPlayer *)(&enOther);
@@ -1700,7 +1700,7 @@ functions:
   // check if message is in inbox
   BOOL HasMessage( const CTFileName &fnmMessage)
   {
-    ULONG ulHash = fnmMessage.GetHash();
+    unsigned long ulHash = fnmMessage.GetHash();
     INDEX ctMsg = m_acmiMessages.Count();
     for(INDEX iMsg=0; iMsg<ctMsg; iMsg++) {
       if (m_acmiMessages[iMsg].cmi_ulHash      == ulHash &&
@@ -1712,7 +1712,7 @@ functions:
   }
 
   // receive a computer message and put it in inbox if not already there
-  void ReceiveComputerMessage(const CTFileName &fnmMessage, ULONG ulFlags)
+  void ReceiveComputerMessage(const CTFileName &fnmMessage, unsigned long ulFlags)
   {
     // if already received
     if (HasMessage(fnmMessage)) {
@@ -1808,7 +1808,7 @@ functions:
   };
 
   // play light animation
-  void PlayLightAnim(INDEX iAnim, ULONG ulFlags) {
+  void PlayLightAnim(INDEX iAnim, unsigned long ulFlags) {
     if (m_aoLightAnimation.GetData()!=NULL) {
       m_aoLightAnimation.PlayAnim(iAnim, ulFlags);
     }
@@ -2420,7 +2420,7 @@ functions:
   }
 
   // create a checksum value for sync-check
-  void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+  void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
   {
     CPlayerEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
     CRC_AddLONG(ulCRC, m_psLevelStats.ps_iScore);
@@ -2438,8 +2438,8 @@ functions:
     CPlayerEntity::DumpSync_t(strm, iExtensiveSyncCheck);
     strm.FPrintF_t("Score: %d\n", m_psLevelStats.ps_iScore);
     strm.FPrintF_t("m_iMana:  %d\n", m_iMana);
-    strm.FPrintF_t("m_fManaFraction: %g(%08x)\n", m_fManaFraction, (ULONG&)m_fManaFraction);
-    strm.FPrintF_t("m_fArmor: %g(%08x)\n", m_fArmor, (ULONG&)m_fArmor);
+    strm.FPrintF_t("m_fManaFraction: %g(%08x)\n", m_fManaFraction, (unsigned long&)m_fManaFraction);
+    strm.FPrintF_t("m_fArmor: %g(%08x)\n", m_fArmor, (unsigned long&)m_fArmor);
   }
 
 /************************************************************
@@ -2800,8 +2800,8 @@ functions:
     // readout blood type
     const INDEX iBloodType = GetSP()->sp_iBlood;
     // determine debris texture (color)
-    ULONG ulFleshTexture = TEXTURE_FLESH_GREEN;
-    ULONG ulFleshModel   = MODEL_FLESH;
+    unsigned long ulFleshTexture = TEXTURE_FLESH_GREEN;
+    unsigned long ulFleshModel   = MODEL_FLESH;
     if( iBloodType==2) { ulFleshTexture = TEXTURE_FLESH_RED; }
     // spawn debris
     Debris_Begin( EIBT_FLESH, DPT_BLOODTRAIL, BET_BLOODSTAIN, fBlowUpSize, vNormalizedDamage, vBodySpeed, 1.0f, 0.0f);
@@ -2928,7 +2928,7 @@ functions:
     // *********** KEYS ***********
     else if (ee.ee_slEvent == EVENTCODE_EKey) {
       // make key mask
-      ULONG ulKey = 1<<INDEX(((EKey&)ee).kitType);
+      unsigned long ulKey = 1<<INDEX(((EKey&)ee).kitType);
       EKey &eKey = (EKey&)ee;
       if(eKey.kitType == KIT_ANKHGOLDDUMMY || eKey.kitType == KIT_SCARABDUMMY)
       {
@@ -4165,8 +4165,8 @@ functions:
     // get your prediction tail
     CPlayer *pen = (CPlayer*)GetPredictionTail();
     // do screen blending
-    ULONG ulR=255, ulG=0, ulB=0; // red for wounding
-    ULONG ulA = pen->m_fDamageAmmount*5.0f;
+    unsigned long ulR=255, ulG=0, ulB=0; // red for wounding
+    unsigned long ulA = pen->m_fDamageAmmount*5.0f;
     
     // if less than few seconds elapsed since last damage
     FLOAT tmSinceWounding = _pTimer->CurrentTick() - pen->m_tmWoundedTime;
@@ -4176,7 +4176,7 @@ functions:
     }
 
     // add rest of blend ammount
-    ulA = ClampUp( ulA, (ULONG)224);
+    ulA = ClampUp( ulA, (unsigned long)224);
     if (m_iViewState == PVT_PLAYEREYES) {
       pdp->dp_ulBlendingRA += ulR*ulA;
       pdp->dp_ulBlendingGA += ulG*ulA;
@@ -4190,10 +4190,10 @@ functions:
       UBYTE ubR, ubG, ubB, ubA;
       ColorToRGBA(colGlare, ubR, ubG, ubB, ubA);
       if (ubA!=0) {
-        pdp->dp_ulBlendingRA += ULONG(ubR)*ULONG(ubA);
-        pdp->dp_ulBlendingGA += ULONG(ubG)*ULONG(ubA);
-        pdp->dp_ulBlendingBA += ULONG(ubB)*ULONG(ubA);
-        pdp->dp_ulBlendingA  += ULONG(ubA);
+        pdp->dp_ulBlendingRA += unsigned long(ubR)*unsigned long(ubA);
+        pdp->dp_ulBlendingGA += unsigned long(ubG)*unsigned long(ubA);
+        pdp->dp_ulBlendingBA += unsigned long(ubB)*unsigned long(ubA);
+        pdp->dp_ulBlendingA  += unsigned long(ubA);
       }
     }
 
@@ -5093,7 +5093,7 @@ procedures:
   // auto action - go to current marker
   AutoGoToMarker(EVoid)
   {
-    ULONG ulFlags = AOF_LOOPING|AOF_NORESTART;
+    unsigned long ulFlags = AOF_LOOPING|AOF_NORESTART;
 
     INDEX iAnim = GetModelObject()->GetAnim();
     if( iAnim!=PLAYER_ANIM_STAND)
@@ -5124,7 +5124,7 @@ procedures:
   // auto action - go to current marker and stop there
   AutoGoToMarkerAndStop(EVoid)
   {
-    ULONG ulFlags = AOF_LOOPING|AOF_NORESTART;
+    unsigned long ulFlags = AOF_LOOPING|AOF_NORESTART;
 
     INDEX iAnim = GetModelObject()->GetAnim();
     if( iAnim!=PLAYER_ANIM_STAND)

@@ -913,20 +913,20 @@ properties:
 components:
 functions:
   // get visibility tweaking bits
-  ULONG GetVisTweaks(void)
+  unsigned long GetVisTweaks(void)
   {
     return m_cbClassificationBits|m_vbVisibilityBits;
   }
 
   // Validate offered target for one property
-  BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+  BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget)
   {
     if(penTarget==NULL)
     {
       return FALSE;
     }
     
-    ULONG ulFirst, ulLast;
+    unsigned long ulFirst, ulLast;
     CTString strClass;
 
     // if gradient marker
