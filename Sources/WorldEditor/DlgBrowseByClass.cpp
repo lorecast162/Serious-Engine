@@ -88,7 +88,7 @@ CTString GetPropertyValue(CEntity *pen, CEntityProperty *pepProperty, INDEX &iFo
   {
   case CEntityProperty::EPT_FLAGS:
   {
-    strResult.PrintF("0x%08x", ENTITYPROPERTY( pen, pepProperty->ep_slOffset, ULONG));
+    strResult.PrintF("0x%08x", ENTITYPROPERTY( pen, pepProperty->ep_slOffset, unsigned long));
     break;
   }
   case CEntityProperty::EPT_ENUM:

@@ -75,7 +75,7 @@ public:
   void *ss_pvValue;       // symbol value
   BOOL (*ss_pPreFunc)(void *);
   void (*ss_pPostFunc)(void *);
-  ULONG ss_ulFlags;       // various flags
+  unsigned long ss_ulFlags;       // various flags
   // Clear function.
   void Clear(void);
   // check if declared

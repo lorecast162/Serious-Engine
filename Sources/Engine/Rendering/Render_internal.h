@@ -102,7 +102,7 @@ class CViewVertex {
 public:
   FLOAT3D vvx_vView;      // coordinates in view space
   FLOAT vvx_fD; // distance from clip plane
-  ULONG vvx_ulOutcode;    // outcode of the vertex -> bits set if polygon is behind the plane
+  unsigned long vvx_ulOutcode;    // outcode of the vertex -> bits set if polygon is behind the plane
   FLOAT vvx_fI; // screen-space coordinates
   FLOAT vvx_fJ;
 };
@@ -141,7 +141,7 @@ public:
   FIX16_16 ace_xI;            // top I coordinate
   FIX16_16 ace_xIStep;        // I coordinate step per scan line
   CScreenEdge *ace_psedEdge;  // the edge
-  ULONG ace_ulDummy;  // alignment to 16 bytes
+  unsigned long ace_ulDummy;  // alignment to 16 bytes
 
   ALIGNED_NEW_AND_DELETE(32);
 
@@ -208,7 +208,7 @@ class CDelayedModel {
 public:
   FLOAT dm_fDistance;         // Z distance from viewer (for sorting)
   FLOAT dm_fMipFactor;        // mip factor of the model
-  ULONG dm_ulFlags;           // various flags
+  unsigned long dm_ulFlags;           // various flags
   CEntity *dm_penModel;       // the model entity
   CModelObject *dm_pmoModel;  // model of the entity
   __forceinline void Clear(void) {};
@@ -224,7 +224,7 @@ public:
 class CLensFlareInfo {
 public:
   INDEX lfi_iID;                      // unique ID of a lens flare info
-  ULONG lfi_ulDrawPortID;             // unique ID of the lens flare's drawport
+  unsigned long lfi_ulDrawPortID;             // unique ID of the lens flare's drawport
   CLightSource *lfi_plsLightSource;   // the light source
   FLOAT3D lfi_vProjected;             // coordinates in view space (for fog and haze)
   FLOAT lfi_fI, lfi_fJ;    // position of light source on screen in this frame
@@ -233,7 +233,7 @@ public:
   TIME  lfi_tmLastFrame;   // last time it was animated
   INDEX lfi_iMirrorLevel;  // mirror recursion level in which the flare is
   FLOAT lfi_fFadeFactor;   // current fade ratio (0..1)
-  ULONG lfi_ulFlags;       // various flags
+  unsigned long lfi_ulFlags;       // various flags
 
   __forceinline void Clear(void) { };
 };
@@ -306,8 +306,8 @@ public:
   BOOL re_bRenderingShadows;    // set if rendering shadows instead of normal view
   BOOL re_bDirectionalShadows;  // set if rendering directional shadows
   UBYTE *re_pubShadow;          // byte-packed shadow mask
-  SLONG re_slShadowWidth;
-  SLONG re_slShadowHeight; 
+  long re_slShadowWidth;
+  long re_slShadowHeight; 
   BOOL re_bSomeLightExists;     // set if rendering light, and at least one pixel is lighted
   BOOL re_bSomeDarkExists;      // set if rendering light, and at least one pixel is dark
   UBYTE re_ubLightIllumination;  // the illumination type used by light rendering shadows
@@ -315,8 +315,8 @@ public:
   BOOL re_bCurrentSectorHasFog;   // set if currently added sector has fog
   BOOL re_bCurrentSectorHasHaze;  // set if currently added sector has haze
   BOOL re_bViewerInHaze;          // set if viewer is viewing from a hazed sector
-  ULONG re_ulVisExclude;    // for visibility tweaking
-  ULONG re_ulVisInclude;
+  unsigned long re_ulVisExclude;    // for visibility tweaking
+  unsigned long re_ulVisInclude;
 
   INDEX re_iViewVx0; // first view vertex for current sector
   FLOATplane3D re_plClip;         // current clip plane
@@ -399,7 +399,7 @@ public:
   // check if a sector is inside view frustum
   __forceinline INDEX IsSectorVisible(CBrush3D &br, CBrushSector &bsc);
   // check if a polygon is to be visible
-  __forceinline ULONG GetPolygonVisibility(const CBrushPolygon &bpo);
+  __forceinline unsigned long GetPolygonVisibility(const CBrushPolygon &bpo);
   // check if polygon is outside viewfrustum
   __forceinline BOOL IsPolygonCulled(const CBrushPolygon &bpo);
   // setup fog/haze for current sector
@@ -490,10 +490,10 @@ public:
                         FLOAT &fTotalShadowIntensity, FLOAT3D &vTotalLightDirection, FLOATplane3D &plFloorPlane);
   /* Render a model. */
   void RenderOneModel( CEntity &en, CModelObject &moModel, const CPlacement3D &plModel,
-                       const FLOAT fDistanceFactor, BOOL bRenderShadow, ULONG ulDMFlags);
+                       const FLOAT fDistanceFactor, BOOL bRenderShadow, unsigned long ulDMFlags);
   /* Render a ska model. */
   void RenderOneSkaModel( CEntity &en, const CPlacement3D &plModel,
-                                  const FLOAT fDistanceFactor, BOOL bRenderShadow, ULONG ulDMFlags);
+                                  const FLOAT fDistanceFactor, BOOL bRenderShadow, unsigned long ulDMFlags);
   /* Render models that were kept for delayed rendering. */
   void RenderModels(BOOL bBackground);
   /* Render active terrains */
@@ -567,9 +567,9 @@ public:
 
 // Render a world with some viewer, projection and drawport. (viewer may be NULL)
 // internal version used for rendering shadows
-extern ULONG RenderShadows(CWorld &woWorld, CEntity &enViewer,
+extern unsigned long RenderShadows(CWorld &woWorld, CEntity &enViewer,
   CAnyProjection3D &prProjection, const FLOATaabbox3D &boxViewer, 
-  UBYTE *pubShadowMask, SLONG slShadowWidth, SLONG slShadowHeight,
+  UBYTE *pubShadowMask, long slShadowWidth, long slShadowHeight,
   UBYTE ubIllumination);
 
 

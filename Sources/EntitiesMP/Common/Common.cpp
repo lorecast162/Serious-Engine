@@ -467,8 +467,8 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
  *                   SET MODEL AND ATTACHMENT               *
  ************************************************************/
   // Set components
-  void SetComponents(CEntity *pen, CModelObject &mo, ULONG ulIDModel, ULONG ulIDTexture,
-                     ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void SetComponents(CEntity *pen, CModelObject &mo, unsigned long ulIDModel, unsigned long ulIDTexture,
+                     unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     // model data
     mo.SetData(pen->GetModelDataForComponent(ulIDModel));
     // texture data
@@ -494,8 +494,8 @@ void KickEntity(CEntity *penTarget, FLOAT3D vSpeed) {
   };
 
   // Add attachment to model
-  void AddAttachmentToModel(CEntity *pen, CModelObject &mo, INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                            ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture) {
+  void AddAttachmentToModel(CEntity *pen, CModelObject &mo, INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture,
+                            unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture) {
     SetComponents(pen, mo.AddAttachmentModel(iAttachment)->amo_moModelObject, ulIDModel,
                   ulIDTexture, ulIDReflectionTexture, ulIDSpecularTexture, ulIDBumpTexture);
   };
@@ -1024,11 +1024,11 @@ void Debris_Begin(
 CEntityPointer Debris_Spawn(
   CEntity *penSpawner,
   CEntity *penComponents,
-  SLONG idModelComponent,
-  SLONG idTextureComponent,
-  SLONG idReflectionTextureComponent,
-  SLONG idSpecularTextureComponent,
-  SLONG idBumpTextureComponent,
+  long idModelComponent,
+  long idTextureComponent,
+  long idReflectionTextureComponent,
+  long idSpecularTextureComponent,
+  long idBumpTextureComponent,
   INDEX iModelAnim,
   FLOAT fSize,
   const FLOAT3D &vPosRatio)
@@ -1100,11 +1100,11 @@ CEntityPointer Debris_Spawn(
 CEntityPointer Debris_Spawn_Independent(
   CEntity *penSpawner,
   CEntity *penComponents,
-  SLONG idModelComponent,
-  SLONG idTextureComponent,
-  SLONG idReflectionTextureComponent,
-  SLONG idSpecularTextureComponent,
-  SLONG idBumpTextureComponent,
+  long idModelComponent,
+  long idTextureComponent,
+  long idReflectionTextureComponent,
+  long idSpecularTextureComponent,
+  long idBumpTextureComponent,
   INDEX iModelAnim,
   FLOAT fSize,
   CPlacement3D plAbsolutePlacement,

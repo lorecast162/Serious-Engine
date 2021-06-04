@@ -30,17 +30,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define B  byte ptr
 
 
-static ULONG _ulAlphaMask = 0;
-static void (*pConvertMipmap)( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch);
+static unsigned long _ulAlphaMask = 0;
+static void (*pConvertMipmap)( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch);
 
 
 
 // convert to any D3DFormat (thru D3DX functions - slow!)
-static void ConvertAny( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip)
+static void ConvertAny( unsigned long *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip)
 {
   // alloc temporary memory and flip colors there
   const PIX pixSize = pixWidth*pixHeight;
-  ULONG *pulFlipped = (ULONG*)AllocMemory( pixSize*4);
+  unsigned long *pulFlipped = (unsigned long*)AllocMemory( pixSize*4);
   abgr2argb( pulSrc, pulFlipped, pixSize);
 
   // get mipmap surface
@@ -51,7 +51,7 @@ static void ConvertAny( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth,
 
   // prepare and upload surface
   const RECT rect = { 0,0, pixWidth, pixHeight };
-  const SLONG slPitch = pixWidth*4;
+  const long slPitch = pixWidth*4;
   hr = D3DXLoadSurfaceFromMemory( pd3dSurf, NULL, NULL, pulFlipped, D3DFMT_A8R8G8B8, slPitch, NULL, &rect, D3DX_FILTER_NONE, 0);
   D3D_CHECKERROR(hr);
 
@@ -65,9 +65,9 @@ static void ConvertAny( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth,
 // fast conversion from RGBA memory format to one of D3D color formats
 
 
-static void ConvARGB8( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvARGB8( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<2);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<2);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -91,9 +91,9 @@ pixLoop:
 }
 
 
-static void ConvARGB5( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvARGB5( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<1);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<1);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -134,9 +134,9 @@ pixLoop:
 }
 
 
-static void ConvARGB4( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvARGB4( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<1);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<1);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -177,9 +177,9 @@ pixLoop:
 }
 
 
-static void ConvRGB5( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvRGB5( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<1);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<1);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -213,9 +213,9 @@ pixLoop:
 }
 
 
-static void ConvAL8( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvAL8( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<1);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<1);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -239,9 +239,9 @@ pixLoop:
 
 
 
-static void ConvL8( ULONG *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, SLONG slPitch)
+static void ConvL8( unsigned long *pulSrc, void *pulDst, PIX pixWidth, PIX pixHeight, long slPitch)
 {
-  const ULONG slRowModulo = slPitch - (pixWidth<<0);
+  const unsigned long slRowModulo = slPitch - (pixWidth<<0);
   __asm {
     mov     esi,D [pulSrc]
     mov     edi,D [pulDst]
@@ -289,7 +289,7 @@ extern void SetInternalFormat_D3D( D3DFORMAT d3dFormat)
 
 
 // convert one mipmap from memory to surface
-extern void UploadMipmap_D3D( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip)
+extern void UploadMipmap_D3D( unsigned long *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip)
 {
   // general case thru D3DX approach
   if( pConvertMipmap==NULL) {
@@ -308,7 +308,7 @@ extern void UploadMipmap_D3D( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pix
 
 
 // unpack from some of D3D color formats to COLOR
-extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, SLONG &slColorSize)
+extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, long &slColorSize)
 {
   UWORD uw;
   UBYTE ubR,ubG,ubB;

@@ -125,10 +125,10 @@ void CDlgFilterPolygonSelection::DoDataExchange(CDataExchange* pDX)
   if( pDX->m_bSaveAndValidate != FALSE)
   {
     
-    ULONG ulMask = 0;
-    ULONG ulValue = 0;
-    ULONG ulTexMask = 0;
-    ULONG ulTexValue = 0;
+    unsigned long ulMask = 0;
+    unsigned long ulValue = 0;
+    unsigned long ulTexMask = 0;
+    unsigned long ulTexValue = 0;
 
     ADD_TO_FLAG_MASK( ulMask, ulValue, IDC_IS_PORTAL2, BPOF_PORTAL);
     ADD_TO_FLAG_MASK( ulMask, ulValue, IDC_IS_OLD_PORTAL2, OPOF_PORTAL);

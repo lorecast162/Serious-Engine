@@ -64,7 +64,7 @@ static CDrawPort *_pDP;
 static PIX   _pixDPWidth, _pixDPHeight;
 static FLOAT _fResolutionScaling;
 static FLOAT _fCustomScaling;
-static ULONG _ulAlphaHUD;
+static unsigned long _ulAlphaHUD;
 static COLOR _colHUD;
 static TIME  _tmNow = -1.0f;
 static CFontData _fdNumbersFont;
@@ -187,8 +187,8 @@ static int qsort_CompareNames( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareScores( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = en0.m_psGameStats.ps_iScore;
-  SLONG sl1 = en1.m_psGameStats.ps_iScore;
+  long sl0 = en0.m_psGameStats.ps_iScore;
+  long sl1 = en1.m_psGameStats.ps_iScore;
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -197,8 +197,8 @@ static int qsort_CompareScores( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareHealth( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = (SLONG)ceil(en0.GetHealth());
-  SLONG sl1 = (SLONG)ceil(en1.GetHealth());
+  long sl0 = (long)ceil(en0.GetHealth());
+  long sl1 = (long)ceil(en1.GetHealth());
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -207,8 +207,8 @@ static int qsort_CompareHealth( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareManas( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = en0.m_iMana;
-  SLONG sl1 = en1.m_iMana;
+  long sl0 = en0.m_iMana;
+  long sl1 = en1.m_iMana;
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -217,8 +217,8 @@ static int qsort_CompareManas( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareFrags( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = en0.m_psGameStats.ps_iKills;
-  SLONG sl1 = en1.m_psGameStats.ps_iKills;
+  long sl0 = en0.m_psGameStats.ps_iKills;
+  long sl1 = en1.m_psGameStats.ps_iKills;
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -227,8 +227,8 @@ static int qsort_CompareFrags( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareDeaths( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = en0.m_psGameStats.ps_iDeaths;
-  SLONG sl1 = en1.m_psGameStats.ps_iDeaths;
+  long sl0 = en0.m_psGameStats.ps_iDeaths;
+  long sl1 = en1.m_psGameStats.ps_iDeaths;
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -238,8 +238,8 @@ static int qsort_CompareDeaths( const void *ppPEN0, const void *ppPEN1) {
 static int qsort_CompareLatencies( const void *ppPEN0, const void *ppPEN1) {
   CPlayer &en0 = **(CPlayer**)ppPEN0;
   CPlayer &en1 = **(CPlayer**)ppPEN1;
-  SLONG sl0 = (SLONG)ceil(en0.m_tmLatency);
-  SLONG sl1 = (SLONG)ceil(en1.m_tmLatency);
+  long sl0 = (long)ceil(en0.m_tmLatency);
+  long sl1 = (long)ceil(en1.m_tmLatency);
   if(      sl0<sl1) return +1;
   else if( sl0>sl1) return -1;
   else              return  0;
@@ -581,7 +581,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     UBYTE ubR,ubG,ubB;
     ColorToRGB( colBorder, ubR,ubG,ubB);
     colBorder = RGBToColor( ubG,ubB,ubR); // shift and xor color components
-    if( ((ULONG)(_tmNow*5))&1) {
+    if( ((unsigned long)(_tmNow*5))&1) {
       colBorder = (colBorder>>1) & 0x7F7F7F00; // darken flash and scale
       _fCustomScaling *= 0.933f;
     }
@@ -609,7 +609,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
   // prepare and draw health info
   fValue = ClampDn( _penPlayer->GetHealth(), 0.0f);  // never show negative health
   fNormValue = fValue/TOP_HEALTH;
-  strValue.PrintF( "%d", (SLONG)ceil(fValue));
+  strValue.PrintF( "%d", (long)ceil(fValue));
   PrepareColorTransitions( colMax, colTop, colMid, C_RED, 0.5f, 0.25f, FALSE);
   fRow = pixBottomBound-fHalfUnit;
   fCol = pixLeftBound+fHalfUnit;
@@ -625,7 +625,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
   fValue = _penPlayer->m_fArmor;
   if( fValue > 0.0f) {
     fNormValue = fValue/TOP_ARMOR;
-    strValue.PrintF( "%d", (SLONG)ceil(fValue));
+    strValue.PrintF( "%d", (long)ceil(fValue));
     PrepareColorTransitions( colMax, colTop, colMid, C_lGRAY, 0.5f, 0.25f, FALSE);
     fRow = pixBottomBound- (fNextUnit+fHalfUnit);//*_pDP->dp_fWideAdjustment;
     fCol = pixLeftBound+    fHalfUnit;
@@ -655,7 +655,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
     FLOAT fMaxValue = _penWeapons->GetMaxAmmo();
     fValue = _penWeapons->GetAmmo();
     fNormValue = fValue / fMaxValue;
-    strValue.PrintF( "%d", (SLONG)ceil(fValue));
+    strValue.PrintF( "%d", (long)ceil(fValue));
     PrepareColorTransitions( colMax, colTop, colMid, C_RED, 0.5f, 0.25f, FALSE);
     BOOL bDrawAmmoIcon = _fCustomScaling<=1.0f;
     // draw ammo, value and weapon
@@ -1000,7 +1000,7 @@ extern void DrawHUD( const CPlayer *penPlayerCurrent, CDrawPort *pdpCurrent, BOO
   // draw cheat modes
   if( GetSP()->sp_ctMaxPlayers==1) {
     INDEX iLine=1;
-    ULONG ulAlpha = sin(_tmNow*16)*96 +128;
+    unsigned long ulAlpha = sin(_tmNow*16)*96 +128;
     PIX pixFontHeight = _pfdConsoleFont->fd_pixCharHeight;
     const COLOR colCheat = _colHUD;
     _pDP->SetFont( _pfdConsoleFont);

@@ -27,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // packet drop rate caused by routers dropping large UDP packets. UDP_BLOCK_SIZE is the
 // maximum length of real data, not counting the packet header (ulPacketSequence, bReliable,uwID)
 #define MAX_UDP_BLOCK_SIZE	1400
-#define MAX_HEADER_SIZE (sizeof(UBYTE) + sizeof(ULONG) + sizeof(UWORD) + sizeof(ULONG)) // pa_bReliable + pa_ulPacketSequence + pa_uwID + pa_ulTransferSize
+#define MAX_HEADER_SIZE (sizeof(UBYTE) + sizeof(unsigned long) + sizeof(UWORD) + sizeof(unsigned long)) // pa_bReliable + pa_ulPacketSequence + pa_uwID + pa_ulTransferSize
 #define MAX_PACKET_SIZE (MAX_UDP_BLOCK_SIZE + MAX_HEADER_SIZE)
 
 // flags for different kinds of packets used by the netcode - note that the acknowledge packets are unreliable
@@ -47,7 +47,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CAddress {
 public:
-  ULONG adr_ulAddress;   // host address
+  unsigned long adr_ulAddress;   // host address
   UWORD adr_uwPort;      // host port
   UWORD adr_uwID;        // host id
   void MakeBroadcast(void);
@@ -63,10 +63,10 @@ public:
  */
 class CPacket {
 public:
-	ULONG	pa_ulSequence;		// Sequence number of this packet
+	unsigned long	pa_ulSequence;		// Sequence number of this packet
 	UBYTE	pa_ubReliable;					// Is packet reliable or not
-	SLONG pa_slSize;							// Number of data bytes in packet (without header)
-  SLONG pa_slTransferSize;      // Number of data bytes in a data transfer unit this packet belongs to
+	long pa_slSize;							// Number of data bytes in packet (without header)
+  long pa_slTransferSize;      // Number of data bytes in a data transfer unit this packet belongs to
 
 	UBYTE pa_ubRetryNumber;			// How many retries so far for this packet
 	CTimerValue pa_tvSendWhen;	// When to try sending this packet (includes latency bandwidth limitations 
@@ -87,11 +87,11 @@ public:
 	void Clear();
 
 	// Write data to the packet and add header data
-	BOOL WriteToPacket(void* pv,SLONG slSize,UBYTE ubReliable,ULONG ulSequence,UWORD uwClientID,SLONG slTransferSize);
+	BOOL WriteToPacket(void* pv,long slSize,UBYTE ubReliable,unsigned long ulSequence,UWORD uwClientID,long slTransferSize);
 	// Write raw data to the packet and extract header data from the data
-	BOOL WriteToPacketRaw(void* pv,SLONG slSize);
+	BOOL WriteToPacketRaw(void* pv,long slSize);
 	// Read data from the packet (no header data)
-	BOOL ReadFromPacket(void* pv,SLONG &slExpectedSize);
+	BOOL ReadFromPacket(void* pv,long &slExpectedSize);
 
 	// Is packet reliable
 	BOOL IsReliable();
@@ -103,14 +103,14 @@ public:
   BOOL IsBroadcast();
 	
 	// Get the sequence number of the packet (must be reliable)
-	ULONG GetSequence();
+	unsigned long GetSequence();
 	// What is the current retry status?
 	UBYTE CanRetry();
 	// Drop the packet from the list
 	void Drop();
 	
   // get the size of data transfer unit this packet belongs to
-  SLONG GetTransferSize();
+  long GetTransferSize();
 
 	// Copy operator
 	void operator=(const CPacket &paOriginal);
@@ -129,19 +129,19 @@ public:
 
   void Clear(void);
   // get time when the packet will be allowed to leave the buffer
-  CTimerValue GetPacketSendTime(SLONG slSize);
+  CTimerValue GetPacketSendTime(long slSize);
 };
 
 
 class CPacketBuffer {
 public:
-	ULONG pb_ulTotalSize;						// Total size of data in packets stored in this buffer (no headers)
-	ULONG pb_ulLastSequenceOut;			// Sequence number of the last packet taken out of the buffer
+	unsigned long pb_ulTotalSize;						// Total size of data in packets stored in this buffer (no headers)
+	unsigned long pb_ulLastSequenceOut;			// Sequence number of the last packet taken out of the buffer
 	
 	CListHead pb_lhPacketStorage;
 	
-	ULONG pb_ulNumOfPackets;					// Total number of packets currently in storage
-	ULONG pb_ulNumOfReliablePackets;	// Number of reliable packets in storage (0 if no reliable stream in progress)
+	unsigned long pb_ulNumOfPackets;					// Total number of packets currently in storage
+	unsigned long pb_ulNumOfReliablePackets;	// Number of reliable packets in storage (0 if no reliable stream in progress)
 
 	CPacketBufferStats *pb_ppbsStats; // for bandwidth/latency emulation stats and limits
 	CPacketBufferStats pb_pbsLimits;	// maximum output BPS for the buffer, to prevent client flooding
@@ -155,7 +155,7 @@ public:
 	BOOL IsEmpty();
 
 	// Calculate when the packet can be output from the buffer
-	CTimerValue GetPacketSendTime(SLONG slSize);
+	CTimerValue GetPacketSendTime(long slSize);
 
 	// Adds a packet to the end of the packet buffer
 	BOOL AppendPacket(CPacket &paPacket,BOOL bDelay);
@@ -168,26 +168,26 @@ public:
 	// Reads the first packet in the bufffer
 	CPacket* GetFirstPacket();
 	// Reads the data from the packet with the requested sequence, but does not remove it
-	CPacket* PeekPacket(ULONG ulSequence);
+	CPacket* PeekPacket(unsigned long ulSequence);
 	// Reads the packet with the requested sequence
-	CPacket* GetPacket(ULONG ulSequence);
+	CPacket* GetPacket(unsigned long ulSequence);
 	// Reads the first connection request packet from the buffer
 	CPacket* GetConnectRequestPacket();
 	// Removes the first packet from the buffer
 	BOOL RemoveFirstPacket(BOOL bDelete);
 	// Removes the packet with the requested sequence from the buffer
-	BOOL RemovePacket(ULONG ulSequence,BOOL bDelete);
+	BOOL RemovePacket(unsigned long ulSequence,BOOL bDelete);
 	// Remove connect response packets from the buffer
   BOOL RemoveConnectResponsePackets();
 
 	// Gets the sequence number of the first packet in the buffer
-	ULONG GetFirstSequence();
+	unsigned long GetFirstSequence();
 	// Gets the sequence number of the last packet in the buffer
-	ULONG GetLastSequence();
+	unsigned long GetLastSequence();
 	// Is the packet with the given sequence in the buffer?
-	BOOL IsSequenceInBuffer(ULONG ulSequence);
+	BOOL IsSequenceInBuffer(unsigned long ulSequence);
 	// Check if the buffer contains a complete sequence of reliable packets	at the start of the buffer
-	BOOL CheckSequence(SLONG &slSize);
+	BOOL CheckSequence(long &slSize);
 		
 };
 

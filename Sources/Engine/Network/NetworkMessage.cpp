@@ -172,7 +172,7 @@ BOOL CNetworkMessage::EndOfMessage(void)
 }
 
 // read/write functions
-void CNetworkMessage::Read(void *pvBuffer, SLONG slSize)
+void CNetworkMessage::Read(void *pvBuffer, long slSize)
 {
   if (nm_pubPointer+slSize > nm_pubMessage+nm_slSize) {
     CPrintF(TRANSV("Warning: Message over-reading!\n"));
@@ -184,7 +184,7 @@ void CNetworkMessage::Read(void *pvBuffer, SLONG slSize)
   nm_pubPointer += slSize;
   nm_iBit = 0;
 }
-void CNetworkMessage::Write(const void *pvBuffer, SLONG slSize)
+void CNetworkMessage::Write(const void *pvBuffer, long slSize)
 {
   if (nm_pubPointer+slSize > nm_pubMessage+nm_slMaxSize) {
     CPrintF(TRANSV("Warning: Message over-writing!\n"));
@@ -295,10 +295,10 @@ void CNetworkMessage::Rewind(void)
 void CNetworkMessage::Pack(CNetworkMessage &nmPacked, CCompressor &comp)
 {
   // get size and pointers for packing, leave the message type alone
-  SLONG slUnpackedSize = nm_slSize-sizeof(UBYTE);
+  long slUnpackedSize = nm_slSize-sizeof(UBYTE);
   void *pvUnpacked     = nm_pubMessage+sizeof(UBYTE);
 
-  SLONG slPackedSize    = nmPacked.nm_slMaxSize-sizeof(UBYTE);
+  long slPackedSize    = nmPacked.nm_slMaxSize-sizeof(UBYTE);
   void *pvPacked        = nmPacked.nm_pubMessage+sizeof(UBYTE);
 
   // pack it there
@@ -315,10 +315,10 @@ void CNetworkMessage::Pack(CNetworkMessage &nmPacked, CCompressor &comp)
 void CNetworkMessage::Unpack(CNetworkMessage &nmUnpacked, CCompressor &comp)
 {
   // get size and pointers for unpacking, leave the message type alone
-  SLONG slPackedSize = nm_slSize-sizeof(UBYTE);
+  long slPackedSize = nm_slSize-sizeof(UBYTE);
   void *pvPacked     = nm_pubMessage+sizeof(UBYTE);
 
-  SLONG slUnpackedSize = nmUnpacked.nm_slMaxSize-sizeof(UBYTE);
+  long slUnpackedSize = nmUnpacked.nm_slMaxSize-sizeof(UBYTE);
   void *pvUnpacked     = nmUnpacked.nm_pubMessage+sizeof(UBYTE);
 
   // unpack it there
@@ -348,7 +348,7 @@ void CNetworkMessage::PackDefault(CNetworkMessage &nmPacked)
     (int&)nmPacked.nm_mtType|=1<<6;
   } else {
     // no packing
-    SLONG slUnpackedSize = nm_slSize-sizeof(UBYTE);
+    long slUnpackedSize = nm_slSize-sizeof(UBYTE);
     void *pvUnpacked     = nm_pubMessage+sizeof(UBYTE);
     void *pvPacked       = nmPacked.nm_pubMessage+sizeof(UBYTE);
     nmPacked.nm_slSize   = slUnpackedSize+sizeof(UBYTE);
@@ -382,7 +382,7 @@ void CNetworkMessage::UnpackDefault(CNetworkMessage &nmUnpacked)
   default:
   case 2: {
     // no unpacking
-    SLONG slPackedSize = nm_slSize-sizeof(UBYTE);
+    long slPackedSize = nm_slSize-sizeof(UBYTE);
     void *pvPacked     = nm_pubMessage+sizeof(UBYTE);
     void *pvUnpacked   = nmUnpacked.nm_pubMessage+sizeof(UBYTE);
     nmUnpacked.nm_slSize = slPackedSize+sizeof(UBYTE);
@@ -418,7 +418,7 @@ void CNetworkMessage::Dump(void)
 void CNetworkMessage::Shrink(void)
 {
   // remember original pointer offset
-  SLONG slOffset = nm_pubPointer-nm_pubMessage;
+  long slOffset = nm_pubPointer-nm_pubMessage;
   // allocate message buffer
   ShrinkMemory((void**)&nm_pubMessage, nm_slSize);
   nm_slMaxSize = nm_slSize;
@@ -636,9 +636,9 @@ INDEX CNetworkStream::GetUsedBlocks(void)
 }
 
 // get amount of memory used by this object
-SLONG CNetworkStream::GetUsedMemory(void)
+long CNetworkStream::GetUsedMemory(void)
 {
-  SLONG slMem = 0;
+  long slMem = 0;
   // for each block in list
   FOREACHINLIST(CNetworkStreamBlock, nsb_lnInStream, ns_lhBlocks, itnsb) {
     // add its usage
@@ -858,7 +858,7 @@ void CPlayerAction::Normalize(void)
   }
 }
 // create a checksum value for sync-check
-void CPlayerAction::ChecksumForSync(ULONG &ulCRC)
+void CPlayerAction::ChecksumForSync(unsigned long &ulCRC)
 {
   // !!! FIXME: Bad, bad, bad.  --ryan.
   CRC_AddBlock(ulCRC, (UBYTE*)this, sizeof(this));
@@ -866,7 +866,7 @@ void CPlayerAction::ChecksumForSync(ULONG &ulCRC)
 
 #define DUMPVECTOR(v) \
   strm.FPrintF_t(#v ":  %g,%g,%g %08x,%08x,%08x\n", \
-    (v)(1), (v)(2), (v)(3), (ULONG&)(v)(1), (ULONG&)(v)(2), (ULONG&)(v)(3))
+    (v)(1), (v)(2), (v)(3), (unsigned long&)(v)(1), (unsigned long&)(v)(2), (unsigned long&)(v)(3))
 #define DUMPLONG(l) \
   strm.FPrintF_t(#l ":  %08x\n", l)
 
@@ -907,7 +907,7 @@ CNetworkMessage &operator<<(CNetworkMessage &nm, const CPlayerAction &pa)
 {
   nm.Write(&pa.pa_llCreated, sizeof(pa.pa_llCreated));
 
-  const ULONG *pul = (const ULONG*)&pa.pa_vTranslation;
+  const unsigned long *pul = (const unsigned long*)&pa.pa_vTranslation;
   for (INDEX i=0; i<9; i++) {
     if (*pul==0) {
       UBYTE ub=0;
@@ -919,7 +919,7 @@ CNetworkMessage &operator<<(CNetworkMessage &nm, const CPlayerAction &pa)
     }
     pul++;
   }
-  ULONG ulFlags = pa.pa_ulButtons;
+  unsigned long ulFlags = pa.pa_ulButtons;
 
   // (0)          1       = no bits follow, value is 0
   if (ulFlags==0) {
@@ -962,7 +962,7 @@ CNetworkMessage &operator>>(CNetworkMessage &nm, CPlayerAction &pa)
 {
   nm.Read(&pa.pa_llCreated, sizeof(pa.pa_llCreated));
 
-  ULONG *pul = (ULONG*)&pa.pa_vTranslation;
+  unsigned long *pul = (unsigned long*)&pa.pa_vTranslation;
   for (INDEX i=0; i<9; i++) {
     UBYTE ub = 0;
     nm.ReadBits(&ub, 1);
@@ -983,7 +983,7 @@ CNetworkMessage &operator>>(CNetworkMessage &nm, CPlayerAction &pa)
       break;
     }
   }
-  ULONG ulFlags = 0;
+  unsigned long ulFlags = 0;
   // now read flags according to the number of bits
   // (0)          1       = no bits follow, value is 0
   if (iZeros==0) {

@@ -213,7 +213,7 @@ public:
   CTString gm_strNetworkProvider;
 
   // controls that are local to each player
-  SLONG gm_slPlayerControlsSize;
+  long gm_slPlayerControlsSize;
   void *gm_pvGlobalPlayerControls;
   // index of local player
   // (-1) if not active
@@ -228,9 +228,9 @@ public:
   BOOL StartProviderFromName(void);
   void SetupLocalPlayers( void);
   BOOL AddPlayers(void);
-  SLONG PackHighScoreTable(void);
+  long PackHighScoreTable(void);
   void RecordHighScore(void);
-  void UnpackHighScoreTable(SLONG slSize);
+  void UnpackHighScoreTable(long slSize);
   void SaveThumbnail(const CTFileName &fnm);
   CTFileName GetQuickSaveName(BOOL bSave);
   void GameHandleTimer(void);
@@ -248,7 +248,7 @@ public:
 
   // game loop functions
 #define GRV_SHOWEXTRAS  (1L<<0)   // add extra stuff like console, weapon, pause
-  virtual void GameRedrawView(CDrawPort *pdpDrawport, ULONG ulFlags);
+  virtual void GameRedrawView(CDrawPort *pdpDrawport, unsigned long ulFlags);
   virtual void GameMainLoop(void);
 
   // console functions

@@ -100,7 +100,7 @@ struct RenMesh
 // initialize batch model rendering
 ENGINE_API void RM_BeginRenderingView(CAnyProjection3D &apr, CDrawPort *pdp);
 ENGINE_API void RM_BeginModelRenderingMask( CAnyProjection3D &prProjection,
-                                            UBYTE *pubMask, SLONG slMaskWidth, SLONG slMaskHeight);
+                                            UBYTE *pubMask, long slMaskWidth, long slMaskHeight);
 // cleanup after batch model rendering
 ENGINE_API void RM_EndRenderingView( BOOL bRestoreOrtho=TRUE);
 ENGINE_API void RM_EndModelRenderingMask(void);
@@ -157,11 +157,11 @@ ENGINE_API void TransformVertex(GFXVertex &v, const Matrix12 &m);
 ENGINE_API void RotateVector(FLOAT3 &v, const Matrix12 &m);
 
 // model flags
-ENGINE_API void RM_SetFlags(ULONG ulNewFlags);
-ENGINE_API ULONG RM_GetFlags();
-ENGINE_API void RM_AddFlag(ULONG ulFlag);
-ENGINE_API void RM_RemoveFlag(ULONG ulFlag);
-ENGINE_API ULONG &RM_GetRenderFlags();
+ENGINE_API void RM_SetFlags(unsigned long ulNewFlags);
+ENGINE_API unsigned long RM_GetFlags();
+ENGINE_API void RM_AddFlag(unsigned long ulFlag);
+ENGINE_API void RM_RemoveFlag(unsigned long ulFlag);
+ENGINE_API unsigned long &RM_GetRenderFlags();
 ENGINE_API void RM_DoFogAndHaze(BOOL bOpaque);
 
 

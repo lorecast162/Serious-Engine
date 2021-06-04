@@ -61,9 +61,9 @@ void CPatchPaletteButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   else
   {
     INDEX iButtonNo = lpDrawItemStruct->CtlID - IDC_PATCH_BUTTON_BASE;
-    ULONG ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
+    unsigned long ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
     CModelerDoc* pDoc = pModelerView->GetDocument();
-    ULONG ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
+    unsigned long ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
     pDC->FillSolidRect( &lpDrawItemStruct->rcItem, 0x00aaaaaa);
     // If this patch doesn't exist
     if( (ulExistingMask & (1UL << iButtonNo)) == 0)
@@ -103,9 +103,9 @@ void CPatchPaletteButton::OnLButtonDown(UINT nFlags, CPoint point)
   CModelerView *pModelerView = CModelerView::GetActiveMappingNormalView();
   if( pModelerView != NULL)
   {
-    ULONG ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
+    unsigned long ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
     CModelerDoc* pDoc = pModelerView->GetDocument();
-    ULONG ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
+    unsigned long ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
     if( (ulExistingMask & (1UL << iButtonNo)) != 0)
     {
       pModelerView->m_iActivePatchBitIndex = iButtonNo;
@@ -124,9 +124,9 @@ void CPatchPaletteButton::OnRButtonDown(UINT nFlags, CPoint point)
   CModelerView *pModelerView = CModelerView::GetActiveMappingNormalView();
   if( pModelerView != NULL)
   {
-    ULONG ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
+    unsigned long ulCurrentMask = pModelerView->m_ModelObject.GetPatchesMask();
     CModelerDoc* pDoc = pModelerView->GetDocument();
-    ULONG ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
+    unsigned long ulExistingMask = pDoc->m_emEditModel.GetExistingPatchesMask();
     if( (ulExistingMask & (1UL << iButtonNo)) != 0)
     {
       if( (ulCurrentMask & (1UL << iButtonNo)) != 0)

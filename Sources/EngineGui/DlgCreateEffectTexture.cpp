@@ -48,7 +48,7 @@ void _OnLeftMouseDown( PIX pixU, PIX pixV)
 void _OnLeftMouseUp( PIX pixU, PIX pixV)
 {
   // obtain currently selected effect source type
-  ULONG ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
+  unsigned long ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
   // add new effect source
   pDialog->m_tdCreated.td_ptegEffect->AddEffectSource( ulEffectSourceType, pixStartU, pixStartV, pixU, pixV);
 }
@@ -57,7 +57,7 @@ void _OnLeftMouseUp( PIX pixU, PIX pixV)
 void _OnRightMouseDown( PIX pixU, PIX pixV)
 {
   // obtain currently selected effect source type
-  ULONG ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
+  unsigned long ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
   // add new effect source
   pDialog->m_tdCreated.td_ptegEffect->AddEffectSource( ulEffectSourceType, pixU, pixV, pixU, pixV);
 }
@@ -66,7 +66,7 @@ void _OnRightMouseDown( PIX pixU, PIX pixV)
 void _OnRightMouseMove( PIX pixU, PIX pixV)
 {
   // obtain currently selected effect source type
-  ULONG ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
+  unsigned long ulEffectSourceType = pDialog->m_ctrlEffectTypeCombo.GetCurSel();
   // add new effect source
   pDialog->m_tdCreated.td_ptegEffect->AddEffectSource( ulEffectSourceType, pixU, pixV, pixU, pixV);
 }

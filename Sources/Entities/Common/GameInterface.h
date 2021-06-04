@@ -9,7 +9,7 @@
 
 // these define address and size of player controls structure
 DECL_DLL extern void *ctl_pvPlayerControls;
-DECL_DLL extern const SLONG ctl_slPlayerControlsSize;
+DECL_DLL extern const long ctl_slPlayerControlsSize;
 // called to compose action packet from current controls
 DECL_DLL extern void ctl_ComposeActionPacket(const CPlayerCharacter &pc, CPlayerAction &paAction, BOOL bPreScan);
 
@@ -43,7 +43,7 @@ public:
   enum CompMsgType cmi_cmtType; // message category
   CTFileName cmi_fnmFileName;   // message filename
   BOOL cmi_bRead;               // true if message is read
-  ULONG cmi_ulHash;             // filename hash for fast searching
+  unsigned long cmi_ulHash;             // filename hash for fast searching
 
   void Clear(void);
   void Read_t(CTStream &strm);    // throw char *

@@ -106,10 +106,10 @@ void CEntity::ReadProperties_t(CTStream &istrm) // throw char *
   for(INDEX iProperty=0; iProperty<ctProperties; iProperty++) {
     //pdecDLLClass->dec_ctProperties;
     // read packed identifier
-    ULONG ulIDAndType;
+    unsigned long ulIDAndType;
     istrm>>ulIDAndType;
     // unpack property ID and property type from the identifier
-    ULONG ulID;
+    unsigned long ulID;
     CEntityProperty::PropertyType eptType;
     ulID = ulIDAndType>>8;
     eptType = (CEntityProperty::PropertyType )(ulIDAndType&0x000000FFUL);
@@ -434,9 +434,9 @@ void CEntity::WriteProperties_t(CTStream &ostrm) // throw char *
       CEntityProperty &epProperty = pdecDLLClass->dec_aepProperties[iProperty];
 
       // pack property ID and property type together
-      ULONG ulID = epProperty.ep_ulID;
-      ULONG ulType = (ULONG)epProperty.ep_eptType;
-      ULONG ulIDAndType = (ulID<<8)|ulType;
+      unsigned long ulID = epProperty.ep_ulID;
+      unsigned long ulType = (unsigned long)epProperty.ep_eptType;
+      unsigned long ulIDAndType = (ulID<<8)|ulType;
       // write the packed identifier
       ostrm<<ulIDAndType;
 

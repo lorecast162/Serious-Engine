@@ -373,8 +373,8 @@ static void ShrinkMap(INDEX iNewWidth, INDEX iNewHeight, INDEX iOldWidth, INDEX 
   FLOAT fDiffX = (FLOAT)iNewWidth  / iOldWidth;
   FLOAT fDiffY = (FLOAT)iNewHeight / iOldHeight;
 
-  ULONG *pulNewData = (ULONG*)AllocMemory(iNewWidth * iNewHeight * sizeof(ULONG));
-  memset(pulNewData,0,iNewWidth * iNewHeight * sizeof(ULONG));
+  unsigned long *pulNewData = (unsigned long*)AllocMemory(iNewWidth * iNewHeight * sizeof(unsigned long));
+  memset(pulNewData,0,iNewWidth * iNewHeight * sizeof(unsigned long));
 
   INDEX iOldPix = 0;
   for(FLOAT fy=0;fy<iNewHeight;fy+=fDiffY) {
@@ -385,7 +385,7 @@ static void ShrinkMap(INDEX iNewWidth, INDEX iNewHeight, INDEX iOldWidth, INDEX 
     }
   }
 
-  ULONG ulDiv = ceil(1.0f/fDiffX) * ceil(1.0f/fDiffY);
+  unsigned long ulDiv = ceil(1.0f/fDiffX) * ceil(1.0f/fDiffY);
   for(INDEX ii=0;ii<iNewWidth*iNewHeight;ii++) {
     pNewData[ii] = pulNewData[ii] / ulDiv;
   }
@@ -574,7 +574,7 @@ void CTerrain::SetShadowMapsSize(INDEX iShadowMapAspect, INDEX iShadingMapAspect
   // Clear current shadow map
   ClearShadowMap();
  
-  ULONG ulShadowMapFlags = 0;
+  unsigned long ulShadowMapFlags = 0;
   // if current app is world editor app
   if(_bWorldEditorApp) {
     // force texture to be static
@@ -904,7 +904,7 @@ static void AddTileLayerToTopMap(CTerrain *ptrTerrain, INDEX iTileIndex, INDEX i
     iOffsetZ = tt.tt_iOffsetZ*ctQuadsPerTile;
   }
 
-  ULONG *pulFirstInTopMap = ptdDst->td_pulFrames;
+  unsigned long *pulFirstInTopMap = ptdDst->td_pulFrames;
   UBYTE *pubFirstInLayerMask = tl.tl_aubColors;
 
   // Calculate width and height of quad that will be draw in top map
@@ -926,7 +926,7 @@ static void AddTileLayerToTopMap(CTerrain *ptrTerrain, INDEX iTileIndex, INDEX i
 
   ASSERT(pixDstQuadWidth==iSrcMipQuadWidth);
    
-  ULONG *pulSrcMip = &ptdSrc->td_pulFrames[iSrcMipMapOffset];
+  unsigned long *pulSrcMip = &ptdSrc->td_pulFrames[iSrcMipMapOffset];
 
   INDEX iMaskIndex = iOffsetX + iOffsetZ*ptrTerrain->tr_pixHeightMapWidth;
   INDEX iMaskStepX = ptrTerrain->tr_pixHeightMapWidth - ctQuadsPerTile;
@@ -954,7 +954,7 @@ static void AddTileLayerToTopMap(CTerrain *ptrTerrain, INDEX iTileIndex, INDEX i
       ASSERT(iTileY<tl.tl_ctTilesInCol);
 
       INDEX iFirstDstQuadPixel = (iQuadX*pixDstQuadWidth) + iQuadY*pixDstQuadWidth*ptdDst->GetPixWidth();
-      ULONG *pulDstPixel = &pulFirstInTopMap[iFirstDstQuadPixel];
+      unsigned long *pulDstPixel = &pulFirstInTopMap[iFirstDstQuadPixel];
       PIX pixSrc = iTileX*iSrcMipQuadWidth + iTileY*iSrcMipQuadWidth*iSrcMipWidth;
       PIX pixDst = 0;
       PIX pixDstModulo = ptdDst->GetPixWidth() - pixDstQuadWidth;
@@ -1088,46 +1088,46 @@ void CTerrain::UpdateTopMap(INDEX iTileIndex, Rect *prcDest/*=NULL*/)
     FIX16_16 fiHMaskStep = FIX16_16(iMaskWidth-1) / FIX16_16(ptdDest->GetWidth()-1) / fiMaskDiv;
     FIX16_16 fiVMaskStep = FIX16_16(iMaskWidth-1) / FIX16_16(ptdDest->GetWidth()-1) / fiMaskDiv;
 
-    SLONG xHMaskStep = fiHMaskStep.slHolder;
-    SLONG xVMaskStep = fiVMaskStep.slHolder;
-    SLONG xMaskVPos=0;
+    long xHMaskStep = fiHMaskStep.slHolder;
+    long xVMaskStep = fiVMaskStep.slHolder;
+    long xMaskVPos=0;
     
     // get first byte in destination texture
-    ULONG *pulTexDst = (ULONG*)&ptdDest->td_pulFrames[0];
+    unsigned long *pulTexDst = (unsigned long*)&ptdDest->td_pulFrames[0];
     // get first byte in source texture
-    ULONG *pulFirstInMipSrc = (ULONG*)&ptdSrc->td_pulFrames[iMipAdr];
+    unsigned long *pulFirstInMipSrc = (unsigned long*)&ptdSrc->td_pulFrames[iMipAdr];
   
     // for each row
     for(UINT ir=0;ir<ptdDest->GetPixHeight();ir++)
     {
       // get first byte for src mip texture in this row
-      ULONG *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
+      unsigned long *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
       INDEX iMaskVPos = (INDEX)(xMaskVPos>>16) * (iMaskWidth);
       UBYTE *pubMaskRow = &ubFirstInMask[iMaskVPos];
       UBYTE *pubEdgeMaskRow = &ubFirstInEdgeMap[iMaskVPos];
-      SLONG xMaskHPos = 0;
+      long xMaskHPos = 0;
       // for each column
       for(UINT ic=0;ic<ptdDest->GetPixWidth();ic++)
       {
-        ULONG *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
+        unsigned long *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
         INDEX iMask = (INDEX)(xMaskHPos>>16);
 
-        SLONG x1 = (SLONG)(pubMaskRow[iMask+0]) <<0; //NormByteToFixInt(pubMaskRow[iMask]);
-        SLONG x2 = (SLONG)(pubMaskRow[iMask+1]) <<0; //NormByteToFixInt(pubMaskRow[iMask+1]);
-        SLONG x3 = (SLONG)(pubMaskRow[iMask+iMaskWidth+0]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+0]);
-        SLONG x4 = (SLONG)(pubMaskRow[iMask+iMaskWidth+1]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+1]);
-        SLONG xFactH = xMaskHPos - (xMaskHPos&0xFFFF0000);
-        SLONG xFactV = xMaskVPos - (xMaskVPos&0xFFFF0000);
+        long x1 = (long)(pubMaskRow[iMask+0]) <<0; //NormByteToFixInt(pubMaskRow[iMask]);
+        long x2 = (long)(pubMaskRow[iMask+1]) <<0; //NormByteToFixInt(pubMaskRow[iMask+1]);
+        long x3 = (long)(pubMaskRow[iMask+iMaskWidth+0]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+0]);
+        long x4 = (long)(pubMaskRow[iMask+iMaskWidth+1]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+1]);
+        long xFactH = xMaskHPos - (xMaskHPos&0xFFFF0000);
+        long xFactV = xMaskVPos - (xMaskVPos&0xFFFF0000);
         
-        SLONG xStrengthX1 = (x1<<7) + (SLONG)(((x2-x1)*xFactH)>>9); //Lerp(fi1,fi2,fiFactH);
-        SLONG xStrengthX2 = (x3<<7) + (SLONG)(((x4-x3)*xFactH)>>9); //Lerp(fi3,fi4,fiFactH);
-        SLONG xStrength   = (xStrengthX1<<1) + (SLONG)((((xStrengthX2>>0)-(xStrengthX1>>0))*xFactV)>>15);   //Lerp(fiStrengthX1,fiStrengthX2,fiFactV);
+        long xStrengthX1 = (x1<<7) + (long)(((x2-x1)*xFactH)>>9); //Lerp(fi1,fi2,fiFactH);
+        long xStrengthX2 = (x3<<7) + (long)(((x4-x3)*xFactH)>>9); //Lerp(fi3,fi4,fiFactH);
+        long xStrength   = (xStrengthX1<<1) + (long)((((xStrengthX2>>0)-(xStrengthX1>>0))*xFactV)>>15);   //Lerp(fiStrengthX1,fiStrengthX2,fiFactV);
         
         GFXColor *pcolSrc = (GFXColor*)pulTexDst;
         GFXColor *pcolDst = (GFXColor*)ulSrc;
-        pcolSrc->ub.r = (BYTE)( (ULONG)pcolSrc->ub.r + ((((ULONG)pcolDst->ub.r - (ULONG)pcolSrc->ub.r) * xStrength)>>16));
-        pcolSrc->ub.g = (BYTE)( (ULONG)pcolSrc->ub.g + ((((ULONG)pcolDst->ub.g - (ULONG)pcolSrc->ub.g) * xStrength)>>16));
-        pcolSrc->ub.b = (BYTE)( (ULONG)pcolSrc->ub.b + ((((ULONG)pcolDst->ub.b - (ULONG)pcolSrc->ub.b) * xStrength)>>16));
+        pcolSrc->ub.r = (BYTE)( (unsigned long)pcolSrc->ub.r + ((((unsigned long)pcolDst->ub.r - (unsigned long)pcolSrc->ub.r) * xStrength)>>16));
+        pcolSrc->ub.g = (BYTE)( (unsigned long)pcolSrc->ub.g + ((((unsigned long)pcolDst->ub.g - (unsigned long)pcolSrc->ub.g) * xStrength)>>16));
+        pcolSrc->ub.b = (BYTE)( (unsigned long)pcolSrc->ub.b + ((((unsigned long)pcolDst->ub.b - (unsigned long)pcolSrc->ub.b) * xStrength)>>16));
         pcolSrc->ub.a = pubEdgeMaskRow[iMask];
         
         pulTexDst++;
@@ -1176,7 +1176,7 @@ COLOR CTerrain::GetShadeColor(CShadingInfo *psi)
   PIX pixWidth  = GetShadingMapWidth();
   PIX pixShadow = pixShadowU + pixShadowV*pixWidth;
   UWORD auwShade[4];
-  SLONG aslr[4], aslg[4], aslb[4];
+  long aslr[4], aslg[4], aslb[4];
 
   auwShade[0] = tr_auwShadingMap[pixShadow];
   auwShade[1] = tr_auwShadingMap[pixShadow+1];
@@ -1193,11 +1193,11 @@ COLOR CTerrain::GetShadeColor(CShadingInfo *psi)
     aslb[ish] = (aslb[ish]<<3) | (aslb[ish]>>2);
   }
 
-  SLONG slRed   = Lerp( Lerp(aslr[0], aslr[1], fLRRatio), Lerp(aslr[2], aslr[3], fLRRatio), fUDRatio);
-  SLONG slGreen = Lerp( Lerp(aslg[0], aslg[1], fLRRatio), Lerp(aslg[2], aslg[3], fLRRatio), fUDRatio);
-  SLONG slBlue  = Lerp( Lerp(aslb[0], aslb[1], fLRRatio), Lerp(aslb[2], aslb[3], fLRRatio), fUDRatio);
+  long slRed   = Lerp( Lerp(aslr[0], aslr[1], fLRRatio), Lerp(aslr[2], aslr[3], fLRRatio), fUDRatio);
+  long slGreen = Lerp( Lerp(aslg[0], aslg[1], fLRRatio), Lerp(aslg[2], aslg[3], fLRRatio), fUDRatio);
+  long slBlue  = Lerp( Lerp(aslb[0], aslb[1], fLRRatio), Lerp(aslb[2], aslb[3], fLRRatio), fUDRatio);
 
-  ULONG ulPixel = ((slRed  <<24)&0xFF000000) |
+  unsigned long ulPixel = ((slRed  <<24)&0xFF000000) |
                   ((slGreen<<16)&0x00FF0000) | 
                   ((slBlue << 8)&0x0000FF00) | 0xFF;
 
@@ -1362,44 +1362,44 @@ void CTerrain::GenerateTopMap(INDEX iTileIndex)
     FIX16_16 fiHMaskStep = FIX16_16(iMaskWidth-1)/FIX16_16(ptdDest->GetWidth()-1)/fiMaskDiv;
     FIX16_16 fiVMaskStep = FIX16_16(iMaskWidth-1)/FIX16_16(ptdDest->GetWidth()-1)/fiMaskDiv;
 
-    SLONG xHMaskStep = fiHMaskStep.slHolder;
-    SLONG xVMaskStep = fiVMaskStep.slHolder;
-    SLONG xMaskVPos=0;
+    long xHMaskStep = fiHMaskStep.slHolder;
+    long xVMaskStep = fiVMaskStep.slHolder;
+    long xMaskVPos=0;
     
     // get first byte in destination texture
-    ULONG *pulTexDst = (ULONG*)&ptdDest->td_pulFrames[0];
+    unsigned long *pulTexDst = (unsigned long*)&ptdDest->td_pulFrames[0];
     // get first byte in source texture
-    ULONG *pulFirstInMipSrc = (ULONG*)&ptdSrc->td_pulFrames[iMipAdr];
+    unsigned long *pulFirstInMipSrc = (unsigned long*)&ptdSrc->td_pulFrames[iMipAdr];
   
     // for each row
     for(UINT ir=0;ir<ptdDest->GetHeight();ir++) {
       // get first byte for src mip texture in this row
-      ULONG *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
+      unsigned long *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
       INDEX iMaskVPos = (INDEX)(xMaskVPos>>16) * (iMaskWidth);
       UBYTE *pubMaskRow = &ubFirstInMask[iMaskVPos];
-      SLONG xMaskHPos = 0;
+      long xMaskHPos = 0;
       // for each column
       for(UINT ic=0;ic<ptdDest->GetWidth();ic++) {
 
-        ULONG *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
+        unsigned long *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
         INDEX iMask = (INDEX)(xMaskHPos>>16);
 
-        SLONG x1 = (SLONG)(pubMaskRow[iMask+0]) <<0; //NormByteToFixInt(pubMaskRow[iMask]);
-        SLONG x2 = (SLONG)(pubMaskRow[iMask+1]) <<0; //NormByteToFixInt(pubMaskRow[iMask+1]);
-        SLONG x3 = (SLONG)(pubMaskRow[iMask+iMaskWidth+0]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+0]);
-        SLONG x4 = (SLONG)(pubMaskRow[iMask+iMaskWidth+1]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+1]);
-        SLONG xFactH = xMaskHPos - (xMaskHPos&0xFFFF0000);
-        SLONG xFactV = xMaskVPos - (xMaskVPos&0xFFFF0000);
+        long x1 = (long)(pubMaskRow[iMask+0]) <<0; //NormByteToFixInt(pubMaskRow[iMask]);
+        long x2 = (long)(pubMaskRow[iMask+1]) <<0; //NormByteToFixInt(pubMaskRow[iMask+1]);
+        long x3 = (long)(pubMaskRow[iMask+iMaskWidth+0]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+0]);
+        long x4 = (long)(pubMaskRow[iMask+iMaskWidth+1]) <<0;//NormByteToFixInt(pubMaskRow[iMask+iMaskWidth+1]);
+        long xFactH = xMaskHPos - (xMaskHPos&0xFFFF0000);
+        long xFactV = xMaskVPos - (xMaskVPos&0xFFFF0000);
         
-        SLONG xStrengthX1 = (x1<<7) + (SLONG)(((x2-x1)*xFactH)>>9); //Lerp(fi1,fi2,fiFactH);
-        SLONG xStrengthX2 = (x3<<7) + (SLONG)(((x4-x3)*xFactH)>>9); //Lerp(fi3,fi4,fiFactH);
-        SLONG xStrength   = (xStrengthX1<<1) + (SLONG)((((xStrengthX2>>0)-(xStrengthX1>>0))*xFactV)>>15);   //Lerp(fiStrengthX1,fiStrengthX2,fiFactV);
+        long xStrengthX1 = (x1<<7) + (long)(((x2-x1)*xFactH)>>9); //Lerp(fi1,fi2,fiFactH);
+        long xStrengthX2 = (x3<<7) + (long)(((x4-x3)*xFactH)>>9); //Lerp(fi3,fi4,fiFactH);
+        long xStrength   = (xStrengthX1<<1) + (long)((((xStrengthX2>>0)-(xStrengthX1>>0))*xFactV)>>15);   //Lerp(fiStrengthX1,fiStrengthX2,fiFactV);
         
         GFXColor *pcolSrc = (GFXColor*)pulTexDst;
         GFXColor *pcolDst = (GFXColor*)ulSrc;
-        pcolSrc->r = (BYTE)( (ULONG)pcolSrc->r + ((((ULONG)pcolDst->r - (ULONG)pcolSrc->r) * xStrength)>>16));
-        pcolSrc->g = (BYTE)( (ULONG)pcolSrc->g + ((((ULONG)pcolDst->g - (ULONG)pcolSrc->g) * xStrength)>>16));
-        pcolSrc->b = (BYTE)( (ULONG)pcolSrc->b + ((((ULONG)pcolDst->b - (ULONG)pcolSrc->b) * xStrength)>>16));
+        pcolSrc->r = (BYTE)( (unsigned long)pcolSrc->r + ((((unsigned long)pcolDst->r - (unsigned long)pcolSrc->r) * xStrength)>>16));
+        pcolSrc->g = (BYTE)( (unsigned long)pcolSrc->g + ((((unsigned long)pcolDst->g - (unsigned long)pcolSrc->g) * xStrength)>>16));
+        pcolSrc->b = (BYTE)( (unsigned long)pcolSrc->b + ((((unsigned long)pcolDst->b - (unsigned long)pcolSrc->b) * xStrength)>>16));
         pcolSrc->a = 255;
         
         pulTexDst++;
@@ -1458,21 +1458,21 @@ void CTerrain::GenerateTopMap(INDEX iTileIndex)
     FLOAT fMaskVPos=0;
     
     // get first byte in destination texture
-    ULONG *pulTexDst = (ULONG*)&ptdDest->td_pulFrames[0];
+    unsigned long *pulTexDst = (unsigned long*)&ptdDest->td_pulFrames[0];
     // get first byte in source texture
-    ULONG *pulFirstInMipSrc = &ptdSrc->td_pulFrames[iMipAdr];
+    unsigned long *pulFirstInMipSrc = &ptdSrc->td_pulFrames[iMipAdr];
   
     // for each row
     for(UINT ir=0;ir<ptdDest->GetWidth();ir++) {
       // get first byte for src mip texture in this row
-      ULONG *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
+      unsigned long *pulSrcRow = &pulFirstInMipSrc[(ir&(iSrcMipWidth-1))*iSrcMipWidth];//%
       INDEX iMaskVPos = (INDEX)fMaskVPos * (iMaskWidth);
       UBYTE *pubMaskRow = &ubFirstInMask[iMaskVPos];
       FLOAT fMaskHPos = 0;
       // for each column
       for(UINT ic=0;ic<ptdDest->GetWidth();ic++) {
 
-        ULONG *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
+        unsigned long *ulSrc = &pulSrcRow[ic&(iSrcMipWidth-1)];
         INDEX iMask = (INDEX)fMaskHPos;
         FLOAT f1 = NormByteToFloat(pubMaskRow[iMask]);
         FLOAT f2 = NormByteToFloat(pubMaskRow[iMask+1]);
@@ -1741,50 +1741,50 @@ static void ShowTerrainInfo(CAnyProjection3D &apr, CDrawPort *pdp, CTerrain *ptr
   strInfo +=strTemp;
 
   // Show memory usage
-  //SLONG slUsedMemory=0;
+  //long slUsedMemory=0;
   // Height map usage
-  SLONG slHeightMap = ptrTerrain->tr_pixHeightMapWidth*ptrTerrain->tr_pixHeightMapHeight*sizeof(UWORD);
+  long slHeightMap = ptrTerrain->tr_pixHeightMapWidth*ptrTerrain->tr_pixHeightMapHeight*sizeof(UWORD);
   // Edge map usage
-  SLONG slEdgeMap = ptrTerrain->tr_pixHeightMapWidth*ptrTerrain->tr_pixHeightMapHeight*sizeof(UBYTE);
+  long slEdgeMap = ptrTerrain->tr_pixHeightMapWidth*ptrTerrain->tr_pixHeightMapHeight*sizeof(UBYTE);
   // Shadow map usage
-  SLONG slShadowMap = ptrTerrain->tr_tdShadowMap.GetUsedMemory();
+  long slShadowMap = ptrTerrain->tr_tdShadowMap.GetUsedMemory();
   // Quad tree usage
-  SLONG slQTNodes  = sizeof(QuadTreeNode)*ptrTerrain->tr_aqtnQuadTreeNodes.Count();
-  SLONG slQTLevels = sizeof(QuadTreeLevel)*ptrTerrain->tr_aqtlQuadTreeLevels.Count();
+  long slQTNodes  = sizeof(QuadTreeNode)*ptrTerrain->tr_aqtnQuadTreeNodes.Count();
+  long slQTLevels = sizeof(QuadTreeLevel)*ptrTerrain->tr_aqtlQuadTreeLevels.Count();
   // Tiles usage 
-  SLONG slTiles = 0;
+  long slTiles = 0;
   INDEX cttt = ptrTerrain->tr_ctTiles;
   for(INDEX itt=0;itt<cttt;itt++) {
     CTerrainTile &tt = ptrTerrain->tr_attTiles[itt];
     slTiles+=tt.GetUsedMemory();
   }
   // Arrays holders usage
-  SLONG slArrayHoldes=0;
+  long slArrayHoldes=0;
   INDEX ctah=ptrTerrain->tr_aArrayHolders.Count();
   for(INDEX iah=0;iah<ctah;iah++) {
     CArrayHolder &ah = ptrTerrain->tr_aArrayHolders[iah];
     slArrayHoldes+=ah.GetUsedMemory();
   }
-  SLONG slLayers=0;
+  long slLayers=0;
   // Terrain layers usage
   INDEX cttl = ptrTerrain->tr_atlLayers.Count();
   for(INDEX itl=0;itl<cttl;itl++) {
     CTerrainLayer &tl = ptrTerrain->tr_atlLayers[itl];
     slLayers+=tl.GetUsedMemory();
   }
-  SLONG slTopMaps=0;
+  long slTopMaps=0;
   // Top maps usage
   INDEX cttm=ptrTerrain->tr_atdTopMaps.Count();
   for(INDEX itm=0;itm<cttm;itm++) {
     CTextureData *ptdTopMap = &ptrTerrain->tr_atdTopMaps[itm];
     slTopMaps+=ptdTopMap->GetUsedMemory();
   }
-  SLONG slGlobalTopMap = ptrTerrain->tr_tdTopMap.GetUsedMemory();
-  SLONG slTileBatchingSize = GetUsedMemoryForTileBatching();
-  SLONG slVertexSmoothing  = _avLerpedVerices.sa_Count * sizeof(GFXVertex4);
-  extern SLONG  _slSharedTopMapSize; // Shared top map size
+  long slGlobalTopMap = ptrTerrain->tr_tdTopMap.GetUsedMemory();
+  long slTileBatchingSize = GetUsedMemoryForTileBatching();
+  long slVertexSmoothing  = _avLerpedVerices.sa_Count * sizeof(GFXVertex4);
+  extern long  _slSharedTopMapSize; // Shared top map size
   // Global top map usage
-  SLONG slTotal = slHeightMap+slEdgeMap+slShadowMap+slQTNodes+slQTLevels+slTiles+slArrayHoldes+slLayers+
+  long slTotal = slHeightMap+slEdgeMap+slShadowMap+slQTNodes+slQTLevels+slTiles+slArrayHoldes+slLayers+
                   slTopMaps+slGlobalTopMap+slTileBatchingSize+slVertexSmoothing;
   CTString strMemoryUsed;
   strMemoryUsed.PrintF("Heightmap = %d KB\nEdgemap   = %d KB\nShadowMap = %d KB\nQuadTree  = %d KB\nTiles     = %d KB\nArrays    = %d KB\nLayers    = %d KB\nTopMaps   = %d KB\nGlobal TM = %d KB\nShared TM = %d KB\nVtx lerp  = %d KB\nBatching  = %d KB\nTotal     = %d KB\n",
@@ -1902,7 +1902,7 @@ void CTerrain::ReadVersion_t( CTStream *istrFile, INDEX iSavedVersion)
   (*istrFile).ExpectID_t("TRHM");  // 'Terrain heightmap'
 
   // read height map
-  for (ULONG i = 0; i < tr_pixHeightMapWidth*tr_pixHeightMapHeight; i++)
+  for (unsigned long i = 0; i < tr_pixHeightMapWidth*tr_pixHeightMapHeight; i++)
     (*istrFile)>>tr_auwHeightMap[i];
   (*istrFile).ExpectID_t("THEN");  // 'Terrain heightmap end'
 
@@ -1968,7 +1968,7 @@ void CTerrain::Write_t( CTStream *ostrFile)
 
   (*ostrFile)<<tr_iShadowMapSizeAspect;
   (*ostrFile)<<tr_iShadingMapSizeAspect;
-  INDEX iShadowMapSize = GetShadowMapWidth() * GetShadowMapHeight() * sizeof(ULONG);
+  INDEX iShadowMapSize = GetShadowMapWidth() * GetShadowMapHeight() * sizeof(unsigned long);
   INDEX iShadingMapSize = GetShadingMapWidth() * GetShadingMapHeight() * sizeof(UWORD);
   // Write shadow map
   ASSERT(tr_tdShadowMap.td_pulFrames!=NULL);

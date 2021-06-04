@@ -37,10 +37,10 @@ public:
   CEntity *cm_penB;      // entity B - can be either model or brush
 
   // masks for collision flags of other entities
-  ULONG cm_ulTestMask1;
-  ULONG cm_ulTestMask2;
-  ULONG cm_ulPassMaskA;   // pass - send event to A
-  ULONG cm_ulPassMaskB;   // pass - send event to B
+  unsigned long cm_ulTestMask1;
+  unsigned long cm_ulTestMask2;
+  unsigned long cm_ulPassMaskA;   // pass - send event to A
+  unsigned long cm_ulPassMaskB;   // pass - send event to B
 
   // test if should test with some entity
   inline BOOL MustTest(CEntity *pen) {

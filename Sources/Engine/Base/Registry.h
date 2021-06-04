@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 ENGINE_API BOOL REG_GetString(const CTString &strKey, CTString &strString);
 ENGINE_API BOOL REG_SetString(const CTString &strKey, const CTString &strString);
-ENGINE_API BOOL REG_GetLong(const CTString &strKey, ULONG &ulLong);
+ENGINE_API BOOL REG_GetLong(const CTString &strKey, unsigned long &ulLong);
 
 
 #endif  /* include-once check. */

@@ -40,7 +40,7 @@ public:
   CTString m_astrVTreeBuffer[DIRECTORY_SHORTCT_CT][32];
   INDEX m_aiSubDirectoriesCt[DIRECTORY_SHORTCT_CT];
   CSize m_Size;
-  SLONG m_TreeHeight;
+  long m_TreeHeight;
 
   PIXaabbox2D m_boxBrowseWnd;
   PIXaabbox2D m_boxTreeWnd;

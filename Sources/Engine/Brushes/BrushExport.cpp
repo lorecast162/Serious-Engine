@@ -180,7 +180,7 @@ void CBrushSector::ToObjectSector(CObjectSector &osc)
     memcpy(pubUserData+sizePolygonProperties+2*sizeTextureProperties,
       &bpo.bpo_abptTextures[2].bpt_auProperties,
       sizeTextureProperties);
-    *(ULONG*)(pubUserData+sizePolygonProperties+3*sizeTextureProperties) = bpo.bpo_colShadow;
+    *(unsigned long*)(pubUserData+sizePolygonProperties+3*sizeTextureProperties) = bpo.bpo_colShadow;
 
     opo.opo_PolygonEdges.Lock();
     // get the number of edges in brush polygon

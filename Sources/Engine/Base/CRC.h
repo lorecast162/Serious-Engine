@@ -19,24 +19,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-extern ENGINE_API ULONG crc_aulCRCTable[256];
+extern ENGINE_API unsigned long crc_aulCRCTable[256];
 
 // begin crc calculation
-inline void CRC_Start(ULONG &ulCRC) { ulCRC = 0xFFFFFFFF; };
+inline void CRC_Start(unsigned long &ulCRC) { ulCRC = 0xFFFFFFFF; };
 
 // add data to a crc value
-inline void CRC_AddBYTE( ULONG &ulCRC, UBYTE ub)
+inline void CRC_AddBYTE( unsigned long &ulCRC, UBYTE ub)
 {
   ulCRC = (ulCRC>>8)^crc_aulCRCTable[UBYTE(ulCRC)^ub];
 };
 
-inline void CRC_AddWORD( ULONG &ulCRC, UWORD uw)
+inline void CRC_AddWORD( unsigned long &ulCRC, UWORD uw)
 {
   CRC_AddBYTE(ulCRC, UBYTE(uw>> 8));
   CRC_AddBYTE(ulCRC, UBYTE(uw>> 0));
 };
 
-inline void CRC_AddLONG( ULONG &ulCRC, ULONG ul)
+inline void CRC_AddLONG( unsigned long &ulCRC, unsigned long ul)
 {
   CRC_AddBYTE(ulCRC, UBYTE(ul>>24));
   CRC_AddBYTE(ulCRC, UBYTE(ul>>16));
@@ -44,7 +44,7 @@ inline void CRC_AddLONG( ULONG &ulCRC, ULONG ul)
   CRC_AddBYTE(ulCRC, UBYTE(ul>> 0));
 };
 
-inline void CRC_AddLONGLONG( ULONG &ulCRC, uint64_t x)
+inline void CRC_AddLONGLONG( unsigned long &ulCRC, uint64_t x)
 {
   CRC_AddBYTE(ulCRC, UBYTE(x>>56));
   CRC_AddBYTE(ulCRC, UBYTE(x>>48));
@@ -56,31 +56,31 @@ inline void CRC_AddLONGLONG( ULONG &ulCRC, uint64_t x)
   CRC_AddBYTE(ulCRC, UBYTE(x>> 0));
 }
 
-inline void CRC_AddFLOAT(ULONG &ulCRC, FLOAT f)
+inline void CRC_AddFLOAT(unsigned long &ulCRC, FLOAT f)
 {
-  CRC_AddLONG(ulCRC, *(ULONG*)&f);
+  CRC_AddLONG(ulCRC, *(unsigned long*)&f);
 };
 
 // add memory block to a CRC value
-inline void CRC_AddBlock(ULONG &ulCRC, UBYTE *pubBlock, ULONG ulSize)
+inline void CRC_AddBlock(unsigned long &ulCRC, UBYTE *pubBlock, unsigned long ulSize)
 {
-  for( INDEX i=0; (ULONG)i<ulSize; i++) CRC_AddBYTE( ulCRC, pubBlock[i]);
+  for( INDEX i=0; (unsigned long)i<ulSize; i++) CRC_AddBYTE( ulCRC, pubBlock[i]);
 };
 
 // end crc calculation
-inline void CRC_Finish(ULONG &ulCRC) { ulCRC ^= 0xFFFFFFFF; };
+inline void CRC_Finish(unsigned long &ulCRC) { ulCRC ^= 0xFFFFFFFF; };
 
-// in 32bit mode, it just returns iPtr ULONG,
+// in 32bit mode, it just returns iPtr unsigned long,
 // in 64bit mode it returns the CRC hash of iPtr (or 0 if ptr == NULL)
 // so either way you should get a value that very likely uniquely identifies the pointer
-inline ULONG IntPtrToID(size_t iPtr)
+inline unsigned long IntPtrToID(size_t iPtr)
 {
 #if PLATFORM_32BIT
-  return (ULONG)iPtr;
+  return (unsigned long)iPtr;
 #else
   // in case the code relies on 0 having special meaning because of NULL-pointers...
   if(iPtr == 0)  return 0;
-  ULONG ret;
+  unsigned long ret;
   CRC_Start(ret);
   CRC_AddLONGLONG(ret, iPtr);
   CRC_Finish(ret);
@@ -88,13 +88,13 @@ inline ULONG IntPtrToID(size_t iPtr)
 #endif
 }
 
-// in 32bit mode, it just returns the pointer's address as ULONG,
+// in 32bit mode, it just returns the pointer's address as unsigned long,
 // in 64bit mode it returns the CRC hash of the pointer's address (or 0 if ptr == NULL)
 // so either way you should get a value that very likely uniquely identifies the pointer
-inline ULONG PointerToID(void* ptr)
+inline unsigned long PointerToID(void* ptr)
 {
 #if PLATFORM_32BIT
-  return (ULONG)(size_t)ptr;
+  return (unsigned long)(size_t)ptr;
 #else
   return IntPtrToID((size_t)ptr);
 #endif

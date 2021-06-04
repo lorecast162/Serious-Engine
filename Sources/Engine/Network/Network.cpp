@@ -367,7 +367,7 @@ static void NetworkInfo(void)
   for(INDEX iplt=0; iplt<_pNetwork->ga_sesSessionState.ses_apltPlayers.Count(); iplt++) {
     CPlayerTarget &plt = _pNetwork->ga_sesSessionState.ses_apltPlayers[iplt];
     if (plt.plt_bActive) {
-      ULONG ulID = (ULONG) -1;
+      unsigned long ulID = (unsigned long) -1;
       if (plt.plt_penPlayerEntity!=NULL) {
         ulID = plt.plt_penPlayerEntity->en_ulID;
       }
@@ -459,19 +459,19 @@ static void StockInfo(void)
 {
   // find memory used by shadowmap (both cached and uploaded)
   INDEX ctCachedShadows=0, ctDynamicShadows=0, ctFlatShadows=0;
-  SLONG slStaticMemory=0,  slDynamicMemory=0,  slUploadMemory=0;
-  SLONG slShdBytes=0,  slSlackMemory=0,    slFlatMemory=0;
+  long slStaticMemory=0,  slDynamicMemory=0,  slUploadMemory=0;
+  long slShdBytes=0,  slSlackMemory=0,    slFlatMemory=0;
   INDEX ct256=0, ct128=0, ct64=0, ct32=0, ct16=0;
-  SLONG sl256Memory=0, sl128Memory=0, sl64Memory=0, sl32Memory=0, sl16Memory=0;
+  long sl256Memory=0, sl128Memory=0, sl64Memory=0, sl32Memory=0, sl16Memory=0;
 
   if( _pGfx!=NULL)
   {
     FLOAT fSlackRatio;
     FOREACHINLIST( CShadowMap, sm_lnInGfx, _pGfx->gl_lhCachedShadows, itsm)
     { // get polygon size in pixels (used portion of shadowmap)
-      SLONG slStaticSize, slDynamicSize, slUploadSize;
+      long slStaticSize, slDynamicSize, slUploadSize;
       BOOL bIsFlat = itsm->GetUsedMemory( slStaticSize, slDynamicSize, slUploadSize, fSlackRatio);
-      SLONG slTotalSize = slDynamicSize+slUploadSize;
+      long slTotalSize = slDynamicSize+slUploadSize;
       if( bIsFlat) {
         slStaticMemory += 4;
         slTotalSize    += 4;
@@ -488,7 +488,7 @@ static void StockInfo(void)
       }
       slUploadMemory  += slUploadSize;
       slShdBytes  += slTotalSize + sizeof(CShadowMap);
-      slSlackMemory   += (SLONG) (slTotalSize*fSlackRatio);
+      slSlackMemory   += (long) (slTotalSize*fSlackRatio);
 
       if( !bIsFlat) { // by size ...
         if(      slStaticSize>128*1024) { ct256++; sl256Memory+=slTotalSize; }
@@ -518,8 +518,8 @@ static void StockInfo(void)
 
   // report world stats
   INDEX ctEntities=0, ctShadowLayers=0, ctPolys=0,    ctPlanes=0,   ctEdges=0,    ctVertices=0, ctSectors=0;
-  SLONG slEntBytes=0, slLyrBytes=0,     slPlyBytes=0, slPlnBytes=0, slEdgBytes=0, slVtxBytes=0, slSecBytes=0;
-  SLONG slCgrBytes=0;
+  long slEntBytes=0, slLyrBytes=0,     slPlyBytes=0, slPlnBytes=0, slEdgBytes=0, slVtxBytes=0, slSecBytes=0;
+  long slCgrBytes=0;
   CWorld *pwo = _pShell->GetCurrentWorld();
 
   if( pwo!=NULL)
@@ -574,7 +574,7 @@ static void StockInfo(void)
         }
       }
     } // add in memory used by collision grid
-    extern SLONG  GetCollisionGridMemory( CCollisionGrid *pcg);
+    extern long  GetCollisionGridMemory( CCollisionGrid *pcg);
     slCgrBytes += GetCollisionGridMemory( pwo->wo_pcgCollisionGrid);
   }
 
@@ -980,7 +980,7 @@ void CNetworkLibrary::AutoAdjustSettings(void)
  * remember to keep this routine up to date with CNetworkLibrary::Read()
  */
 void CNetworkLibrary::StartPeerToPeer_t(const CTString &strSessionName,
-  const CTFileName &fnmWorld, ULONG ulSpawnFlags,
+  const CTFileName &fnmWorld, unsigned long ulSpawnFlags,
   INDEX ctMaxPlayers, BOOL bWaitAllPlayers,
   void *pvSessionProperties) // throw char *
 {
@@ -1777,7 +1777,7 @@ void CNetworkLibrary::StartDemoRec_t(const CTFileName &fnDemo) // throw char *
   // write initial info to stream
   ga_strmDemoRec.WriteID_t("DEMO");
   ga_strmDemoRec.WriteID_t("MVER");
-  ga_strmDemoRec<<ULONG(_SE_BUILD_MINOR);
+  ga_strmDemoRec<<unsigned long(_SE_BUILD_MINOR);
   ga_sesSessionState.Write_t(&ga_strmDemoRec);
 
   // remember that recording demo
@@ -1804,7 +1804,7 @@ void CNetworkLibrary::StopDemoRec(void)
 }
 
 // split the rcon response string into lines and send one by one to the client
-static void SendAdminResponse(ULONG ulAdr, UWORD uwPort, ULONG ulCode, const CTString &strResponse)
+static void SendAdminResponse(unsigned long ulAdr, UWORD uwPort, unsigned long ulCode, const CTString &strResponse)
 {
   CTString str = strResponse;
   INDEX iLineCt = 0;
@@ -1964,7 +1964,7 @@ void CNetworkLibrary::MainLoop(void)
       CNetworkMessage nmReceived;
 
 //      _cmiComm.Broadcast_Update();
-      ULONG ulFrom;
+      unsigned long ulFrom;
       UWORD uwPort;
       BOOL bHasMsg = ReceiveBroadcast(nmReceived, ulFrom, uwPort);
       // if there are no more messages
@@ -1988,7 +1988,7 @@ void CNetworkLibrary::MainLoop(void)
         if (!strMsg.RemovePrefix("rcmd ")) {
           continue;
         }
-        ULONG ulCode;
+        unsigned long ulCode;
         char strPass[80];
         char strCmd[256];
         strMsg.ScanF("%u \"%80[^\"]\"%256[^\n]", &ulCode, strPass, strCmd);
@@ -2239,7 +2239,7 @@ void *CNetworkLibrary::GetSessionProperties(void)
 }
 
 /* Send chat message from some players to some other players. */
-void CNetworkLibrary::SendChat(ULONG ulFrom, ULONG ulTo, const CTString &strMessage)
+void CNetworkLibrary::SendChat(unsigned long ulFrom, unsigned long ulTo, const CTString &strMessage)
 {
   // if the string is too long and we're not server
   if (strlen(strMessage)>256 && !_pNetwork->IsServer()) {
@@ -2338,7 +2338,7 @@ void CNetworkLibrary::AddNetGraphValue(enum NetGraphEntryType nget, FLOAT fLaten
 
 // make default state for a network game
 extern void NET_MakeDefaultState_t(
-  const CTFileName &fnmWorld, ULONG ulSpawnFlags, void *pvSessionProperties,
+  const CTFileName &fnmWorld, unsigned long ulSpawnFlags, void *pvSessionProperties,
   CTStream &strmState) // throw char *
 {
   // mute all sounds
@@ -2440,7 +2440,7 @@ void CNetworkLibrary::GameInactive(void)
     CNetworkMessage nmReceived;
 
 //  _cmiComm.Broadcast_Update();
-    ULONG ulFrom;
+    unsigned long ulFrom;
     UWORD uwPort;
     BOOL bHasMsg = ReceiveBroadcast(nmReceived, ulFrom, uwPort);
     // if there are no more messages
@@ -2511,7 +2511,7 @@ void CNetworkLibrary::FinishCRCGather(void)
 
 // make default state data for creating deltas
 void CNetworkLibrary::MakeDefaultState(const CTFileName &fnmWorld,
-  ULONG ulSpawnFlags, void *pvSessionProperties)
+  unsigned long ulSpawnFlags, void *pvSessionProperties)
 {
   // prepare file or memory stream for state
   CTFileStream strmStateFile; CTMemoryStream strmStateMem;

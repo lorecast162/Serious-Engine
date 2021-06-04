@@ -123,9 +123,9 @@ void DecompressNormal_HQ(FLOAT3D &vNormal, UBYTE ubH, UBYTE ubP)
 
 //--------------------------------------------------------------------------------------------
 /*
- * Function returns number of first setted bit in ULONG
+ * Function returns number of first setted bit in unsigned long
  */
-INDEX GetBit( ULONG ulSource)
+INDEX GetBit( unsigned long ulSource)
 {
   for( INDEX i=0; i<32; i++)
   {
@@ -150,15 +150,15 @@ CModelRenderPrefs::CModelRenderPrefs()
 /*
  * Routines managing (get/set) rendering preferences
  */
-void CModelRenderPrefs::SetRenderType(ULONG rtNew)
+void CModelRenderPrefs::SetRenderType(unsigned long rtNew)
 {
   rp_RenderType = rtNew;
 }
-void CModelRenderPrefs::SetTextureType(ULONG rtNew)
+void CModelRenderPrefs::SetTextureType(unsigned long rtNew)
 {
   rp_RenderType = (rp_RenderType & (~RT_TEXTURE_MASK)) | rtNew;
 }
-void CModelRenderPrefs::SetShadingType(ULONG rtNew)
+void CModelRenderPrefs::SetShadingType(unsigned long rtNew)
 {
   rp_RenderType = (rp_RenderType & (~RT_SHADING_MASK)) | rtNew;
 }
@@ -184,7 +184,7 @@ void CModelRenderPrefs::SetHiddenLines(BOOL bHiddenLinesOn)
     rp_RenderType = rp_RenderType & (~RT_HIDDEN_LINES);
   }
 }
-ULONG CModelRenderPrefs::GetRenderType()
+unsigned long CModelRenderPrefs::GetRenderType()
 {
   return( rp_RenderType);
 }
@@ -348,16 +348,16 @@ void CModelData::Clear(void)
 
 
 // get amount of memory used by this object
-SLONG CModelData::GetUsedMemory(void)
+long CModelData::GetUsedMemory(void)
 {
-  SLONG slUsed = sizeof(*this)+CAnimData::GetUsedMemory()-sizeof(CAnimData);
+  long slUsed = sizeof(*this)+CAnimData::GetUsedMemory()-sizeof(CAnimData);
 
   slUsed += md_FrameVertices16.Count()*sizeof(struct ModelFrameVertex16);
   slUsed += md_FrameVertices8.Count()*sizeof(struct ModelFrameVertex8);
   slUsed += md_FrameInfos.Count()*sizeof(struct ModelFrameInfo);
   slUsed += md_MainMipVertices.Count()*sizeof(FLOAT3D);
   slUsed += md_TransformedVertices.Count()*sizeof(struct TransformedVertexData);
-  slUsed += md_VertexMipMask.Count()*sizeof(ULONG);
+  slUsed += md_VertexMipMask.Count()*sizeof(unsigned long);
   slUsed += md_acbCollisionBox.Count()*sizeof(CModelCollisionBox);
   slUsed += md_aampAttachedPosition.Count()*sizeof(CAttachedModelPosition);
 
@@ -433,7 +433,7 @@ INDEX CModelData::GetCollisionBoxDimensionEquality(INDEX iCollisionBox=0)
 };
 
 
-ULONG CModelData::GetFlags(void)
+unsigned long CModelData::GetFlags(void)
 {
   return md_Flags;
 };
@@ -514,7 +514,7 @@ void ModelPolygon::Write_t( CTStream *pFile) // throw char *
 void ModelPolygon::Read_t( CTStream *pFile)  // throw char *
 {
   INDEX ctVertices;
-  ULONG ulDummy;
+  unsigned long ulDummy;
   if( pFile->PeekID_t() == CChunkID("MDPL"))
   {
     pFile->ExpectID_t( CChunkID("MDPL"));
@@ -583,7 +583,7 @@ BOOL MappingSurface::operator==(const MappingSurface &msOther) const {
 };
 
 // convert old polygon flags from CTGfx into new rendering parameters
-void MappingSurface::SetRenderingParameters(ULONG ulOldFlags)
+void MappingSurface::SetRenderingParameters(unsigned long ulOldFlags)
 {
   // find rendering type
   if (ulOldFlags&PCF_NOSHADING) {
@@ -925,12 +925,12 @@ void ModelMipInfo::Read_t(CTStream *pFile,
     // chunk ID will tell us if we should read new format that contains bump normals
     CChunkID idChunk = pFile->GetID_t();
     // jump over chunk size
-    ULONG ulDummySize;
+    unsigned long ulDummySize;
     (*pFile) >> ulDummySize;
     // if bump normals are saved (new format)
     if( idChunk == CChunkID("TXV2"))
     {
-      for (SLONG i = 0; i < iMembersCt; i++)
+      for (long i = 0; i < iMembersCt; i++)
         (*pFile)>>mmpi_TextureVertices[i];
     } else {
       // bump normals are not saved
@@ -949,7 +949,7 @@ void ModelMipInfo::Read_t(CTStream *pFile,
   {
     pFile->ExpectID_t( CChunkID("TXVT"));
     // jump over chunk size
-    ULONG ulDummySize;
+    unsigned long ulDummySize;
     (*pFile) >> ulDummySize;
     // read models in old format
     for( INDEX iVertex = 0; iVertex<iMembersCt; iVertex++)
@@ -1205,7 +1205,7 @@ void CModelData::Write_t( CTStream *pFile)  // throw char *
                          sizeof(FLOAT3D));
   // Save vertex mip-mask array
   pFile->WriteFullChunk_t( CChunkID("AVMK"), &md_VertexMipMask[ 0], md_VerticesCt *
-                         sizeof(ULONG));
+                         sizeof(unsigned long));
   // Save mip levels counter
   pFile->WriteFullChunk_t( CChunkID("IMIP"), &md_MipCt, sizeof(INDEX));
 
@@ -1224,7 +1224,7 @@ void CModelData::Write_t( CTStream *pFile)  // throw char *
   pFile->WriteFullChunk_t( CChunkID("STXH"), &md_Height, sizeof(MEX));
 
   // Save value for shading type
-  pFile->Write_t( &md_ShadowQuality, sizeof(SLONG));
+  pFile->Write_t( &md_ShadowQuality, sizeof(long));
 
   // Save static stretch value
   pFile->Write_t( &md_Stretch, sizeof(FLOAT3D));
@@ -1398,7 +1398,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
     {
       CChunkID cidDummy = pFile->GetID_t();
       (void)cidDummy; // shut up about unused variable, compiler.
-      ULONG ulDummy;
+      unsigned long ulDummy;
       // skip chunk size
       *pFile >> ulDummy;
       (void)ulDummy; // shut up about unused variable, compiler.
@@ -1418,7 +1418,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
                              sizeof(struct ModelFrameVertex16));
 
       #if PLATFORM_BIGENDIAN
-      for (ULONG i = 0; i < md_VerticesCt * md_FramesCt; i++)
+      for (unsigned long i = 0; i < md_VerticesCt * md_FramesCt; i++)
       {
           BYTESWAP(md_FrameVertices16[i].mfv_SWPoint.vector[0]);
           BYTESWAP(md_FrameVertices16[i].mfv_SWPoint.vector[1]);
@@ -1442,7 +1442,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   md_FrameInfos.New( md_FramesCt);
   pFile->ReadFullChunk_t( CChunkID("AFIN"), &md_FrameInfos[0], md_FramesCt * sizeof(struct ModelFrameInfo));
   #if PLATFORM_BIGENDIAN
-  for (ULONG i = 0; i < md_FramesCt; i++)
+  for (unsigned long i = 0; i < md_FramesCt; i++)
   {
     BYTESWAP(md_FrameInfos[i].mfi_Box.minvect.vector[0]);
     BYTESWAP(md_FrameInfos[i].mfi_Box.minvect.vector[1]);
@@ -1457,7 +1457,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   md_MainMipVertices.New( md_VerticesCt);
   pFile->ReadFullChunk_t( CChunkID("AMMV"), &md_MainMipVertices[0], md_VerticesCt * sizeof(FLOAT3D));
   #if PLATFORM_BIGENDIAN
-  for (ULONG i = 0; i < md_VerticesCt; i++)
+  for (unsigned long i = 0; i < md_VerticesCt; i++)
   {
     BYTESWAP(md_MainMipVertices[i].vector[0]);
     BYTESWAP(md_MainMipVertices[i].vector[1]);
@@ -1467,9 +1467,9 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
 
   // Allocate and Read vertex mip-mask array
   md_VertexMipMask.New( md_VerticesCt);
-  pFile->ReadFullChunk_t( CChunkID("AVMK"), &md_VertexMipMask[0], md_VerticesCt * sizeof(ULONG));
+  pFile->ReadFullChunk_t( CChunkID("AVMK"), &md_VertexMipMask[0], md_VerticesCt * sizeof(unsigned long));
   #if PLATFORM_BIGENDIAN
-  for (ULONG i = 0; i < md_VerticesCt; i++)
+  for (unsigned long i = 0; i < md_VerticesCt; i++)
   {
     BYTESWAP(md_VertexMipMask[i]);
   }
@@ -1482,7 +1482,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   // Read mip factors array
   pFile->ReadFullChunk_t( CChunkID("FMIP"), &md_MipSwitchFactors[0], MAX_MODELMIPS * sizeof(float));
   #if PLATFORM_BIGENDIAN
-  for (ULONG i = 0; i < MAX_MODELMIPS; i++)
+  for (unsigned long i = 0; i < MAX_MODELMIPS; i++)
   {
     BYTESWAP(md_MipSwitchFactors[i]);
   }
@@ -1513,8 +1513,8 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   CChunkID cidPatchChunkID = pFile->PeekID_t();
   if( cidPatchChunkID == CChunkID("STMK"))
   {
-    ULONG ulOldExistingPatches;
-    pFile->ReadFullChunk_t( CChunkID("STMK"), &ulOldExistingPatches, sizeof(ULONG));
+    unsigned long ulOldExistingPatches;
+    pFile->ReadFullChunk_t( CChunkID("STMK"), &ulOldExistingPatches, sizeof(unsigned long));
     BYTESWAP(ulOldExistingPatches);
 
     for( INDEX iPatch=0; iPatch<MAX_TEXTUREPATCHES; iPatch++)
@@ -1565,7 +1565,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
   if( cidPatchChunkID == CChunkID("STMK"))
   {
     pFile->ExpectID_t( CChunkID("POSS"));
-    ULONG ulChunkSize;
+    unsigned long ulChunkSize;
     *pFile >> ulChunkSize;
     for( INDEX iPatch=0; iPatch<MAX_TEXTUREPATCHES; iPatch++)
     {
@@ -1716,7 +1716,7 @@ void CModelData::Read_t( CTStream *pFile) // throw char *
         // convert rendering flags into new flags format (per surface)
         if (pMMI->mmpi_MappingSurfaces[iSurface].ms_aiPolygons.Count()>0)
         {
-          ULONG ulFlags = pMMI->mmpi_Polygons[pMMI->mmpi_MappingSurfaces[iSurface].ms_aiPolygons[0]].mp_RenderFlags;
+          unsigned long ulFlags = pMMI->mmpi_Polygons[pMMI->mmpi_MappingSurfaces[iSurface].ms_aiPolygons[0]].mp_RenderFlags;
           pMMI->mmpi_MappingSurfaces[iSurface].SetRenderingParameters(ulFlags);
         }
       }
@@ -1935,9 +1935,9 @@ void CModelObject::Write_t( CTStream *pFile)  // throw char *
 
   pFile->WriteID_t( CChunkID( "MODT"));
   *pFile << mo_colBlendColor;
-  pFile->Write_t( &mo_PatchMask, sizeof(ULONG));
+  pFile->Write_t( &mo_PatchMask, sizeof(unsigned long));
   pFile->Write_t( &mo_Stretch, sizeof(FLOAT3D));
-  pFile->Write_t( &mo_ColorMask, sizeof(ULONG));
+  pFile->Write_t( &mo_ColorMask, sizeof(unsigned long));
 }
 //------------------------------------------ READ
 void CModelObject::Read_t( CTStream *pFile) // throw char *
@@ -2002,7 +2002,7 @@ void CModelObject::GetModelInfo(CModelInfo &miInfo)
         pMD->md_MipInfos[ i].mmpi_Polygons[ iPolygon].mp_PolygonVertices.Count()-2;
     }
 
-    ULONG ulMipMask = (1L) << i;      // working mip model's mask
+    unsigned long ulMipMask = (1L) << i;      // working mip model's mask
     INDEX iVertexCt = 0;
     // count vertices that exists in this mip model
     for( INDEX j=0; j<pMD->md_VerticesCt; j++)
@@ -2152,12 +2152,12 @@ void CModelObject::PrevManualMipLevel()
 
 
 // this function returns current value of patches mask
-ULONG CModelObject::GetPatchesMask()
+unsigned long CModelObject::GetPatchesMask()
 {
   return mo_PatchMask;
 };
 // use this function to set new patches combination
-void CModelObject::SetPatchesMask(ULONG new_patches_mask)
+void CModelObject::SetPatchesMask(unsigned long new_patches_mask)
 {
   mo_PatchMask = new_patches_mask;
 }
@@ -2235,7 +2235,7 @@ void CModelObject::SetSurfaceColor( INDEX iCurrentMip, INDEX iCurrentSurface,
  */
 void CModelObject::GetSurfaceRenderFlags( INDEX iCurrentMip, INDEX iCurrentSurface,
       enum SurfaceShadingType &sstShading, enum SurfaceTranslucencyType &sttTranslucency,
-      ULONG &ulRenderingFlags)
+      unsigned long &ulRenderingFlags)
 {
   CModelData *pMD = (CModelData *) GetData();
   if( (iCurrentMip>=pMD->md_MipCt) ||
@@ -2254,7 +2254,7 @@ void CModelObject::GetSurfaceRenderFlags( INDEX iCurrentMip, INDEX iCurrentSurfa
  */
 void CModelObject::SetSurfaceRenderFlags( INDEX iCurrentMip, INDEX iCurrentSurface,
       enum SurfaceShadingType sstShading, enum SurfaceTranslucencyType sttTranslucency,
-      ULONG ulRenderingFlags)
+      unsigned long ulRenderingFlags)
 {
   CModelData *pMD = (CModelData *) GetData();
   if( (iCurrentMip>=pMD->md_MipCt) ||
@@ -2286,7 +2286,7 @@ void CModelObject::ProjectFrameVertices( CProjection3D *pProjection, INDEX iMipM
   pProjection->Prepare();
 
   INDEX iCurrentFrame = GetFrame();
-  ULONG ulVtxMask = (1L) << iMipModel;
+  unsigned long ulVtxMask = (1L) << iMipModel;
 
   if( pMD->md_Flags & MF_COMPRESSED_16BIT)
   {
@@ -2657,7 +2657,7 @@ INDEX CModelObject::PickVertexIndex( CDrawPort *pDP, CProjection3D *pProjection,
   FLOAT iClosest = -1;
   INDEX iCurrentFrame = GetFrame();
   FLOAT3D vTargetPoint = FLOAT3D( x1, pDP->GetHeight()-y1, 0.0f);
-  ULONG ulVtxMask = (1L) << mo_iLastRenderMipLevel;
+  unsigned long ulVtxMask = (1L) << mo_iLastRenderMipLevel;
   // Find closest vertice
   for( INDEX iVertex=0; iVertex<pMD->md_VerticesCt; iVertex++)
   {
@@ -2785,9 +2785,9 @@ void CModelObject::HidePatch( INDEX iMaskBit)
 BOOL CModelObject::HasShadow(INDEX iModelMip)
 {
   CModelData *pMD = (CModelData *) GetData();
-  SLONG slShadowQuality = _mrpModelRenderPrefs.GetShadowQuality();
+  long slShadowQuality = _mrpModelRenderPrefs.GetShadowQuality();
   ASSERT( slShadowQuality >= 0);
-  SLONG res = iModelMip + slShadowQuality + pMD->md_ShadowQuality;
+  long res = iModelMip + slShadowQuality + pMD->md_ShadowQuality;
   if( res >= pMD->md_MipCt)
     return FALSE;
   return TRUE;
@@ -2853,7 +2853,7 @@ void CModelObject::AutoSetTextures(void)
     CTFileName fnIni = fnModel.NoExt()+".ini";
     CTFileStream strmIni;
     strmIni.Open_t( fnIni);
-    SLONG slFileSize = strmIni.GetStreamSize();
+    long slFileSize = strmIni.GetStreamSize();
     // NEVER!NEVER! read after EOF
     while(strmIni.GetPos_t()<(slFileSize-4))
     {
@@ -2912,7 +2912,7 @@ void CModelObject::AutoSetAttachments(void)
     CTFileName fnIni = fnModel.NoExt()+".ini";
     CTFileStream strmIni;
     strmIni.Open_t( fnIni);
-    SLONG slFileSize = strmIni.GetStreamSize();
+    long slFileSize = strmIni.GetStreamSize();
     // NEVER!NEVER! read after EOF
     while(strmIni.GetPos_t()<(slFileSize-4))
     {
@@ -3092,10 +3092,10 @@ void CModelObject::StretchSingleModel(const FLOAT3D &vStretch)
 
 
 // get amount of memory used by this object
-SLONG CModelObject::GetUsedMemory(void)
+long CModelObject::GetUsedMemory(void)
 {
   // initial size
-  SLONG slUsedMemory = sizeof(CModelObject);
+  long slUsedMemory = sizeof(CModelObject);
   // add attachment(s) size
   FOREACHINLIST( CAttachmentModelObject, amo_lnInMain, mo_lhAttachments, itat) {
     slUsedMemory += sizeof(CAttachmentModelObject) - sizeof(CModelObject);

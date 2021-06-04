@@ -124,11 +124,11 @@ void CStock_TYPE::FreeUnused(void)
 }
 // calculate amount of memory used by all objects in the stock
 
-SLONG CStock_TYPE::CalculateUsedMemory(void)
+long CStock_TYPE::CalculateUsedMemory(void)
 {
-  SLONG slUsedTotal = 0;
+  long slUsedTotal = 0;
   {FOREACHINDYNAMICCONTAINER(st_ctObjects, TYPE, itt) {
-    SLONG slUsedByObject = itt->GetUsedMemory();
+    long slUsedByObject = itt->GetUsedMemory();
     if (slUsedByObject<0) {
       return -1;
     }
@@ -142,9 +142,9 @@ SLONG CStock_TYPE::CalculateUsedMemory(void)
 void CStock_TYPE::DumpMemoryUsage_t(CTStream &strm) // throw char *
 {
   CTString strLine;
-  //SLONG slUsedTotal = 0;
+  //long slUsedTotal = 0;
   {FOREACHINDYNAMICCONTAINER(st_ctObjects, TYPE, itt) {
-    SLONG slUsedByObject = itt->GetUsedMemory();
+    long slUsedByObject = itt->GetUsedMemory();
     if (slUsedByObject<0) {
       strm.PutLine_t("Error!");
       return;

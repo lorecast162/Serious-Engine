@@ -105,8 +105,8 @@ static COLOR _colSelection;
 static INDEX _ctUsableTexUnits;
 static BOOL  _bTranslucentPass;      // rendering translucent polygons
 
-static ULONG _ulLastFlags[MAXTEXUNITS];
-static ULONG _ulLastBlends[MAXTEXUNITS];
+static unsigned long _ulLastFlags[MAXTEXUNITS];
+static unsigned long _ulLastBlends[MAXTEXUNITS];
 static INDEX _iLastFrameNo[MAXTEXUNITS];
 static CTextureData *_ptdLastTex[MAXTEXUNITS];
 
@@ -247,7 +247,7 @@ static BOOL RSMakeMipFactorAndAdjustMapping( ScenePolygon *pspo, INDEX iLayer)
   // texture map ?
   if( iLayer<SHADOWTEXTURE)
   { 
-    const ULONG ulBlend = pspo->spo_aubTextureFlags[iLayer] & STXF_BLEND_MASK;
+    const unsigned long ulBlend = pspo->spo_aubTextureFlags[iLayer] & STXF_BLEND_MASK;
     CTextureData *ptd = (CTextureData*)pspo->spo_aptoTextures[iLayer]->GetData();
     mexTexSizeU = ptd->GetWidth();
     mexTexSizeV = ptd->GetHeight();
@@ -265,7 +265,7 @@ static BOOL RSMakeMipFactorAndAdjustMapping( ScenePolygon *pspo, INDEX iLayer)
       const FLOAT fDVoDJ = Abs( mv.mv_vV(2) *f1oPZ2);
       // find mip factor and adjust removing of texture layer
       const FLOAT fMaxDoD    = Max( Max(fDUoDI,fDUoDJ), Max(fDVoDI,fDVoDJ));
-      const INDEX iMipFactor = wld_iDetailRemovingBias + (((SLONG&)fMaxDoD)>>23) -127 +10;
+      const INDEX iMipFactor = wld_iDetailRemovingBias + (((long&)fMaxDoD)>>23) -127 +10;
       const INDEX iLastMip   = ptd->td_iFirstMipLevel + ptd->GetNoOfMips() -1; // determine last mipmap in texture
       bRemoved = (iMipFactor>=iLastMip);
       // check for detail texture showing
@@ -351,7 +351,7 @@ static void RSBinToGroups( ScenePolygon *pspoFirst)
   {
     pspoNext = pspo->spo_pspoSucc;
     const INDEX ctTris = pspo->spo_ctElements/3;
-    ULONG ulBits = NONE;
+    unsigned long ulBits = NONE;
 
     // if it has texture 1 active
     if( pspo->spo_aptoTextures[0]!=NULL && bTextureLayer1) {
@@ -412,9 +412,9 @@ static void RSBinToGroups( ScenePolygon *pspoFirst)
             else {
               UBYTE ubR,ubG,ubB;
               ColorToRGB( colFlat, ubR,ubG,ubB);
-              const ULONG ulR = ClampUp( ((ULONG)ubR)<<1, (ULONG) 255);
-              const ULONG ulG = ClampUp( ((ULONG)ubG)<<1, (ULONG) 255);
-              const ULONG ulB = ClampUp( ((ULONG)ubB)<<1, (ULONG) 255);
+              const unsigned long ulR = ClampUp( ((unsigned long)ubR)<<1, (unsigned long) 255);
+              const unsigned long ulG = ClampUp( ((unsigned long)ubG)<<1, (unsigned long) 255);
+              const unsigned long ulB = ClampUp( ((unsigned long)ubB)<<1, (unsigned long) 255);
               colFlat = RGBToColor(ulR,ulG,ulB);
             }
           } // mix color in the first texture layer
@@ -607,7 +607,7 @@ static void RSCheckLayersUpToDate( ScenePolygon *pspoFirst)
 
 
 // prepare parameters individual to a polygon texture
-inline void RSSetTextureWrapping( ULONG ulFlags)
+inline void RSSetTextureWrapping( unsigned long ulFlags)
 {
   gfxSetTextureWrapping( (ulFlags&STXF_CLAMPU) ? GFX_CLAMP : GFX_REPEAT,
                          (ulFlags&STXF_CLAMPV) ? GFX_CLAMP : GFX_REPEAT);
@@ -626,10 +626,10 @@ static void RSSetInitialTextureParameters(void)
 }
 
 
-static void RSSetTextureParameters( ULONG ulFlags)
+static void RSSetTextureParameters( unsigned long ulFlags)
 {
   // if blend flags have changed
-  ULONG ulBlendFlags = ulFlags&STXF_BLEND_MASK;
+  unsigned long ulBlendFlags = ulFlags&STXF_BLEND_MASK;
   if( _ulLastBlends[0] != ulBlendFlags)
   { // determine new texturing mode
     switch( ulBlendFlags) {
@@ -679,10 +679,10 @@ static void RSSetInitialTextureParametersMT(void)
 
 
 // prepare parameters individual to a polygon texture
-static void RSSetTextureParametersMT( ULONG ulFlags)
+static void RSSetTextureParametersMT( unsigned long ulFlags)
 {
   // skip if the same as last time
-  const ULONG ulBlendFlags = ulFlags&STXF_BLEND_MASK;
+  const unsigned long ulBlendFlags = ulFlags&STXF_BLEND_MASK;
   if( _ulLastBlends[0]==ulBlendFlags) return; 
   // update
   if( ulBlendFlags==STXF_BLEND_OPAQUE) {
@@ -765,7 +765,7 @@ static void RSSetConstantColors( COLOR col)
 }
 
 
-static void RSSetTextureColors( ScenePolygon *pspoGroup, ULONG ulLayerMask)
+static void RSSetTextureColors( ScenePolygon *pspoGroup, unsigned long ulLayerMask)
 {
   _pfGfxProfile.StartTimer( CGfxProfile::PTI_RS_SETCOLORS);
   ASSERT( !(ulLayerMask & (GF_TA1|GF_TA2|GF_FOG|GF_HAZE|GF_SEL)));
@@ -1393,8 +1393,8 @@ static void RSStartupHaze(void)
 
 
 // process one group of polygons
-void RSRenderGroupInternal( ScenePolygon *pspoGroup, ULONG ulGroupFlags);
-void RSRenderGroup( ScenePolygon *pspoGroup, ULONG ulGroupFlags, ULONG ulTestedFlags)
+void RSRenderGroupInternal( ScenePolygon *pspoGroup, unsigned long ulGroupFlags);
+void RSRenderGroup( ScenePolygon *pspoGroup, unsigned long ulGroupFlags, unsigned long ulTestedFlags)
 {
   // skip if the group is empty
   if( pspoGroup==NULL) return;
@@ -1580,7 +1580,7 @@ void RSRenderGroup( ScenePolygon *pspoGroup, ULONG ulGroupFlags, ULONG ulTestedF
 
 
 // internal group rendering routine
-void RSRenderGroupInternal( ScenePolygon *pspoGroup, ULONG ulGroupFlags)
+void RSRenderGroupInternal( ScenePolygon *pspoGroup, unsigned long ulGroupFlags)
 {
   _pfGfxProfile.StartTimer( CGfxProfile::PTI_RS_RENDERGROUPINTERNAL);
   _pfGfxProfile.IncrementCounter( CGfxProfile::PCI_RS_POLYGONGROUPS);
@@ -1933,7 +1933,7 @@ void RenderSceneZOnly( CDrawPort *pDP, ScenePolygon *pspoFirst, CAnyProjection3D
   RSPrepare();
 
   // set for depth-only rendering
-  const ULONG ulCurrentColorMask = gfxGetColorMask();
+  const unsigned long ulCurrentColorMask = gfxGetColorMask();
   gfxSetColorMask(NONE);
   gfxEnableDepthTest();
   gfxEnableDepthWrite();

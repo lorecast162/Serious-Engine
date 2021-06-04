@@ -122,7 +122,7 @@ CEntity *CEntity::FindRemappedEntityPointer(CEntity *penOriginal)
  *  - Doesn't copy placement, it must be done on creation.
  *  - Entity must be initialized afterwards.
  */
-void CEntity::Copy(CEntity &enOther, ULONG ulFlags)
+void CEntity::Copy(CEntity &enOther, unsigned long ulFlags)
 {
   BOOL bRemapPointers = ulFlags & COPY_REMAP;
   BOOL bMakePredictor = ulFlags & COPY_PREDICTOR;
@@ -217,7 +217,7 @@ void CEntity::Copy(CEntity &enOther, ULONG ulFlags)
  * Copy one entity property from property of another entity.
  */
 void CEntity::CopyOneProperty( CEntityProperty &epPropertySrc, CEntityProperty &epPropertyDest,
-                               CEntity &enOther, ULONG ulFlags)
+                               CEntity &enOther, unsigned long ulFlags)
 {
 // a helper macro
 #define COPYPROPERTY(type)                                            \
@@ -350,7 +350,7 @@ void CEntity::CopyOneProperty( CEntityProperty &epPropertySrc, CEntityProperty &
 /*
  * Copy entity properties from another entity of same class.
  */
-void CEntity::CopyEntityProperties(CEntity &enOther, ULONG ulFlags)
+void CEntity::CopyEntityProperties(CEntity &enOther, unsigned long ulFlags)
 {
   // other entity must have same class
   ASSERT(enOther.en_pecClass == en_pecClass);
@@ -379,7 +379,7 @@ void CWorld::CopyEntities(CWorld &woOther, CDynamicContainer<CEntity> &cenToCopy
 
   CSetFPUPrecision FPUPrecision(FPT_24BIT);
 
-  ULONG ulCopyFlags = COPY_REMAP;
+  unsigned long ulCopyFlags = COPY_REMAP;
   if(_bReinitEntitiesWhileCopying) {
     ulCopyFlags|=COPY_REINIT;
   };
@@ -644,7 +644,7 @@ void CWorld::CopyEntitiesToPredictors(CDynamicContainer<CEntity> &cenToCopy)
   TIME tmCurrentTickOld = _pTimer->CurrentTick();
   _pTimer->SetCurrentTick(0.0f);
 
-  ULONG ulCopyFlags = COPY_REMAP|COPY_PREDICTOR;
+  unsigned long ulCopyFlags = COPY_REMAP|COPY_PREDICTOR;
 
   // create array of pointer remaps
   _aprRemaps.Clear();

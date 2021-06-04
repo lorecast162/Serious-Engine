@@ -160,7 +160,7 @@ INDEX CModelInstance::GetColisionBoxIndex(INDEX iBoxID)
 {
   INDEX ctcb = mi_cbAABox.Count();
   // for each existing box
-  for(SLONG icb=0;icb<ctcb;icb++) {
+  for(long icb=0;icb<ctcb;icb++) {
     ColisionBox &cb = mi_cbAABox[icb];
     // if this is searched box
     if(cb.GetID() == iBoxID) {
@@ -518,7 +518,7 @@ CModelInstance *CModelInstance::GetFirstNonReferencedParent(CModelInstance *pmiR
 }
 
 // add animation to ModelInstance
-void CModelInstance::AddAnimation(INDEX iAnimID, ULONG ulFlags, FLOAT fStrength, INDEX iGroupID, FLOAT fSpeedMul/*=1.0f*/)
+void CModelInstance::AddAnimation(INDEX iAnimID, unsigned long ulFlags, FLOAT fStrength, INDEX iGroupID, FLOAT fSpeedMul/*=1.0f*/)
 {
 
 #ifdef SKADEBUG
@@ -833,7 +833,7 @@ BOOL CModelInstance::IsAnimationPlaying(INDEX iAnimID)
 }
 
 // Add flags to animation playing in anim queue
-BOOL CModelInstance::AddFlagsToPlayingAnim(INDEX iAnimID, ULONG ulFlags)
+BOOL CModelInstance::AddFlagsToPlayingAnim(INDEX iAnimID, unsigned long ulFlags)
 {
   // check last anim list if animation iAnimID exists in it
   INDEX ctal = mi_aqAnims.aq_Lists.Count();
@@ -1078,9 +1078,9 @@ void CModelInstance::Clear(void)
 }
 
 // Count used memory
-SLONG CModelInstance::GetUsedMemory(void)
+long CModelInstance::GetUsedMemory(void)
 {
-  SLONG slMemoryUsed = sizeof(*this);
+  long slMemoryUsed = sizeof(*this);
   // Count mesh instances
   INDEX ctmshi = mi_aMeshInst.Count();
   for(INDEX imshi=0;imshi<ctmshi;imshi++) {

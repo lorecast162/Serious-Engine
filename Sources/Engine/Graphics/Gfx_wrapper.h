@@ -109,8 +109,8 @@ extern void (*gfxDepthFunc)( GfxComp eFunc);
 extern void (*gfxDepthRange)( FLOAT fMin, FLOAT fMax);
 
 // color mask control (use CT_RMASK, CT_GMASK, CT_BMASK, CT_AMASK to enable specific channels)
-extern void (*gfxSetColorMask)( ULONG ulColorMask);
-extern ULONG gfxGetColorMask(void);
+extern void (*gfxSetColorMask)( unsigned long ulColorMask);
+extern unsigned long gfxGetColorMask(void);
 
 
 
@@ -159,10 +159,10 @@ public:
   PIX ts_pixNormSize;
   PIX ts_pixAnimSize;
   // texture formats (set by OGL or D3D)
-  ULONG ts_tfRGB8, ts_tfRGBA8;               // true color
-  ULONG ts_tfRGB5, ts_tfRGBA4, ts_tfRGB5A1;  // high color
-  ULONG ts_tfLA8,  ts_tfL8;                  // grayscale
-  ULONG ts_tfCRGB, ts_tfCRGBA;               // compressed formats
+  unsigned long ts_tfRGB8, ts_tfRGBA8;               // true color
+  unsigned long ts_tfRGB5, ts_tfRGBA4, ts_tfRGB5A1;  // high color
+  unsigned long ts_tfLA8,  ts_tfL8;                  // grayscale
+  unsigned long ts_tfCRGB, ts_tfCRGBA;               // compressed formats
   // maximum texel-byte ratio for largest texture size
   INDEX ts_iMaxBytesPerTexel;
 };
@@ -202,28 +202,28 @@ extern void (*gfxSetTextureModulation)( INDEX iScale);
 extern void gfxSetTextureUnit( INDEX iUnit);
 
 // generate texture for API
-extern void (*gfxGenerateTexture)( ULONG &ulTexObject);
+extern void (*gfxGenerateTexture)( unsigned long &ulTexObject);
 // unbind texture from API
-extern void (*gfxDeleteTexture)( ULONG &ulTexObject);
+extern void (*gfxDeleteTexture)( unsigned long &ulTexObject);
 
 
 // set texture as current
 //  - ulTexture = bind number for OGL, or *LPDIRECT3DTEXTURE8 for D3D (pointer to pointer!)
-extern void gfxSetTexture( ULONG &ulTexObject, CTexParams &tpLocal);
+extern void gfxSetTexture( unsigned long &ulTexObject, CTexParams &tpLocal);
 
 // upload texture
 // - ulTexture  = bind number for OGL, or LPDIRECT3DTEXTURE8 for D3D
 // - pulTexture = pointer to texture in 32-bit R,G,B,A format (in that byte order)
 // - ulFormat   = format in which the texture will be stored in accelerator's (or driver's) memory
 // - bNoDiscard = no need to discard old texture (for OGL, this is like "use SubImage")
-extern void gfxUploadTexture( ULONG *pulTexture, PIX pixWidth, PIX pixHeight, ULONG ulFormat, BOOL bNoDiscard);
+extern void gfxUploadTexture( unsigned long *pulTexture, PIX pixWidth, PIX pixHeight, unsigned long ulFormat, BOOL bNoDiscard);
 
 // returns size of uploaded texture
-extern SLONG gfxGetTextureSize( ULONG ulTexObject, BOOL bHasMipmaps=TRUE);
+extern long gfxGetTextureSize( unsigned long ulTexObject, BOOL bHasMipmaps=TRUE);
 
 // returns bytes/pixels ratio for uploaded texture or texture format
-extern INDEX gfxGetTexturePixRatio( ULONG ulTextureObject);
-extern INDEX gfxGetFormatPixRatio(  ULONG ulTextureFormat);
+extern INDEX gfxGetTexturePixRatio( unsigned long ulTextureObject);
+extern INDEX gfxGetFormatPixRatio(  unsigned long ulTextureFormat);
 
 
 

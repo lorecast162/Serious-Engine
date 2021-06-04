@@ -382,7 +382,7 @@ CTString GetGameAgentRulesInfo(void)
   return strOut;
 }
 
-ULONG GetSpawnFlagsForGameType(INDEX iGameType)
+unsigned long GetSpawnFlagsForGameType(INDEX iGameType)
 {
   switch(iGameType) {
   default:
@@ -392,7 +392,7 @@ ULONG GetSpawnFlagsForGameType(INDEX iGameType)
   case CSessionProperties::GM_FRAGMATCH:    return SPF_DEATHMATCH;
   };
 }
-ULONG GetSpawnFlagsForGameTypeCfunc(void* pArgs)
+unsigned long GetSpawnFlagsForGameTypeCfunc(void* pArgs)
 {
   INDEX iGameType = NEXTARGUMENT(INDEX);
   return GetSpawnFlagsForGameType(iGameType);

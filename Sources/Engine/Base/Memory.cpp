@@ -89,7 +89,7 @@ CMemHandlerInit::CMemHandlerInit(void)
 
 #undef AllocMemory
 
-void *AllocMemory( SLONG memsize )
+void *AllocMemory( long memsize )
 {
   void *pmem;
   ASSERTMSG(memsize>0, "AllocMemory: Block size is less or equal zero.");
@@ -107,7 +107,7 @@ void *AllocMemory( SLONG memsize )
 
 #ifdef _MSC_VER
 #ifndef NDEBUG
-void *_debug_AllocMemory( SLONG memsize, int iType, const char *strFile, int iLine)
+void *_debug_AllocMemory( long memsize, int iType, const char *strFile, int iLine)
 {
   void *pmem;
   ASSERTMSG(memsize>0, "AllocMemory: Block size is less or equal zero.");
@@ -126,7 +126,7 @@ void *_debug_AllocMemory( SLONG memsize, int iType, const char *strFile, int iLi
 #endif
 #endif
 
-void *AllocMemoryAligned( SLONG memsize, SLONG slAlignPow2)
+void *AllocMemoryAligned( long memsize, long slAlignPow2)
 {
   ASSERT(slAlignPow2 >= (sizeof (void*) * 2));
   size_t ulMem = (size_t)AllocMemory(memsize+slAlignPow2*2);
@@ -145,7 +145,7 @@ void FreeMemory( void *memory )
   free( (char *)memory);
 }
 
-void ResizeMemory( void **ppv, SLONG slSize )
+void ResizeMemory( void **ppv, long slSize )
 {
   if (_bCheckAllAllocations) {
     _CrtCheckMemory();
@@ -159,12 +159,12 @@ void ResizeMemory( void **ppv, SLONG slSize )
   *ppv = pv;
 }
 
-void GrowMemory( void **ppv, SLONG newSize )
+void GrowMemory( void **ppv, long newSize )
 {
   ResizeMemory(ppv, newSize);
 }
 
-void ShrinkMemory( void **ppv, SLONG newSize )
+void ShrinkMemory( void **ppv, long newSize )
 {
   ResizeMemory(ppv, newSize);
 }
@@ -175,7 +175,7 @@ void ShrinkMemory( void **ppv, SLONG newSize )
  */
 char *StringDuplicate(const char *strOriginal) {
   // get the size
-  SLONG slSize = strlen(strOriginal)+1;
+  long slSize = strlen(strOriginal)+1;
   // allocate that much memory
   char *strCopy = (char *)AllocMemory(slSize);
   // copy it there

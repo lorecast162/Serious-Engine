@@ -143,7 +143,7 @@ void ClearLevelsList(void)
 }
 
 // find all levels that match given flags
-void FilterLevels(ULONG ulSpawnFlags)
+void FilterLevels(unsigned long ulSpawnFlags)
 {
   // delete list of filtered levels
   {FORDELETELIST(CLevelInfo, li_lnNode, _lhFilteredLevels, itli) {
@@ -184,7 +184,7 @@ void FilterLevels(ULONG ulSpawnFlags)
 }
 
 // if level doesn't support given flags, find one that does
-void ValidateLevelForFlags(CTString &fnm, ULONG ulSpawnFlags)
+void ValidateLevelForFlags(CTString &fnm, unsigned long ulSpawnFlags)
 {
   // for each level in main list
   {FOREACHINLIST(CLevelInfo, li_lnNode, _lhAllLevels, itli) {

@@ -143,7 +143,7 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
       // get ambient light
       UBYTE ubAR, ubAG, ubAB;
       ColorToRGB( bsm.GetBrushPolygon()->bpo_pbscSector->bsc_colAmbient, ubAR, ubAG, ubAB);
-      SLONG slSAR=ubAR, slSAG=ubAG, slSAB=ubAB;
+      long slSAR=ubAR, slSAG=ubAG, slSAB=ubAB;
 
       fTotalShadowIntensity = 0.0f;
       // for each shadow layer
@@ -214,9 +214,9 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
         }
         // special case for substract sector ambient light
         if (plsLight->ls_ulFlags&LSF_SUBSTRACTSECTORAMBIENT) {
-          ubR = (UBYTE)Clamp( (SLONG)ubR-slSAR, 0, 255);
-          ubG = (UBYTE)Clamp( (SLONG)ubG-slSAG, 0, 255);
-          ubB = (UBYTE)Clamp( (SLONG)ubB-slSAB, 0, 255);
+          ubR = (UBYTE)Clamp( (long)ubR-slSAR, 0, 255);
+          ubG = (UBYTE)Clamp( (long)ubG-slSAG, 0, 255);
+          ubB = (UBYTE)Clamp( (long)ubB-slSAB, 0, 255);
         }
         // calculate light intensity
         FLOAT fShade = (ubR+ubG+ubB)*(2.0f/(3.0f*255.0f));
@@ -268,7 +268,7 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
       }}
 
       // adjust ambient light with gradient if needed
-      ULONG ulGradientType = en.en_psiShadingInfo->si_pbpoPolygon->bpo_bppProperties.bpp_ubGradientType;
+      unsigned long ulGradientType = en.en_psiShadingInfo->si_pbpoPolygon->bpo_bppProperties.bpp_ubGradientType;
       if( ulGradientType>0) {
         CGradientParameters gp;
         COLOR colGradientPoint;
@@ -290,12 +290,12 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
       slSAB = Clamp( slSAB, 0, 255);
 
       // calculate average light properties
-      SLONG slAR = Clamp( (SLONG)FloatToInt(fTR-fDR) +slSAR, 0, 255);
-      SLONG slAG = Clamp( (SLONG)FloatToInt(fTG-fDG) +slSAG, 0, 255);
-      SLONG slAB = Clamp( (SLONG)FloatToInt(fTB-fDB) +slSAB, 0, 255);
-      SLONG slLR = Clamp( (SLONG)FloatToInt(fDR), 0, 255);
-      SLONG slLG = Clamp( (SLONG)FloatToInt(fDG), 0, 255);
-      SLONG slLB = Clamp( (SLONG)FloatToInt(fDB), 0, 255);
+      long slAR = Clamp( (long)FloatToInt(fTR-fDR) +slSAR, 0, 255);
+      long slAG = Clamp( (long)FloatToInt(fTG-fDG) +slSAG, 0, 255);
+      long slAB = Clamp( (long)FloatToInt(fTB-fDB) +slSAB, 0, 255);
+      long slLR = Clamp( (long)FloatToInt(fDR), 0, 255);
+      long slLG = Clamp( (long)FloatToInt(fDG), 0, 255);
+      long slLB = Clamp( (long)FloatToInt(fDB), 0, 255);
       colLight   = RGBToColor( slLR,slLG,slLB);
       colAmbient = RGBToColor( slAR,slAG,slAB);
 
@@ -323,7 +323,7 @@ BOOL CRenderer::FindModelLights( CEntity &en, const CPlacement3D &plModel,
  * Render one model with shadow (eventually)
  */
 void CRenderer::RenderOneModel( CEntity &en, CModelObject &moModel, const CPlacement3D &plModel,
-                                const FLOAT fDistanceFactor, BOOL bRenderShadow, ULONG ulDMFlags)
+                                const FLOAT fDistanceFactor, BOOL bRenderShadow, unsigned long ulDMFlags)
 {
   // skip invisible models
   if( moModel.mo_Stretch == FLOAT3D(0,0,0)) return;
@@ -450,7 +450,7 @@ void CRenderer::RenderOneModel( CEntity &en, CModelObject &moModel, const CPlace
  * Render one ska model with shadow (eventually)
  */
 void CRenderer::RenderOneSkaModel( CEntity &en, const CPlacement3D &plModel,
-                                  const FLOAT fDistanceFactor, BOOL bRenderShadow, ULONG ulDMFlags)
+                                  const FLOAT fDistanceFactor, BOOL bRenderShadow, unsigned long ulDMFlags)
 {
   // skip invisible models
   if( en.GetModelInstance()->mi_vStretch == FLOAT3D(0,0,0)) return;
@@ -483,7 +483,7 @@ void CRenderer::RenderOneSkaModel( CEntity &en, const CPlacement3D &plModel,
   const BOOL bAllowShadows = en.AdjustShadingParameters( vTotalLightDirection, colLight, colAmbient);
   bRenderModelShadow = (bRenderModelShadow && bAllowShadows && bRenderShadow && mdl_iShadowQuality>0);
 
-  ULONG &ulRenFlags = RM_GetRenderFlags();
+  unsigned long &ulRenFlags = RM_GetRenderFlags();
   ulRenFlags = 0;
   if( ulDMFlags & DMF_FOG)      ulRenFlags |= RMF_FOG;
   if( ulDMFlags & DMF_HAZE)     ulRenFlags |= RMF_HAZE;
@@ -772,7 +772,7 @@ void CRenderer::RenderLensFlares(void)
 
   // get drawport ID
   ASSERT( re_pdpDrawPort!=NULL);
-  const ULONG ulDrawPortID = re_pdpDrawPort->GetID();
+  const unsigned long ulDrawPortID = re_pdpDrawPort->GetID();
   
   // for each lens flare of this drawport
   {for(INDEX iFlare=0; iFlare<re_alfiLensFlares.Count(); iFlare++) {
@@ -850,7 +850,7 @@ void CRenderer::RenderLensFlares(void)
     FLOAT fReflectionDirJ = fScreenCenterJ-fLightJ;
     UBYTE ubR, ubG, ubB;
     lfi.lfi_plsLightSource->GetLightColor(ubR, ubG, ubB);
-    UBYTE ubI = (ULONG(ubR)+ULONG(ubG)+ULONG(ubB))/3;
+    UBYTE ubI = (unsigned long(ubR)+unsigned long(ubG)+unsigned long(ubB))/3;
     FLOAT fReflectionDistance = sqrt(fReflectionDirI*fReflectionDirI+fReflectionDirJ*fReflectionDirJ);
     FLOAT fOfCenterFadeFactor = 1.0f-2.0f*fReflectionDistance/fScreenSizeI;
     fOfCenterFadeFactor = Max(fOfCenterFadeFactor, 0.0f);
@@ -944,7 +944,7 @@ void CRenderer::RenderLensFlares(void)
       const FLOAT fCenterFactor = (1-fOfCenterFadeFactor);
       const FLOAT fGlare = lft.lft_fGlareIntensity*fIntensity
                    * (exp(1/(1+fGlearCompression*fCenterFactor*fCenterFactor)) -1) / (exp(1)-1);
-      const ULONG ulGlareA = ClampUp( (ULONG) NormFloatToByte(fGlare), (ULONG) 255);
+      const unsigned long ulGlareA = ClampUp( (unsigned long) NormFloatToByte(fGlare), (unsigned long) 255);
       // if there is any relevant glare
       if( ulGlareA>1) {
         // calculate glare color
@@ -956,9 +956,9 @@ void CRenderer::RenderLensFlares(void)
         fGlareR *= fBrightFactor;
         fGlareG *= fBrightFactor;
         fGlareB *= fBrightFactor;
-        ULONG ulGlareR = ClampUp( FloatToInt(fGlareR), 255);
-        ULONG ulGlareG = ClampUp( FloatToInt(fGlareG), 255);
-        ULONG ulGlareB = ClampUp( FloatToInt(fGlareB), 255);
+        unsigned long ulGlareR = ClampUp( FloatToInt(fGlareR), 255);
+        unsigned long ulGlareG = ClampUp( FloatToInt(fGlareG), 255);
+        unsigned long ulGlareB = ClampUp( FloatToInt(fGlareB), 255);
         // add the glare to screen blending
         re_pdpDrawPort->dp_ulBlendingRA += ulGlareR*ulGlareA;
         re_pdpDrawPort->dp_ulBlendingGA += ulGlareG*ulGlareA;

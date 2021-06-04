@@ -51,8 +51,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // this version string can be referenced from outside the engine
 ENGINE_API CTString _strEngineBuild  = "";
-ENGINE_API ULONG _ulEngineBuildMajor = _SE_BUILD_MAJOR;
-ENGINE_API ULONG _ulEngineBuildMinor = _SE_BUILD_MINOR;
+ENGINE_API unsigned long _ulEngineBuildMajor = _SE_BUILD_MAJOR;
+ENGINE_API unsigned long _ulEngineBuildMinor = _SE_BUILD_MINOR;
 
 ENGINE_API BOOL _bDedicatedServer = FALSE;
 ENGINE_API BOOL _bWorldEditorApp  = FALSE;
@@ -129,8 +129,8 @@ static void DetectCPU(void)
 {
   char strVendor[12+1] = { 0 };
   strVendor[12] = 0;
-  ULONG ulTFMS = 0;
-  ULONG ulFeatures = 0;
+  unsigned long ulTFMS = 0;
+  unsigned long ulFeatures = 0;
 
   #if (defined __MSVC_INLINE__)
   // test MMX presence and update flag
@@ -147,7 +147,7 @@ static void DetectCPU(void)
   }
 
   #elif (defined __GNU_INLINE_X86__)
-    ULONG eax, ebx, ecx, edx;
+    unsigned long eax, ebx, ecx, edx;
     // test MMX presence and update flag
     __asm__ __volatile__ (
     #if (defined __GNU_INLINE_X86_64__)
@@ -305,12 +305,12 @@ static void SanityCheckTypes(void)
     ASSERT(sizeof (UBYTE) == 1);
     ASSERT(sizeof (UWORD) == 2);
     ASSERT(sizeof (SWORD) == 2);
-    ASSERT(sizeof (ULONG) == 4);
-    ASSERT(sizeof (SLONG) == 4);
+    ASSERT(sizeof (unsigned long) == 4);
+    ASSERT(sizeof (long) == 4);
     ASSERT(sizeof (INDEX) == 4);
     ASSERT(sizeof (BOOL) == 4);
 
-    ULONG val = 0x02000001;
+    unsigned long val = 0x02000001;
     UBYTE num = *((UBYTE *) &val);
     #if PLATFORM_BIGENDIAN
         #if PLATFORM_LITTLEENDIAN
@@ -677,8 +677,8 @@ ENGINE_API void SE_InitEngine(const char *argv0, CTString strGameID)
 
 // checking of crc
 #if 0
-  ULONG ulCRCActual = -2;
-  SLONG ulCRCExpected = -1;
+  unsigned long ulCRCActual = -2;
+  long ulCRCExpected = -1;
   try {
     // get the checksum of engine
     #ifndef NDEBUG
@@ -911,7 +911,7 @@ ENGINE_API extern void SE_PretouchIfNeeded(void)
     while( VirtualQuery( pvNextBlock, &mbi, sizeof(mbi)))
     { 
       // don't mess with kernel's memory and zero-sized blocks    
-      if( ((ULONG)pvNextBlock)>0x7FFF0000UL || mbi.RegionSize<1) break;
+      if( ((unsigned long)pvNextBlock)>0x7FFF0000UL || mbi.RegionSize<1) break;
 
       // if this region of memory belongs to our process
       BOOL bCanAccess = (mbi.Protect==PAGE_READWRITE); // || (mbi.Protect==PAGE_EXECUTE_READWRITE);

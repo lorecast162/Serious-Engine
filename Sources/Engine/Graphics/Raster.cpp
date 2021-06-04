@@ -25,7 +25,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
  *  Raster functions
  */
 
-CRaster::CRaster(PIX ulWidth, PIX ulHeight, ULONG ulFlags) : ra_MainDrawPort()
+CRaster::CRaster(PIX ulWidth, PIX ulHeight, unsigned long ulFlags) : ra_MainDrawPort()
 {
   // remember width and height
   ra_Width  = ulWidth;

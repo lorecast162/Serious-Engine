@@ -93,8 +93,8 @@ void CDlgPgPolygon::DoDataExchange(CDataExchange* pDX)
       UWORD uwFirstPretenderDistance;
       m_bPretenderDistance = TRUE;
 
-      ULONG ulFlagsOn = MAX_ULONG;
-      ULONG ulFlagsOff = MAX_ULONG;
+      unsigned long ulFlagsOn = MAX_unsigned long;
+      unsigned long ulFlagsOff = MAX_unsigned long;
 
       INDEX iPolygon = 0;
       // for each of the selected polygons
@@ -202,7 +202,7 @@ void CDlgPgPolygon::DoDataExchange(CDataExchange* pDX)
     if( bFindShdLayers) bFindShadowLayers = TRUE;\
   }
 
-      ULONG ulFlagsBefore = itbpo->bpo_ulFlags;
+      unsigned long ulFlagsBefore = itbpo->bpo_ulFlags;
       TRI_STATE_CTRL_TO_FLAGS( m_IsPortal, BPOF_PORTAL, TRUE, TRUE);
       TRI_STATE_CTRL_TO_FLAGS( m_IsOccluder, BPOF_OCCLUDER, FALSE, FALSE);
       TRI_STATE_CTRL_TO_FLAGS( m_IsOldPortal, OPOF_PORTAL, TRUE, TRUE);
@@ -214,7 +214,7 @@ void CDlgPgPolygon::DoDataExchange(CDataExchange* pDX)
       TRI_STATE_CTRL_TO_FLAGS( m_bIsDetail, BPOF_DETAILPOLYGON, FALSE, FALSE);      
       TRI_STATE_CTRL_TO_FLAGS( m_IsTranslucent, BPOF_TRANSLUCENT, FALSE, FALSE);
       TRI_STATE_CTRL_TO_FLAGS( m_IsTransparent, BPOF_TRANSPARENT, FALSE, FALSE);
-      ULONG ulFlagsAfter = itbpo->bpo_ulFlags;
+      unsigned long ulFlagsAfter = itbpo->bpo_ulFlags;
 
       // occluder and detail flags can't be on at the same time    
       BOOL bOccluderSet = ((ulFlagsBefore&BPOF_OCCLUDER)!=(ulFlagsAfter&BPOF_OCCLUDER))&&(ulFlagsAfter&BPOF_OCCLUDER);

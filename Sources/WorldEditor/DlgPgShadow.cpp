@@ -99,8 +99,8 @@ void CDlgPgShadow::DoDataExchange(CDataExchange* pDX)
       BOOL bSameShadowBlend = TRUE;
       BOOL bSameGradient = TRUE;
 
-      ULONG ulFlagsOn = MAX_ULONG;
-      ULONG ulFlagsOff = MAX_ULONG;
+      unsigned long ulFlagsOn = MAX_unsigned long;
+      unsigned long ulFlagsOff = MAX_unsigned long;
 
       INDEX iPolygon = 0;
       // for each of the selected polygons
@@ -316,7 +316,7 @@ void CDlgPgShadow::InitComboBoxes(void)
     strIlluminationName = pDoc->m_woWorld.wo_aitIlluminationTypes[iIllumination].it_strName;
     if(strIlluminationName == "") break;
     INDEX iAddedAs = m_ComboIllumination.AddString( CString(strIlluminationName));
-    m_ComboIllumination.SetItemData( iAddedAs, (ULONG) iIllumination);
+    m_ComboIllumination.SetItemData( iAddedAs, (unsigned long) iIllumination);
   }
   for(INDEX iBlend=0; iBlend<256; iBlend++)
   {

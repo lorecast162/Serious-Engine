@@ -135,7 +135,7 @@ void CWndAnimationFrames::OnPaint()
         if( iFrame == m_iSelectedFrame)
         {
           // set looks of rectangle
-          ULONG ulLineType = _FULL_;
+          unsigned long ulLineType = _FULL_;
           // draw 3D button (outer edges black)
           m_pDrawPort->DrawLine( pixX,pixY,pixX,pixY+pixDY, C_BLACK|CT_OPAQUE, ulLineType);
           m_pDrawPort->DrawLine( pixX,pixY+pixDY,pixX+pixDX-1,pixY+pixDY, C_BLACK|CT_OPAQUE, ulLineType);

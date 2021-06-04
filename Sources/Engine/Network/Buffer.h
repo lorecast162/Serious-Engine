@@ -26,12 +26,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
  */
 class CBuffer {
 public:
-  SLONG bu_slAllocationStep;  // how many bytes to add when buffer overflows
-  SLONG bu_slWriteOffset; // where to write to next
-  SLONG bu_slReadOffset;  // where to read from next
+  long bu_slAllocationStep;  // how many bytes to add when buffer overflows
+  long bu_slWriteOffset; // where to write to next
+  long bu_slReadOffset;  // where to read from next
 
-  SLONG bu_slFree;        // number of bytes free
-  SLONG bu_slSize;        // current buffer size
+  long bu_slFree;        // number of bytes free
+  long bu_slSize;        // current buffer size
   UBYTE *bu_pubBuffer;    // buffer memory
 
   // default constructor
@@ -41,21 +41,21 @@ public:
   // free buffer
   void Clear(void);
   // expand buffer to be given number of bytes in size
-  void Expand(SLONG slNewSize);
+  void Expand(long slNewSize);
   // set how many bytes to add when buffer overflows
-  void SetAllocationStep(SLONG slStep);
+  void SetAllocationStep(long slStep);
   // read bytes from buffer
-  SLONG ReadBytes(void *pv, SLONG slSize);
+  long ReadBytes(void *pv, long slSize);
   // skip bytes from buffer (read without actually reading)
-  SLONG SkipBytes(SLONG slSize);
+  long SkipBytes(long slSize);
   // read bytes from buffer to stream
-  SLONG ReadBytesToStream(CTStream &strm, SLONG slSize);
+  long ReadBytesToStream(CTStream &strm, long slSize);
   // unread bytes from buffer
-  void UnreadBytes(SLONG slSize);
+  void UnreadBytes(long slSize);
   // check how many bytes are there to read
-  SLONG QueryReadBytes(void);
+  long QueryReadBytes(void);
   // write bytes to buffer
-  void WriteBytes(const void *pv, SLONG slSize);
+  void WriteBytes(const void *pv, long slSize);
   // move all data from another buffer to this one
   void MoveBuffer(CBuffer &buFrom);
 };
@@ -70,7 +70,7 @@ public:
 
   void Clear(void);
   // get time when block of given size will be finished if started now
-  CTimerValue GetBlockFinalTime(SLONG slSize);
+  CTimerValue GetBlockFinalTime(long slSize);
 };
 
 /*
@@ -79,8 +79,8 @@ public:
 class CBlockBuffer : public CBuffer {
 public:
   CBlockBufferStats *bb_pbbsStats;   // for bandwidth/latency stats and limits
-  SLONG bb_slBlockSizeRead;     // block size left for reading (0 if not inside block)
-  SLONG bb_slBlockSizeWrite;    // block size left for writing (0 if not inside block)
+  long bb_slBlockSizeRead;     // block size left for reading (0 if not inside block)
+  long bb_slBlockSizeWrite;    // block size left for writing (0 if not inside block)
 
   // default constructor
   CBlockBuffer(void);
@@ -90,24 +90,24 @@ public:
   void Clear(void);
 
   // read one block if possible
-  BOOL ReadBlock(void *pv, SLONG &slSize);
+  BOOL ReadBlock(void *pv, long &slSize);
   // read one block from buffer to stream
   BOOL ReadBlockToStream(CTStream &strm);
   // write one block
-  void WriteBlock(const void *pv, SLONG slSize);
+  void WriteBlock(const void *pv, long slSize);
   // unread one block
-  void UnreadBlock(SLONG slSize);
+  void UnreadBlock(long slSize);
 
   // read raw block data
-  SLONG ReadRawBlock(void *pv, SLONG slSize);
+  long ReadRawBlock(void *pv, long slSize);
   // write raw block data
-  void WriteRawBlock(const void *pv, SLONG slSize);
+  void WriteRawBlock(const void *pv, long slSize);
   // unread raw block data
-  void UnreadRawBlock(SLONG slSize);
+  void UnreadRawBlock(long slSize);
   // move all data from another buffer to this one
   void MoveBlockBuffer(CBlockBuffer &buFrom);
   // peek sizes of next block
-  void PeekBlockSize(SLONG &slExpectedSize, SLONG &slReceivedSoFar);
+  void PeekBlockSize(long &slExpectedSize, long &slReceivedSoFar);
 };
 
 

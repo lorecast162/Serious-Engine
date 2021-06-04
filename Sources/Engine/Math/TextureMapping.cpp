@@ -194,7 +194,7 @@ void CMappingDefinition::ReadOld_t(CTStream &strm) // throw char *
   // - obsolete - used only for loading old worlds
   class CTextureMapping_old {
   public:
-    ULONG tm_ulFlags;       // flags
+    unsigned long tm_ulFlags;       // flags
     ANGLE tm_aRotation;     // angle of texture rotation
     FLOAT tm_fOffsetU;      // texture offsets (in meters)
     FLOAT tm_fOffsetV;

@@ -84,7 +84,7 @@ void CWndTestAnimation::OnPaint()
       m_aoAnimObject.StartAnim( iLightAnimation);
     }
     // get current frame (color)
-    SLONG col0, col1;
+    long col0, col1;
     FLOAT fRatio;
     m_aoAnimObject.GetFrame(col0, col1, fRatio);
     COLOR colorFrame = LerpColor(col0, col1, fRatio);

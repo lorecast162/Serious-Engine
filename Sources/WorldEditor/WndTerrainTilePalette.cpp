@@ -202,8 +202,8 @@ void CWndTerrainTilePalette::OnPaint()
       PIXaabbox2D boxScr=GetTileBBox(itum);
       if( (boxScr & boxPoint) == boxPoint)
       {
-        INDEX iRot=((ULONG)(tm*25.0f))&7;
-        ULONG ulLineType=0x0f0f0f0f<<iRot;
+        INDEX iRot=((unsigned long)(tm*25.0f))&7;
+        unsigned long ulLineType=0x0f0f0f0f<<iRot;
         m_pDrawPort->DrawBorder(boxScr.Min()(1), boxScr.Min()(2), 
                                 boxScr.Size()(1), boxScr.Size()(2),
                                 C_BLUE|CT_OPAQUE, ulLineType);

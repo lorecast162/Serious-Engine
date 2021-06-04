@@ -614,9 +614,9 @@ void CAnimSet::Clear(void)
 }
 
 // Count used memory
-SLONG CAnimSet::GetUsedMemory(void)
+long CAnimSet::GetUsedMemory(void)
 {
-  SLONG slMemoryUsed = sizeof(*this);
+  long slMemoryUsed = sizeof(*this);
   INDEX ctAnims = as_Anims.Count();
   for(INDEX ias=0;ias<ctAnims;ias++) {
     Animation &an = as_Anims[ias];

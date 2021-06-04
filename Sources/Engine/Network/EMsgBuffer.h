@@ -48,28 +48,28 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CEntityMessage {
 public:
-	ULONG em_ulType;
+	unsigned long em_ulType;
 	UBYTE em_aubMessage[EM_SIZE];
 	UBYTE em_ubSize;
-	ULONG em_ulEntityID;
+	unsigned long em_ulEntityID;
 
 	CEntityMessage(){};
 	~CEntityMessage(){};
 
-	void WritePlacement(ULONG &ulEntityID,CPlacement3D &plPlacement);
-	void ReadPlacement(ULONG &ulEntityID,CPlacement3D &plPlacement);
+	void WritePlacement(unsigned long &ulEntityID,CPlacement3D &plPlacement);
+	void ReadPlacement(unsigned long &ulEntityID,CPlacement3D &plPlacement);
 
-	void WriteEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
-	void ReadEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void WriteEntityCreate(unsigned long &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void ReadEntityCreate(unsigned long &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
 
-	void WriteEntityCopy(ULONG &ulSourceEntityID,ULONG &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
-	void ReadEntityCopy(ULONG &ulSourceEntityID,ULONG &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void WriteEntityCopy(unsigned long &ulSourceEntityID,unsigned long &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void ReadEntityCopy(unsigned long &ulSourceEntityID,unsigned long &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
 
-	void WriteEntityDestroy(ULONG &ulEntityID);
-	void ReadEntityDestroy(ULONG &ulEntityID);
+	void WriteEntityDestroy(unsigned long &ulEntityID);
+	void ReadEntityDestroy(unsigned long &ulEntityID);
 
-	void WriteEntityEvent(ULONG &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
-	void ReadEntityEvent(ULONG &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void WriteEntityEvent(unsigned long &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
+	void ReadEntityEvent(unsigned long &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize);
 
 };
 
@@ -77,7 +77,7 @@ public:
 
 struct TickMarker {
 	float tm_fTickTime;
-	SLONG tm_slTickOffset;
+	long tm_slTickOffset;
 	UBYTE tm_ubAcknowledgesExpected;
   UWORD tm_uwNumMessages;
 
@@ -106,17 +106,17 @@ public:
   virtual void Clear(void);
 
   // expand buffer to be given number of bytes in size
-  virtual void Expand(SLONG slNewSize);
+  virtual void Expand(long slNewSize);
 
 	// write one block
-  virtual void WriteBytes(const void *pv, SLONG slSize);
-	SLONG PeekBytes(const void *pv, SLONG slSize);
-  SLONG PeekBytesAtOffset(const void *pv, SLONG slSize,SLONG &slTickOffset);
+  virtual void WriteBytes(const void *pv, long slSize);
+	long PeekBytes(const void *pv, long slSize);
+  long PeekBytesAtOffset(const void *pv, long slSize,long &slTickOffset);
 
   int StartNewTick(float fTickTime);
   int SetCurrentTick(float fTickTime);
   int GetTickIndex(float fTickTime,INDEX &iTickIndex);
-  int GetTickOffset(float fTickTime,SLONG &slTickOffset);
+  int GetTickOffset(float fTickTime,long &slTickOffset);
   int GetNextTickTime(float fTickTime,float &fNextTickTime);
 	int RequestTickAcknowledge(float fTickTime,UBYTE ubNumAcknowledges);
 	int ReceiveTickAcknowledge(float fTickTime);
@@ -126,10 +126,10 @@ public:
 	// write the message from _emEntityMessage to the buffer
 	void WriteMessage(CEntityMessage &emEntityMessage);
 	int  ReadMessage(CEntityMessage &emEntityMessage);
-  int  PeekMessageAtOffset(CEntityMessage &emEntityMessage,SLONG &slTickOffset);
+  int  PeekMessageAtOffset(CEntityMessage &emEntityMessage,long &slTickOffset);
 
-  int  ReadTick(float fTickTime,const void *pv, SLONG &slSize);
-  void WriteTick(float fTickTime,const void *pv, SLONG slSize);
+  int  ReadTick(float fTickTime,const void *pv, long &slSize);
+  void WriteTick(float fTickTime,const void *pv, long slSize);
 
 
 };

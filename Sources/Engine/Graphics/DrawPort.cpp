@@ -217,19 +217,19 @@ BOOL CDrawPort::IsWideScreen(void)
 
 
 // returns unique drawports number
-ULONG CDrawPort::GetID(void)
+unsigned long CDrawPort::GetID(void)
 {
-  ULONG ulCRC;
+  unsigned long ulCRC;
   CRC_Start(   ulCRC);
 #ifdef PLATFORM_64BIT
   CRC_AddLONGLONG( ulCRC, (uint64_t)(size_t)dp_Raster);
 #else
-  CRC_AddLONG( ulCRC, (ULONG)(size_t)dp_Raster);
+  CRC_AddLONG( ulCRC, (unsigned long)(size_t)dp_Raster);
 #endif
-  CRC_AddLONG( ulCRC, (ULONG)dp_MinI);
-  CRC_AddLONG( ulCRC, (ULONG)dp_MinJ);
-  CRC_AddLONG( ulCRC, (ULONG)dp_MaxI);
-  CRC_AddLONG( ulCRC, (ULONG)dp_MaxJ);
+  CRC_AddLONG( ulCRC, (unsigned long)dp_MinI);
+  CRC_AddLONG( ulCRC, (unsigned long)dp_MinJ);
+  CRC_AddLONG( ulCRC, (unsigned long)dp_MaxI);
+  CRC_AddLONG( ulCRC, (unsigned long)dp_MaxJ);
   CRC_Finish(  ulCRC);
   return ulCRC;
 }
@@ -474,7 +474,7 @@ void CDrawPort::DrawPoint( PIX pixI, PIX pixJ, COLOR col, PIX pixRadius/*=1*/) c
     HRESULT hr;
     const FLOAT fI = pixI+0.75f;
     const FLOAT fJ = pixJ+0.75f;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     CTVERTEX avtx = {fI,fJ,0, d3dColor, 0,0};
     hr = _pGfx->gl_pd3dDevice->SetRenderState( D3DRS_POINTSIZE, *((DWORD*)&fR));
     D3D_CHECKERROR(hr);
@@ -518,7 +518,7 @@ void CDrawPort::DrawPoint3D( FLOAT3D v, COLOR col, FLOAT fRadius/*=1.0f*/) const
 #ifdef SE1_D3D
   else if( eAPI==GAT_D3D) {
     HRESULT hr;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     CTVERTEX avtx = {v(1),v(2),v(3), d3dColor, 0,0};
     hr = _pGfx->gl_pd3dDevice->SetRenderState( D3DRS_POINTSIZE, *((DWORD*)&fRadius));
     D3D_CHECKERROR(hr);
@@ -533,7 +533,7 @@ void CDrawPort::DrawPoint3D( FLOAT3D v, COLOR col, FLOAT fRadius/*=1.0f*/) const
 
 
 // draw one line
-void CDrawPort::DrawLine( PIX pixI0, PIX pixJ0, PIX pixI1, PIX pixJ1, COLOR col, ULONG typ/*=_FULL*/) const
+void CDrawPort::DrawLine( PIX pixI0, PIX pixJ0, PIX pixI1, PIX pixJ1, COLOR col, unsigned long typ/*=_FULL*/) const
 {
   // check API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
@@ -558,7 +558,7 @@ void CDrawPort::DrawLine( PIX pixI0, PIX pixJ0, PIX pixI1, PIX pixJ1, COLOR col,
     gfxGetTextureFiltering( iTexFilter, iTexAnisotropy);
     gfxSetTextureFiltering( iNewFilter, iNewAnisotropy);
     // prepare line pattern and mapping
-    extern void gfxSetPattern( ULONG ulPattern); 
+    extern void gfxSetPattern( unsigned long ulPattern); 
     gfxSetPattern(typ);
     fD = Max( Abs(pixI0-pixI1), Abs(pixJ0-pixJ1)) /32.0f;
   } 
@@ -581,7 +581,7 @@ void CDrawPort::DrawLine( PIX pixI0, PIX pixJ0, PIX pixI1, PIX pixJ1, COLOR col,
     HRESULT hr;
     const FLOAT fI0 = pixI0+0.75f;  const FLOAT fJ0 = pixJ0+0.75f;
     const FLOAT fI1 = pixI1+0.75f;  const FLOAT fJ1 = pixJ1+0.75f;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     CTVERTEX avtxLine[2] = {
       {fI0,fJ0,0, d3dColor,  0,0},
       {fI1,fJ1,0, d3dColor, fD,0} };
@@ -625,7 +625,7 @@ void CDrawPort::DrawLine3D( FLOAT3D v0, FLOAT3D v1, COLOR col) const
 #ifdef SE1_D3D
   else if( eAPI==GAT_D3D) {
     HRESULT hr;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     CTVERTEX avtxLine[2] = {
       {v0(1),v0(2),v0(3), d3dColor, 0,0},
       {v1(1),v1(2),v1(3), d3dColor, 0,0} };
@@ -640,7 +640,7 @@ void CDrawPort::DrawLine3D( FLOAT3D v0, FLOAT3D v1, COLOR col) const
 
 
 // draw border
-void CDrawPort::DrawBorder( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight, COLOR col, ULONG typ/*=_FULL_*/) const
+void CDrawPort::DrawBorder( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight, COLOR col, unsigned long typ/*=_FULL_*/) const
 {
   // check API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
@@ -666,7 +666,7 @@ void CDrawPort::DrawBorder( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight, COL
     gfxGetTextureFiltering( iTexFilter, iTexAnisotropy);
     gfxSetTextureFiltering( iNewFilter, iNewAnisotropy);
     // prepare line pattern
-    extern void gfxSetPattern( ULONG ulPattern); 
+    extern void gfxSetPattern( unsigned long ulPattern); 
     gfxSetPattern(typ);
     fD = Max( pixWidth, pixHeight) /32.0f;
   }
@@ -693,7 +693,7 @@ void CDrawPort::DrawBorder( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight, COL
 #ifdef SE1_D3D
   else if( eAPI==GAT_D3D) {
     HRESULT hr;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     CTVERTEX avtxLines[8] = { // setup lines
       {fI0,fJ0,  0, d3dColor, 0,0}, {fI1,  fJ0,0, d3dColor, fD,0},   // up
       {fI1,fJ0,  0, d3dColor, 0,0}, {fI1,  fJ1,0, d3dColor, fD,0},   // right
@@ -753,7 +753,7 @@ void CDrawPort::Fill( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight, COLOR col
     pixJ += dp_MinJ;
     const PIX pixRasterW = dp_Raster->ra_Width;
     const PIX pixRasterH = dp_Raster->ra_Height;
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     // do fast filling
     if( pixI==0 && pixJ==0 && pixWidth==pixRasterW && pixHeight==pixRasterH) {
       hr = _pGfx->gl_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET, d3dColor,0,0);
@@ -814,8 +814,8 @@ void CDrawPort::Fill( PIX pixI, PIX pixJ, PIX pixWidth, PIX pixHeight,
   else if( eAPI==GAT_D3D) { 
     // thru Direct3D
     HRESULT hr;
-    const ULONG d3dColUL = rgba2argb(colUL);  const ULONG d3dColUR = rgba2argb(colUR);
-    const ULONG d3dColDL = rgba2argb(colDL);  const ULONG d3dColDR = rgba2argb(colDR);
+    const unsigned long d3dColUL = rgba2argb(colUL);  const unsigned long d3dColUR = rgba2argb(colUR);
+    const unsigned long d3dColDL = rgba2argb(colDL);  const unsigned long d3dColDR = rgba2argb(colDR);
     CTVERTEX avtxTris[6] = {
       {fI0,fJ0,0, d3dColUL, 0,0}, {fI0,fJ1,0, d3dColDL, 0,1}, {fI1,fJ1,0, d3dColDR, 1,1},
       {fI0,fJ0,0, d3dColUL, 0,0}, {fI1,fJ1,0, d3dColDR, 1,1}, {fI1,fJ0,0, d3dColUR, 1,0} };
@@ -858,7 +858,7 @@ void CDrawPort::Fill( COLOR col) const
 #ifdef PLATFORM_WIN32 // Direct3D
   else if( eAPI==GAT_D3D)
   {
-    const ULONG d3dColor = rgba2argb(col);
+    const unsigned long d3dColor = rgba2argb(col);
     HRESULT hr = _pGfx->gl_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET, d3dColor,0,0);
     D3D_CHECKERROR(hr);
   }
@@ -948,7 +948,7 @@ void CDrawPort::GrabScreen( class CImageInfo &iiGrabbedImage, INDEX iGrabZBuffer
 
   // allocate memory for 24-bit raw picture and copy buffer context
   const PIX pixPicSize = iiGrabbedImage.ii_Width * iiGrabbedImage.ii_Height;
-  const SLONG slBytes  = pixPicSize * iiGrabbedImage.ii_BitsPerPixel/8;
+  const long slBytes  = pixPicSize * iiGrabbedImage.ii_BitsPerPixel/8;
   iiGrabbedImage.ii_Picture = (UBYTE*)AllocMemory( slBytes);
   memset( iiGrabbedImage.ii_Picture, 128, slBytes);
   
@@ -970,7 +970,7 @@ void CDrawPort::GrabScreen( class CImageInfo &iiGrabbedImage, INDEX iGrabZBuffer
       UBYTE *pubZBuffer = (UBYTE*)pfZBuffer;
       for( INDEX i=0; i<pixPicSize; i++) pubZBuffer[i] = 255-NormFloatToByte(pfZBuffer[i]);
       // add as alpha channel
-      AddAlphaChannel( iiGrabbedImage.ii_Picture, (ULONG*)iiGrabbedImage.ii_Picture,
+      AddAlphaChannel( iiGrabbedImage.ii_Picture, (unsigned long*)iiGrabbedImage.ii_Picture,
                        iiGrabbedImage.ii_Width * iiGrabbedImage.ii_Height, pubZBuffer);
       FreeMemory(pfZBuffer);
     }
@@ -999,7 +999,7 @@ void CDrawPort::GrabScreen( class CImageInfo &iiGrabbedImage, INDEX iGrabZBuffer
     D3D_CHECKERROR(hr);
 
     // prepare to copy'n'convert
-    SLONG slColSize;    
+    long slColSize;    
     UBYTE *pubSrc = (UBYTE*)rectLocked.pBits;
     UBYTE *pubDst = iiGrabbedImage.ii_Picture;
     // loop thru rows
@@ -1007,7 +1007,7 @@ void CDrawPort::GrabScreen( class CImageInfo &iiGrabbedImage, INDEX iGrabZBuffer
       // loop thru pixles in row
       for( INDEX i=0; i<dp_Width; i++) {
         UBYTE ubR,ubG,ubB;
-        extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, SLONG &slColorSize);
+        extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, long &slColorSize);
         COLOR col = UnpackColor_D3D( pubSrc, surfDesc.Format, slColSize);
         ColorToRGB( col, ubR,ubG,ubB);
         *pubDst++ = ubR;
@@ -1123,11 +1123,11 @@ void CDrawPort::SetFont( CFontData *pfd)
 
 
 // returns width of the longest line in text string
-ULONG CDrawPort::GetTextWidth( const CTString &strText) const
+unsigned long CDrawPort::GetTextWidth( const CTString &strText) const
 {
   // prepare scaling factors
   PIX   pixCellWidth    = dp_FontData->fd_pixCharWidth;
-  SLONG fixTextScalingX = FloatToInt(dp_fTextScaling*dp_fTextAspect*65536.0f);
+  long fixTextScalingX = FloatToInt(dp_fTextScaling*dp_fTextAspect*65536.0f);
 
   // calculate width of entire text line
   PIX pixStringWidth=0, pixOldWidth=0;
@@ -1190,8 +1190,8 @@ void CDrawPort::PutText( const CTString &strText, PIX pixX0, PIX pixY0, const CO
 
   // cache char and texture dimensions
   FLOAT fTextScalingX   = dp_fTextScaling*dp_fTextAspect;
-  SLONG fixTextScalingX = FloatToInt(fTextScalingX  *65536.0f);
-  SLONG fixTextScalingY = FloatToInt(dp_fTextScaling*65536.0f);
+  long fixTextScalingX = FloatToInt(fTextScalingX  *65536.0f);
+  long fixTextScalingY = FloatToInt(dp_fTextScaling*65536.0f);
   PIX pixCellWidth  = dp_FontData->fd_pixCharWidth;
   PIX pixCharHeight = dp_FontData->fd_pixCharHeight-1;
   PIX pixScaledWidth  = (pixCellWidth *fixTextScalingX)>>16;
@@ -1215,7 +1215,7 @@ void CDrawPort::PutText( const CTString &strText, PIX pixX0, PIX pixY0, const CO
   // determine text color
   GFXColor glcolDefault( AdjustColor( colBlend, _slTexHueShift, _slTexSaturation));
   GFXColor glcol = glcolDefault;
-  ULONG ulAlphaDefault = (colBlend&CT_AMASK)>>CT_ASHIFT;;  // for flasher
+  unsigned long ulAlphaDefault = (colBlend&CT_AMASK)>>CT_ASHIFT;;  // for flasher
   ASSERT( dp_iTextMode==-1 || dp_iTextMode==0 || dp_iTextMode==+1);
 
   // prepare some text control and output vars
@@ -1223,7 +1223,7 @@ void CDrawPort::PutText( const CTString &strText, PIX pixX0, PIX pixY0, const CO
   BOOL bBold    = FALSE;
   BOOL bItalic  = FALSE;
   INDEX iFlash  = 0;
-  ULONG ulAlpha = ulAlphaDefault;
+  unsigned long ulAlpha = ulAlphaDefault;
   TIME tmFrame  = _pGfx->gl_tvFrameTime.GetSeconds();
   BOOL bParse = dp_iTextMode==1;
 
@@ -1491,8 +1491,8 @@ void CDrawPort::PutTexture( class CTextureObject *pTO,
   const PIX pixWidth  = ptd->GetPixWidth();
   const PIX pixHeight = ptd->GetPixHeight();
   FLOAT fCorrectionU, fCorrectionV;
-  (SLONG&)fCorrectionU = (127-FastLog2(pixWidth))  <<23; // fCorrectionU = 1.0f / ptd->GetPixWidth() 
-  (SLONG&)fCorrectionV = (127-FastLog2(pixHeight)) <<23; // fCorrectionV = 1.0f / ptd->GetPixHeight() 
+  (long&)fCorrectionU = (127-FastLog2(pixWidth))  <<23; // fCorrectionU = 1.0f / ptd->GetPixWidth() 
+  (long&)fCorrectionV = (127-FastLog2(pixHeight)) <<23; // fCorrectionV = 1.0f / ptd->GetPixHeight() 
   FLOAT fU0 = (boxTexture.Min()(1)>>ptd->td_iFirstMipLevel) *fCorrectionU;
   FLOAT fU1 = (boxTexture.Max()(1)>>ptd->td_iFirstMipLevel) *fCorrectionU;
   FLOAT fV0 = (boxTexture.Min()(2)>>ptd->td_iFirstMipLevel) *fCorrectionV;
@@ -1678,11 +1678,11 @@ void CDrawPort::BlendScreen(void)
 {
   if( dp_ulBlendingA==0) return;
 
-  ULONG fix1oA = 65536 / dp_ulBlendingA;
-  ULONG ulRA = (dp_ulBlendingRA*fix1oA)>>16;
-  ULONG ulGA = (dp_ulBlendingGA*fix1oA)>>16;
-  ULONG ulBA = (dp_ulBlendingBA*fix1oA)>>16;
-  ULONG ulA  = ClampUp( dp_ulBlendingA, (ULONG) 255);
+  unsigned long fix1oA = 65536 / dp_ulBlendingA;
+  unsigned long ulRA = (dp_ulBlendingRA*fix1oA)>>16;
+  unsigned long ulGA = (dp_ulBlendingGA*fix1oA)>>16;
+  unsigned long ulBA = (dp_ulBlendingBA*fix1oA)>>16;
+  unsigned long ulA  = ClampUp( dp_ulBlendingA, (unsigned long) 255);
   COLOR colBlending = RGBAToColor( ulRA, ulGA, ulBA, ulA);
                                     
   // blend drawport (thru z-buffer because of elimination of pixel artefacts)

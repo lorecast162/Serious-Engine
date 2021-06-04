@@ -68,7 +68,7 @@ struct ScenePolygon {
   // internal for rendering
   INDEX spo_iVtx0Pass;     // index of first coordinate in per-pass arrays
   COLOR spo_cColor;        // polygon color (for flat or shadow modes)
-  ULONG spo_ulFlags;       // polygon flags (selected or not? ...)
+  unsigned long spo_ulFlags;       // polygon flags (selected or not? ...)
   FLOAT spo_fNearestZ;     // Z coord of nearest vertex to viewer
   void *spo_pvPolygon;     // user data for high level renderer (brush polygon)
 };

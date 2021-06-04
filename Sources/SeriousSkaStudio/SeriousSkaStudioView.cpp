@@ -345,7 +345,7 @@ void CSeriousSkaStudioView::RenderLightModels(CDrawPort *pdp,CPlacement3D &pl)
 
 
     // back up current model flags
-    ULONG ulModelFlags = RM_GetFlags();
+    unsigned long ulModelFlags = RM_GetFlags();
     // change render flags
     RM_SetFlags(RMF_SHOWTEXTURE);
     
@@ -501,7 +501,7 @@ void CSeriousSkaStudioView::RenderView(CDrawPort *pdp)
     // show paused indicator
     if(pDoc->m_bViewPaused) {
       TIME tmNow = _pTimer->GetHighPrecisionTimer().GetSeconds();
-      ULONG ulAlpha = sin(tmNow*16)*96 +128;
+      unsigned long ulAlpha = sin(tmNow*16)*96 +128;
       pdp->SetFont( _pfdConsoleFont);
       pdp->PutText( "Paused", m_pdpDrawPort->dp_Width-50, ClampDn<PIX>(m_pdpDrawPort->dp_Height-15,0), 0xffff0000|ulAlpha);
     }

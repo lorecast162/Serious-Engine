@@ -714,8 +714,8 @@ void PrintDisplayModeInfo(void)
   if( _pTimer->GetRealTimeTick() > (_tmDisplayModeChanged+sam_tmDisplayModeReport)) return;
 
   // cache some general vars
-  SLONG slDPWidth  = pdp->GetWidth();
-  SLONG slDPHeight = pdp->GetHeight();
+  long slDPWidth  = pdp->GetWidth();
+  long slDPHeight = pdp->GetHeight();
   if( pdp->IsDualHead()) slDPWidth/=2;
 
   CDisplayMode dm;

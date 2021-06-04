@@ -34,14 +34,14 @@ public:
 
   PIX    ra_Width;								  // number of pixels in one row
   PIX    ra_Height;							    // number of pixels in one column
-  SLONG  ra_LockCount;							// counter for memory locking
-  ULONG  ra_Flags;									// special flags
+  long  ra_LockCount;							// counter for memory locking
+  unsigned long  ra_Flags;									// special flags
 
   /* Recalculate dimensions for all drawports. */
 	void RecalculateDrawPortsDimensions(void);
 
   /* Constructor for given size. */
-  CRaster( PIX pixWidth, PIX pixHeight, ULONG ulFlags);
+  CRaster( PIX pixWidth, PIX pixHeight, unsigned long ulFlags);
 	/* Destructor. */
   virtual ~CRaster(void);
   /* Change size of this raster and all it's drawports. */

@@ -51,7 +51,7 @@ struct ENGINE_API ModelMipInfo
   ModelMipInfo();                                 // constructor
   ~ModelMipInfo();                                // destructor
 	INDEX mmpi_PolygonsCt;													// how many polygons in this mip-model
-  ULONG mmpi_ulFlags;                             // flags for this mip model
+  unsigned long mmpi_ulFlags;                             // flags for this mip model
   CStaticArray<struct PolygonsPerPatch>   mmpi_aPolygonsPerPatch; // for each patch info telling which polygons are occupied by that patch
 	CStaticArray<struct ModelPolygon>       mmpi_Polygons;          // array of polygons
   CStaticArray<struct ModelTextureVertex> mmpi_TextureVertices;	  // with U,V and data for calculating U,V (for modeler) [???]
@@ -65,7 +65,7 @@ struct ENGINE_API ModelMipInfo
   CStaticArray<FLOAT2D> mmpi_avmexTexCoord;   // texture coordinates for each surface vertex
   CStaticArray<FLOAT3D> mmpi_avBumpU;   // bump directions for each surface vertex
   CStaticArray<FLOAT3D> mmpi_avBumpV;   // bump directions for each surface vertex
-  ULONG mmpi_ulLayerFlags;              // all texture layers needed in this mip
+  unsigned long mmpi_ulLayerFlags;              // all texture layers needed in this mip
   INDEX mmpi_ctTriangles;               // total triangles in this mip
   CStaticStackArray<INDEX_T> mmpi_aiElements;
 
@@ -84,15 +84,15 @@ public:
   CStaticArray<struct ModelFrameInfo> md_FrameInfos;					// bounding box info [FramesCt]
   CStaticArray<FLOAT3D> md_MainMipVertices;				// global array with coordinates of all vertices of main mip-model, used for creating mip-models [VerticesCt]
   CStaticArray<struct TransformedVertexData> md_TransformedVertices;		// buffer with i,j,k, rotated and stretched gouraud normal [VerticesCt]
-  CStaticArray<ULONG> md_VertexMipMask;						// array of vertice masks telling in which mip model some vertex exists [VerticesCt]
+  CStaticArray<unsigned long> md_VertexMipMask;						// array of vertice masks telling in which mip model some vertex exists [VerticesCt]
   INDEX md_MipCt;																	// number of mip-models
   float md_MipSwitchFactors[MAX_MODELMIPS];			// array of mip factors determing where mip-models switch
   struct ModelMipInfo md_MipInfos[MAX_MODELMIPS];	// contains how many polygons and which contains which vertices (different for each mip-model)
   MEX md_Width, md_Height;												// size of texture, used for checking validiti of surfaces
   CModelPatch md_mpPatches[MAX_TEXTUREPATCHES];    // patches themselfs
 	CTString md_ColorNames[MAX_COLOR_NAMES];        // strings containing edited color names
-  ULONG md_Flags;		      												// model flags (face froward, reflesction mapping)
-  SLONG md_ShadowQuality;	          							// determines maximum shadow quality
+  unsigned long md_Flags;		      												// model flags (face froward, reflesction mapping)
+  long md_ShadowQuality;	          							// determines maximum shadow quality
 	FLOAT3D md_Stretch;															// stretch vector (static one, dynamic one is in model object)
 	FLOAT3D md_vCenter;															// center of object
   FLOAT3D md_vCompressedCenter;                   // compressed (0-255) center of object (handle)
@@ -125,13 +125,13 @@ public:
   FLOAT3D GetCollisionBoxMax(INDEX iCollisionBox);
   // returns HEIGHT_EQ_WIDTH, LENGTH_EQ_WIDTH or LENGTH_EQ_HEIGHT
   INDEX GetCollisionBoxDimensionEquality(INDEX iCollisionBox);
-  ULONG GetFlags(void);
+  unsigned long GetFlags(void);
 	void Clear(void);
   // check if this kind of objects is auto-freed
   virtual BOOL IsAutoFreed(void);
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 	void ClearAnimations(void);
   void LinkDataForSurfaces(BOOL bFirstMip);// calculate polygons and vertices for surface
   void Read_t( CTStream *istrFile);  // throw char *

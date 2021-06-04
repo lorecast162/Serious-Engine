@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 struct ENGINE_API MeshVertex
 {
   FLOAT x, y, z;
-  ULONG dummy; // 16 byte alingment
+  unsigned long dummy; // 16 byte alingment
 };
 
 static inline CTStream &operator>>(CTStream &strm, MeshVertex &mv)
@@ -58,7 +58,7 @@ static inline CTStream &operator>>(CTStream &strm, const MeshVertex &mv)
 struct ENGINE_API MeshNormal
 {
   FLOAT nx, ny, nz;
-  ULONG dummy; // 16 byte alingment
+  unsigned long dummy; // 16 byte alingment
 };
 
 static inline CTStream &operator>>(CTStream &strm, MeshNormal &mn)
@@ -82,7 +82,7 @@ static inline CTStream &operator>>(CTStream &strm, const MeshNormal &mn)
 
 struct ENGINE_API MeshUVMap
 {
-  ULONG muv_iID;
+  unsigned long muv_iID;
   CStaticArray<struct MeshTexCoord>  muv_aTexCoords; // texture coordinates
 };
 
@@ -177,7 +177,7 @@ struct ENGINE_API MeshVertexMorph
   FLOAT mwm_nx;
   FLOAT mwm_ny;
   FLOAT mwm_nz;
-  ULONG dummy;        // 32 byte padding
+  unsigned long dummy;        // 32 byte padding
 };
 
 static inline CTStream &operator>>(CTStream &strm, MeshVertexMorph &mwm)
@@ -215,7 +215,7 @@ struct ENGINE_API MeshLOD
   };
   ~MeshLOD() {}
   FLOAT mlod_fMaxDistance;
-  ULONG mlod_ulFlags;
+  unsigned long mlod_ulFlags;
   CStaticArray<struct MeshVertex>    mlod_aVertices;   // vertices
   CStaticArray<struct MeshNormal>    mlod_aNormals;	   // normals
   CStaticArray<struct MeshUVMap>     mlod_aUVMaps;     // UV maps
@@ -240,7 +240,7 @@ public:
   void Read_t( CTStream *istrFile);  // throw char *
   void Write_t( CTStream *ostrFile); // throw char *
   void Clear(void);
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
   CStaticArray<struct MeshLOD> msh_aMeshLODs;
 }; 
 ENGINE_API void ChangeSurfaceShader_t(MeshSurface &msrf,CTString fnNewShader);

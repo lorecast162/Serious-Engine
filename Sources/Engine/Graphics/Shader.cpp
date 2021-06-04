@@ -55,7 +55,7 @@ static FLOAT3D     _vLightDir  = FLOAT3D(0,0,0); // Light direction
 static COLOR       _colConstant  = 0;     // current set color
 static COLOR       *_paColors    = NULL;  // array of colors to chose from
 static FLOAT       *_paFloats    = NULL;  // array of floats to chose from
-static ULONG       _ulFlags      = 0;
+static unsigned long       _ulFlags      = 0;
 
 // Vertex colors
 static CStaticStackArray<GFXColor> _acolVtxColors;        // array of color values for each vertex
@@ -208,9 +208,9 @@ void shaCalculateLight(void)
   colModel.MultiplyRGBA(colModel,colSurface);
 
   UBYTE ubColShift = 8;
-  SLONG slar = colAmbient.ub.r;
-  SLONG slag = colAmbient.ub.g;
-  SLONG slab = colAmbient.ub.b;
+  long slar = colAmbient.ub.r;
+  long slag = colAmbient.ub.g;
+  long slab = colAmbient.ub.b;
 
   if(shaOverBrightningEnabled()) {
     slar = ClampUp(slar,127);
@@ -230,7 +230,7 @@ void shaCalculateLight(void)
     const FLOAT3D &vNorm = FLOAT3D(_paNormals[ivx].nx,_paNormals[ivx].ny,_paNormals[ivx].nz);
     FLOAT fDot = vNorm % _vLightDir;
     fDot = Clamp(fDot,0.0f,1.0f);
-    SLONG slDot = NormFloatToByte(fDot);
+    long slDot = NormFloatToByte(fDot);
 
     _acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot)>>ubColShift))>>8,255);
     _acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot)>>ubColShift))>>8,255);
@@ -257,9 +257,9 @@ void shaCalculateLightForSpecular(void)
   colModel.MultiplyRGBA(colModel,colSurface);
 
   UBYTE ubColShift = 8;
-  SLONG slar = colAmbient.ub.r;
-  SLONG slag = colAmbient.ub.g;
-  SLONG slab = colAmbient.ub.b;
+  long slar = colAmbient.ub.r;
+  long slag = colAmbient.ub.g;
+  long slab = colAmbient.ub.b;
 
   if(shaOverBrightningEnabled()) {
     slar = ClampUp(slar,127);
@@ -279,7 +279,7 @@ void shaCalculateLightForSpecular(void)
     const FLOAT3D &vNorm = FLOAT3D(_paNormals[ivx].nx,_paNormals[ivx].ny,_paNormals[ivx].nz);
     FLOAT fDot = vNorm % _vLightDir;
     fDot = Clamp(fDot,0.0f,1.0f);
-    SLONG slDot = NormFloatToByte(fDot);
+    long slDot = NormFloatToByte(fDot);
 
     _acolVtxColors[ivx].ub.r = ClampUp(colModel.ub.r * (slar + ((colLight.ub.r * slDot)>>ubColShift))>>8,255);
     _acolVtxColors[ivx].ub.g = ClampUp(colModel.ub.g * (slag + ((colLight.ub.g * slDot)>>ubColShift))>>8,255);
@@ -397,7 +397,7 @@ void shaSetFloatArray(FLOAT *paFloats, INDEX ctFloats)
 }
 
 // Set shading flags
-void shaSetFlags(ULONG ulFlags)
+void shaSetFlags(unsigned long ulFlags)
 {
   _ulFlags = ulFlags;
 }
@@ -534,7 +534,7 @@ COLOR &shaGetColor(INDEX iColorIndex)
 }
 
 // Get shading flags
-ULONG &shaGetFlags()
+unsigned long &shaGetFlags()
 {
   return _ulFlags;
 }
@@ -786,7 +786,7 @@ void CShader::Clear(void)
 }
 
 // Count used memory
-SLONG CShader::GetUsedMemory(void)
+long CShader::GetUsedMemory(void)
 {
   return sizeof(CShader);
 }

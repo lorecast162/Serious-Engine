@@ -62,7 +62,7 @@ void CDlgPgRenderingStatistics::DoDataExchange(CDataExchange* pDX)
       CTFileStream fileProfile;
       fileProfile.Open_t(CTString("WorldEditor.profile"));
       // get size of profile file
-      ULONG ulProfileFileSize = fileProfile.GetStreamSize();
+      unsigned long ulProfileFileSize = fileProfile.GetStreamSize();
       char *pchrFile = new char[ ulProfileFileSize+1];
       // set eol character
       pchrFile[ ulProfileFileSize] = 0;

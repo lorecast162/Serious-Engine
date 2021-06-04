@@ -32,7 +32,7 @@ class CModelInfo;
 
 class ENGINE_API CModelObject : public CAnimObject {
 private:
-  ULONG mo_PatchMask;										  				// used to turn on/off texture patches (i.e. blood patches)
+  unsigned long mo_PatchMask;										  				// used to turn on/off texture patches (i.e. blood patches)
 	INDEX mo_iManualMipLevel;
 	BOOL  mo_AutoMipModeling;
 
@@ -52,7 +52,7 @@ public:
   CTextureObject mo_toSpecular;				   					// texture used for specularity
   CTextureObject mo_toBump;   				   					// texture used for bump
   FLOAT3D mo_Stretch;															// dynamic stretching vector, (usually 1,1,1)
-  ULONG mo_ColorMask;															// mask telling what parts (colors) are visible
+  unsigned long mo_ColorMask;															// mask telling what parts (colors) are visible
   INDEX mo_iLastRenderMipLevel;                   // last rendered mip model index remembered
   COLOR mo_colBlendColor;													// dynamic blend color (alpha is applied)
   CListHead mo_lhAttachments;                     // list of currently active attachment models
@@ -95,16 +95,16 @@ public:
   void SetSurfaceColor( INDEX iCurrentMip, INDEX iSurface, COLOR colNewColorAndAlpha); // changes color of given surface
   void GetSurfaceRenderFlags( INDEX iCurrentMip, INDEX iCurrentSurface,
         enum SurfaceShadingType &sstShading, enum SurfaceTranslucencyType &sttTranslucency,
-        ULONG &ulRenderingFlags);
+        unsigned long &ulRenderingFlags);
   void SetSurfaceRenderFlags( INDEX iCurrentMip, INDEX iCurrentSurface,
         enum SurfaceShadingType sstShading, enum SurfaceTranslucencyType sttTranslucency,
-        ULONG ulRenderingFlags);
+        unsigned long ulRenderingFlags);
   INDEX GetClosestPatch( MEX2D mexWanted, MEX2D &mexFound); // returns index and position of closest patch
   CTString GetColorName( INDEX iColor);           // retrieves name of color with given index
   void SetColorName( INDEX iColor, CTString &strNewName); // sets new color name
 
-  ULONG GetPatchesMask(); // this function returns current value of patches mask
-  void  SetPatchesMask( ULONG new_patches_mask);	  	// use this function to set new patches combination
+  unsigned long GetPatchesMask(); // this function returns current value of patches mask
+  void  SetPatchesMask( unsigned long new_patches_mask);	  	// use this function to set new patches combination
 
   void UnpackVertex( CRenderModel &rm, const INDEX iVertex, FLOAT3D &vVertex);
   BOOL CreateAttachment( CRenderModel &rmMain, CAttachmentModelObject &amo);
@@ -174,7 +174,7 @@ public:
   void Synchronize(CModelObject &moOther);
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 

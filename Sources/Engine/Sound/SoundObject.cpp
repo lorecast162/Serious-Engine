@@ -166,7 +166,7 @@ void CSoundObject::Set3DParameters( FLOAT fFalloff, FLOAT fHotSpot,
  */
 
 // get proper sound object for predicted events - return NULL the event is already predicted
-CSoundObject *CSoundObject::GetPredictionTail(ULONG ulTypeID, ULONG ulEventID)
+CSoundObject *CSoundObject::GetPredictionTail(unsigned long ulTypeID, unsigned long ulEventID)
 {
   // if the sound has an entity
   if (so_penEntity!=NULL) {
@@ -177,9 +177,9 @@ CSoundObject *CSoundObject::GetPredictionTail(ULONG ulTypeID, ULONG ulEventID)
       // it must not play the sound
       return NULL;
     }
-    SLONG slOffset = size_t(this)-size_t(so_penEntity);
+    long slOffset = size_t(this)-size_t(so_penEntity);
 
-    ULONG ulCRC;
+    unsigned long ulCRC;
     CRC_Start(ulCRC);
     CRC_AddLONG(ulCRC, slOffset);
     CRC_AddLONG(ulCRC, ulTypeID);
@@ -208,7 +208,7 @@ CSoundObject *CSoundObject::GetPredictionTail(ULONG ulTypeID, ULONG ulEventID)
 /*
  *  Play
  */
-void CSoundObject::Play(CSoundData *pCsdLink, SLONG slFlags)
+void CSoundObject::Play(CSoundData *pCsdLink, long slFlags)
 {
   // synchronize access to sounds
   CTSingleLock slSounds( &_pSound->sl_csSound, TRUE);
@@ -227,7 +227,7 @@ void CSoundObject::Play(CSoundData *pCsdLink, SLONG slFlags)
 }
 
 // play sound - internal function - doesn't account for prediction
-void CSoundObject::Play_internal( CSoundData *pCsdLink, SLONG slFlags)
+void CSoundObject::Play_internal( CSoundData *pCsdLink, long slFlags)
 {
   ASSERT(so_penEntity==NULL || !so_penEntity->IsPredictor());
 
@@ -611,7 +611,7 @@ void CSoundObject::PrepareSound(void)
 
 
 // Obtain sound and play it for this object
-void CSoundObject::Play_t(const CTFileName &fnmSound, SLONG slFlags) // throw char *
+void CSoundObject::Play_t(const CTFileName &fnmSound, long slFlags) // throw char *
 {
   // obtain it (adds one reference)
   CSoundData *ptd = _pSoundStock->Obtain_t(fnmSound);

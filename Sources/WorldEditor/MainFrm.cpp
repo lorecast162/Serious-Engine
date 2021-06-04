@@ -538,7 +538,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CMainFrame::DockControlBarRelativeTo(CControlBar* pbarToDock,
                                           CControlBar* pbarRelativeTo,
-                                          ULONG ulDockDirection /*= DOCK_RIGHT*/)
+                                          unsigned long ulDockDirection /*= DOCK_RIGHT*/)
 {
 	CRect rectToDock;
 	CRect rectRelativeTo;
@@ -751,7 +751,7 @@ void CMainFrame::CustomColorPicker( PIX pixX, PIX pixY)
         if( colIntersectingColor != itbpo->bpo_colColor)
         {
           // set invalid color
-          colIntersectingColor = MAX_ULONG;
+          colIntersectingColor = MAX_unsigned long;
           break;
         }
       }
@@ -778,7 +778,7 @@ void CMainFrame::CustomColorPicker( PIX pixX, PIX pixY)
         if( colIntersectingColor != itbsc->bsc_colColor)
         {
           // set invalid color
-          colIntersectingColor = MAX_ULONG;
+          colIntersectingColor = MAX_unsigned long;
           break;
         }
       }

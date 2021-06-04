@@ -60,34 +60,34 @@ void CCtrlEditFlags::SetDialogPtr( CWnd *pDialog)
   m_pDialog = pDialog;
 }
 
-void CCtrlEditFlags::SetEditableMask(ULONG ulEditable)
+void CCtrlEditFlags::SetEditableMask(unsigned long ulEditable)
 {
   m_ulEditable=ulEditable;
   SetFirstEditableBank();
   if( ::IsWindow(m_hWnd)) Invalidate( FALSE);
 }
 
-void CCtrlEditFlags::SetDefaultValue(ULONG ulDefault)
+void CCtrlEditFlags::SetDefaultValue(unsigned long ulDefault)
 {
   m_ulDefault=ulDefault;
 }
 
-void CCtrlEditFlags::SetFlags(ULONG ulFlags)
+void CCtrlEditFlags::SetFlags(unsigned long ulFlags)
 {
   m_ulValue=ulFlags;
   m_ulDefined=-1;
   if( ::IsWindow(m_hWnd)) Invalidate( FALSE);
 }
 
-void CCtrlEditFlags::MergeFlags(ULONG ulFlags)
+void CCtrlEditFlags::MergeFlags(unsigned long ulFlags)
 {
   m_ulDefined&=~(ulFlags^m_ulValue);
   if( ::IsWindow(m_hWnd)) Invalidate( FALSE);
 }
 
-void CCtrlEditFlags::ApplyChange(ULONG &ulOldFlags)
+void CCtrlEditFlags::ApplyChange(unsigned long &ulOldFlags)
 {
-  ULONG ulKeepMask=~m_ulEditable|~m_ulDefined;
+  unsigned long ulKeepMask=~m_ulEditable|~m_ulDefined;
   ulOldFlags=(ulOldFlags&ulKeepMask)|(m_ulValue&~ulKeepMask);
 }
 
@@ -159,7 +159,7 @@ void CCtrlEditFlags::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   for( INDEX iBit=(m_iCurrentBank+1)*8-1; iBit>=m_iCurrentBank*8; iBit--)
   {
     RECT rectToFill=GetRectForArea(ix);
-    ULONG ulBit=(1<<iBit);
+    unsigned long ulBit=(1<<iBit);
     COLORREF clrfColor=CLRF_CLR( C_GRAY);
     // if is editable
     if( m_ulEditable&ulBit)
@@ -233,7 +233,7 @@ CTString CCtrlEditFlags::GetTipForArea(INDEX iArea) const
   }
   else if( iArea!=-1)
   {
-    ULONG ulBit=1<<((7-iArea)+m_iCurrentBank*8);
+    unsigned long ulBit=1<<((7-iArea)+m_iCurrentBank*8);
     if( m_ulEditable&ulBit)
     {
       INDEX iBit=(7-iArea)+m_iCurrentBank*8;
@@ -286,7 +286,7 @@ void CCtrlEditFlags::OnLButtonUp(UINT nFlags, CPoint point)
   }
   else if( iArea>=0 && iArea<=7)
   {
-    ULONG ulBit=1<<((7-iArea)+m_iCurrentBank*8);
+    unsigned long ulBit=1<<((7-iArea)+m_iCurrentBank*8);
     // if bit was defined
     if( m_ulDefined&ulBit)
     {

@@ -46,9 +46,9 @@ FLOAT3D _fog_vHDirView;
 FLOAT _fog_fMulZ=0;
 FLOAT _fog_fMulH=0;
 FLOAT _fog_fAddH=0;
-ULONG _fog_ulAlpha=0;
-ULONG _fog_ulTexture=0;
-ULONG _fog_ulFormat=0;
+unsigned long _fog_ulAlpha=0;
+unsigned long _fog_ulTexture=0;
+unsigned long _fog_ulFormat=0;
 
 PIX _fog_pixSizeH=0;
 PIX _fog_pixSizeL=0;
@@ -62,7 +62,7 @@ extern BOOL _bMultiPlayer;
 
 
 // prepares fog and haze parameters and eventualy converts texture
-ULONG PrepareTexture( UBYTE *pubTexture, PIX pixSizeI, PIX pixSizeJ)
+unsigned long PrepareTexture( UBYTE *pubTexture, PIX pixSizeI, PIX pixSizeJ)
 {
   // need to upload from RGBA format
   const PIX pixTextureSize = pixSizeI*pixSizeJ;
@@ -109,7 +109,7 @@ pixLoop:
    DWORD* dst = (DWORD*)(pubTexture+pixTextureSize);
    for (int i=0; i<pixTextureSize; i++) {
     const DWORD tmp = ((DWORD)*src) | 0xFFFFFF00;
-    *dst = BYTESWAP32_unsigned((ULONG)tmp);
+    *dst = BYTESWAP32_unsigned((unsigned long)tmp);
     src++;
     dst++;
    }
@@ -161,8 +161,8 @@ void StartFog( CFogParameters &fp, const FLOAT3D &vViewPosAbs, const FLOATmatrix
   }
   // allocate table if needed
   if( _fog_pubTable==NULL) {
-    // allocate byte table (for intensity values) and ULONG table (color values for uploading) right behind!
-    _fog_pubTable = (UBYTE*)AllocMemory( pixSizeH*pixSizeL * (sizeof(UBYTE)+sizeof(ULONG)));
+    // allocate byte table (for intensity values) and unsigned long table (color values for uploading) right behind!
+    _fog_pubTable = (UBYTE*)AllocMemory( pixSizeH*pixSizeL * (sizeof(UBYTE)+sizeof(unsigned long)));
     _fog_pixSizeH = pixSizeH;
     _fog_pixSizeL = pixSizeL;
     _fog_tpLocal.Clear();
@@ -324,14 +324,14 @@ void StartFog( CFogParameters &fp, const FLOAT3D &vViewPosAbs, const FLOATmatrix
 
   // prepare and upload the fog table
   _fog_tpLocal.tp_bSingleMipmap = TRUE;
-  const ULONG ulFormat = PrepareTexture( _fog_pubTable, _fog_pixSizeL, _fog_pixSizeH);
+  const unsigned long ulFormat = PrepareTexture( _fog_pubTable, _fog_pixSizeL, _fog_pixSizeH);
   if( _fog_ulFormat!=ulFormat) {
     _fog_ulFormat = ulFormat;
     bNoDiscard = FALSE;
   } // set'n'upload
   gfxSetTextureWrapping( GFX_CLAMP, GFX_CLAMP);
   gfxSetTexture( _fog_ulTexture, _fog_tpLocal);
-  gfxUploadTexture( (ULONG*)(_fog_pubTable + _fog_pixSizeL*_fog_pixSizeH),
+  gfxUploadTexture( (unsigned long*)(_fog_pubTable + _fog_pixSizeL*_fog_pixSizeH),
                    _fog_pixSizeL, _fog_pixSizeH, ulFormat, bNoDiscard);
 }
 
@@ -355,9 +355,9 @@ FLOAT3D _haze_vViewPosAbs;
 FLOAT3D _haze_vViewDirAbs;
 FLOAT _haze_fMul=0;
 FLOAT _haze_fAdd=0;
-ULONG _haze_ulAlpha=0;
-ULONG _haze_ulTexture=0;
-ULONG _haze_ulFormat=0;
+unsigned long _haze_ulAlpha=0;
+unsigned long _haze_ulTexture=0;
+unsigned long _haze_ulFormat=0;
 
 
 // start haze with given parameters
@@ -389,8 +389,8 @@ void StartHaze( CHazeParameters &hp,
   }
   // allocate table if needed
   if( _haze_pubTable==NULL) {
-    // allocate byte table (for intensity values) and ULONG table (color values for uploading) right behind!
-    _haze_pubTable = (UBYTE*)AllocMemory(pixSize *(sizeof(UBYTE)+sizeof(ULONG)));
+    // allocate byte table (for intensity values) and unsigned long table (color values for uploading) right behind!
+    _haze_pubTable = (UBYTE*)AllocMemory(pixSize *(sizeof(UBYTE)+sizeof(unsigned long)));
     _haze_pixSize  = pixSize;
     _haze_tpLocal.Clear();
     bNoDiscard = FALSE;
@@ -425,14 +425,14 @@ void StartHaze( CHazeParameters &hp,
 
   // prepare haze table
   _haze_tpLocal.tp_bSingleMipmap = TRUE;
-  const ULONG ulFormat = PrepareTexture( _haze_pubTable, _haze_pixSize, 1);
+  const unsigned long ulFormat = PrepareTexture( _haze_pubTable, _haze_pixSize, 1);
   if( _haze_ulFormat!=ulFormat) {
     _haze_ulFormat = ulFormat;
     bNoDiscard = FALSE;
   } // set'n'upload
   gfxSetTextureWrapping( GFX_CLAMP, GFX_CLAMP);
   gfxSetTexture( _haze_ulTexture, _haze_tpLocal);
-  gfxUploadTexture( (ULONG*)(_haze_pubTable + _haze_pixSize*1), _haze_pixSize, 1, ulFormat, bNoDiscard);
+  gfxUploadTexture( (unsigned long*)(_haze_pubTable + _haze_pixSize*1), _haze_pixSize, 1, ulFormat, bNoDiscard);
 }
 
 

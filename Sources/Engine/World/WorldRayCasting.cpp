@@ -484,7 +484,7 @@ void CCastRay::TestBrushSector(CBrushSector *pbscSector)
       continue;
     }
 
-    ULONG ulFlags = bpoPolygon.bpo_ulFlags;
+    unsigned long ulFlags = bpoPolygon.bpo_ulFlags;
     // if not testing recursively
     if (l_cr_penOrigin==NULL) {
       // if the polygon is portal

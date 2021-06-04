@@ -74,7 +74,7 @@ class CFlagControl
 public:
   CFlagControl::CFlagControl(){}
   CFlagControl::~CFlagControl(){}
-  void AddControl(CTString strLabelText, INDEX iFlagIndex, ULONG ulFlags);
+  void AddControl(CTString strLabelText, INDEX iFlagIndex, unsigned long ulFlags);
   CCheckBox fc_CheckBox;
 };
 

@@ -35,7 +35,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 // we need array for OpenGL mipmaps that are lower than N*1 or 1*N
-static ULONG _aulLastMipmaps[(INDEX)(1024*1.334)];
+static unsigned long _aulLastMipmaps[(INDEX)(1024*1.334)];
 static CTexParams *_tpCurrent;
 extern INDEX GFX_iActiveTexUnit;
 
@@ -119,7 +119,7 @@ extern void MimicTexParams_OGL( CTexParams &tpLocal)
 
 // upload context for current texture to accelerator's memory
 // (returns format in which texture was really uploaded)
-void UploadTexture_OGL( ULONG *pulTexture, PIX pixSizeU, PIX pixSizeV,
+void UploadTexture_OGL( unsigned long *pulTexture, PIX pixSizeU, PIX pixSizeV,
                                GLenum eInternalFormat, BOOL bUseSubImage)
 {
   // safeties
@@ -160,8 +160,8 @@ void UploadTexture_OGL( ULONG *pulTexture, PIX pixSizeU, PIX pixSizeV,
   { // prepare variables
     PIX pixSize = Max(pixSizeU,pixSizeV);
     ASSERT( pixSize<=2048);
-    ULONG *pulSrc = pulTexture+pixOffset-pixSize*2;
-    ULONG *pulDst = _aulLastMipmaps;
+    unsigned long *pulSrc = pulTexture+pixOffset-pixSize*2;
+    unsigned long *pulDst = _aulLastMipmaps;
     // loop thru mipmaps
     while( pixSizeU>0 || pixSizeV>0)
     { // make next mipmap

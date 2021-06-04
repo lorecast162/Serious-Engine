@@ -40,7 +40,7 @@ extern BOOL _bTempNetwork;
 class CMessageBuffer {
 public:
   // size of message buffer for one message
-  ULONG mb_ulMessageBufferSize;
+  unsigned long mb_ulMessageBufferSize;
   // pointer to message buffer for one message
   void *mb_pvMessageBuffer;
 
@@ -232,7 +232,7 @@ static void UpdateSentMessageStats(const CNetworkMessage &nmMessage)
     CPrintF("Sent: %d\n", nmMessage.nm_slSize);
   }
 }
-static void UpdateSentStreamStats(SLONG slSize)
+static void UpdateSentStreamStats(long slSize)
 {
   if (net_bReportTraffic) {
     CPrintF("STREAM Sent: %d\n", slSize);
@@ -255,7 +255,7 @@ static void UpdateReceivedMessageStats(const CNetworkMessage &nmMessage)
     CPrintF("Rcvd: %d\n", nmMessage.nm_slSize);
   }
 }
-static void UpdateReceivedStreamStats(SLONG slSize)
+static void UpdateReceivedStreamStats(long slSize)
 {
   if (net_bReportTraffic) {
     CPrintF("STREAM Rcvd: %d\n", slSize);
@@ -296,7 +296,7 @@ void CMessageDispatcher::SendToClientReliable(INDEX iClient, CTMemoryStream &str
 
   // get size and buffer from the stream
   void *pvBuffer;
-  SLONG slSize;
+  long slSize;
   strmMessage.LockBuffer(&pvBuffer, &slSize);
   // send the message
   _cmiComm.Server_Send_Reliable(iClient, pvBuffer, slSize);
@@ -438,7 +438,7 @@ BOOL CMessageDispatcher::ReceiveFromClientReliable(INDEX iClient, CNetworkMessag
 #define SLASHSLASH  0x2F2F   // looks like "//" in ASCII.
 
 /* Send/receive broadcast messages. */
-void CMessageDispatcher::SendBroadcast(const CNetworkMessage &nmMessage, ULONG ulAddr, UWORD uwPort)
+void CMessageDispatcher::SendBroadcast(const CNetworkMessage &nmMessage, unsigned long ulAddr, UWORD uwPort)
 {
   CAddress adrDestination;
   adrDestination.adr_ulAddress = ulAddr;
@@ -450,7 +450,7 @@ void CMessageDispatcher::SendBroadcast(const CNetworkMessage &nmMessage, ULONG u
   UpdateSentMessageStats(nmMessage);
 }
 
-BOOL CMessageDispatcher::ReceiveBroadcast(CNetworkMessage &nmMessage, ULONG &ulAddr, UWORD &uwPort)
+BOOL CMessageDispatcher::ReceiveBroadcast(CNetworkMessage &nmMessage, unsigned long &ulAddr, UWORD &uwPort)
 {
   CAddress adrSource = {0,0,0};
   // receive message in static buffer

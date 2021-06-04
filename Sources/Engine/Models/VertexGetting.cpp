@@ -113,7 +113,7 @@ void CModelObject::GetModelVertices( CStaticStackArray<FLOAT3D> &avVertices, FLO
   // get current mip model using mip factor
   INDEX iMipLevel = GetMipModel( fMipFactor);
   // get current vertices mask
-  //ULONG ulVtxMask = (1L) << iMipLevel;
+  //unsigned long ulVtxMask = (1L) << iMipLevel;
   struct ModelMipInfo *pmmiMip = &pmd->md_MipInfos[iMipLevel];
 
   // allocate space for vertices

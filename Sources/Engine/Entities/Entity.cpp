@@ -338,13 +338,13 @@ CLightSource *CEntity::GetLightSource(void)
   return NULL;
 }
 
-BOOL CEntity::IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget)
+BOOL CEntity::IsTargetValid(long slPropertyOffset, CEntity *penTarget)
 {
   return TRUE;
 }
 
 /* Get anim data for given animation property - return NULL for none. */
-CAnimData *CEntity::GetAnimData(SLONG slPropertyOffset)
+CAnimData *CEntity::GetAnimData(long slPropertyOffset)
 {
   return NULL;
 }
@@ -508,7 +508,7 @@ FLOAT CEntity::GetDepthSortOffset(void)
   return 0.0f;
 }
 // get visibility tweaking bits
-ULONG CEntity::GetVisTweaks(void)
+unsigned long CEntity::GetVisTweaks(void)
 {
   return 0;
 }
@@ -656,7 +656,7 @@ BOOL CEntity::IsAllowedForPrediction(void) const
   return !_pNetwork->IsPredicting() || IsPredictor();
 }
 // check an event for prediction, returns true if already predicted
-BOOL CEntity::CheckEventPrediction(ULONG ulTypeID, ULONG ulEventID)
+BOOL CEntity::CheckEventPrediction(unsigned long ulTypeID, unsigned long ulEventID)
 {
   return _pNetwork->ga_sesSessionState.CheckEventPrediction(this, ulTypeID, ulEventID);
 }
@@ -1153,12 +1153,12 @@ CPlacement3D CEntity::GetLerpedPlacement(void) const
   }
 }
 
-void CEntity::SetFlags(ULONG ulFlags)
+void CEntity::SetFlags(unsigned long ulFlags)
 {
   en_ulFlags = ulFlags;
 }
 
-void CEntity::SetPhysicsFlags(ULONG ulFlags)
+void CEntity::SetPhysicsFlags(unsigned long ulFlags)
 {
   // remember the new flags
   en_ulPhysicsFlags = ulFlags;
@@ -1167,7 +1167,7 @@ void CEntity::SetPhysicsFlags(ULONG ulFlags)
   FindCollisionInfo();
 }
 
-void CEntity::SetCollisionFlags(ULONG ulFlags)
+void CEntity::SetCollisionFlags(unsigned long ulFlags)
 {
   // remember the new flags
   en_ulCollisionFlags = ulFlags;
@@ -1998,7 +1998,7 @@ void CEntity::UncacheShadowsForGradient(INDEX iGradient)
 /*
  * Get state transition for given state and event code.
  */
-CEntity::pEventHandler CEntity::HandlerForStateAndEvent(SLONG slState, SLONG slEvent)
+CEntity::pEventHandler CEntity::HandlerForStateAndEvent(long slState, long slEvent)
 {
   // find translation in the translation table of the DLL class
   return en_pecClass->HandlerForStateAndEvent(slState, slEvent);
@@ -2371,7 +2371,7 @@ void CEntity::SetModel(const CTFileName &fnmModel)
   FindCollisionInfo();
 }
 
-void CEntity::SetModel(SLONG idModelComponent)
+void CEntity::SetModel(long idModelComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CEntityComponent *pecModel = en_pecClass->ComponentForTypeAndID(
@@ -2458,7 +2458,7 @@ const CTFileName &CEntity::GetModel(void)
   return ((CAnimData*)en_pmoModelObject->GetData())->GetName();
 }
 /* Start new animation for model entity. */
-void CEntity::StartModelAnim(INDEX iNewModelAnim, ULONG ulFlags)
+void CEntity::StartModelAnim(INDEX iNewModelAnim, unsigned long ulFlags)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   en_pmoModelObject->PlayAnim(iNewModelAnim, ulFlags);
@@ -2488,7 +2488,7 @@ void CEntity::SetModelMainTexture(const CTFileName &fnmTexture)
     }
   }
 }
-void CEntity::SetModelMainTexture(SLONG idTextureComponent)
+void CEntity::SetModelMainTexture(long idTextureComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CEntityComponent *pecTexture = en_pecClass->ComponentForTypeAndID(
@@ -2509,7 +2509,7 @@ void CEntity::StartModelMainTextureAnim(INDEX iNewTextureAnim)
 }
 
 /* Set the reflection texture data for model entity. */
-void CEntity::SetModelReflectionTexture(SLONG idTextureComponent)
+void CEntity::SetModelReflectionTexture(long idTextureComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CEntityComponent *pecTexture = en_pecClass->ComponentForTypeAndID(
@@ -2517,7 +2517,7 @@ void CEntity::SetModelReflectionTexture(SLONG idTextureComponent)
   en_pmoModelObject->mo_toReflection.SetData(pecTexture->ec_ptdTexture);
 }
 /* Set the specular texture data for model entity. */
-void CEntity::SetModelSpecularTexture(SLONG idTextureComponent)
+void CEntity::SetModelSpecularTexture(long idTextureComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CEntityComponent *pecTexture = en_pecClass->ComponentForTypeAndID(
@@ -2526,7 +2526,7 @@ void CEntity::SetModelSpecularTexture(SLONG idTextureComponent)
 }
 
 /* Add attachment to model */
-void CEntity::AddAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture)
+void CEntity::AddAttachment(INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture)
 {
   // add attachment
   CModelObject &mo = en_pmoModelObject->AddAttachmentModel(iAttachment)->amo_moModelObject;
@@ -2566,7 +2566,7 @@ void CEntity::AddAttachment(INDEX iAttachment, CTFileName fnModel, CTFileName fn
   }
 }
 /* Set the reflection texture data for attachment model entity. */
-void CEntity::SetModelAttachmentReflectionTexture(INDEX iAttachment, SLONG idTextureComponent)
+void CEntity::SetModelAttachmentReflectionTexture(INDEX iAttachment, long idTextureComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CModelObject &mo = en_pmoModelObject->GetAttachmentModel(iAttachment)->amo_moModelObject;
@@ -2575,7 +2575,7 @@ void CEntity::SetModelAttachmentReflectionTexture(INDEX iAttachment, SLONG idTex
   mo.mo_toReflection.SetData(pecTexture->ec_ptdTexture);
 }
 /* Set the specular texture data for attachment model entity. */
-void CEntity::SetModelAttachmentSpecularTexture(INDEX iAttachment, SLONG idTextureComponent)
+void CEntity::SetModelAttachmentSpecularTexture(INDEX iAttachment, long idTextureComponent)
 {
   ASSERT(en_RenderType==RT_MODEL || en_RenderType==RT_EDITORMODEL);
   CModelObject &mo = en_pmoModelObject->GetAttachmentModel(iAttachment)->amo_moModelObject;
@@ -2639,19 +2639,19 @@ void CEntity::AdjustShaderParams(INDEX iSurfaceID,CShader *pShader,ShaderParams 
 }
 
 // precache given component
-void CEntity::PrecacheModel(SLONG slID)
+void CEntity::PrecacheModel(long slID)
 {
   en_pecClass->ec_pdecDLLClass->PrecacheModel(slID);
 }
-void CEntity::PrecacheTexture(SLONG slID)
+void CEntity::PrecacheTexture(long slID)
 {
   en_pecClass->ec_pdecDLLClass->PrecacheTexture(slID);
 }
-void CEntity::PrecacheSound(SLONG slID)
+void CEntity::PrecacheSound(long slID)
 {
   en_pecClass->ec_pdecDLLClass->PrecacheSound(slID);
 }
-void CEntity::PrecacheClass(SLONG slID, INDEX iUser /* = -1*/)
+void CEntity::PrecacheClass(long slID, INDEX iUser /* = -1*/)
 {
   en_pecClass->ec_pdecDLLClass->PrecacheClass(slID, iUser);
 }
@@ -2732,7 +2732,7 @@ void CAutoPrecacheTexture::Precache(const CTFileName &fnm)
 }
 
 /* Get a filename for a component of given id. */
-const CTFileName &CEntity::FileNameForComponent(SLONG slType, SLONG slID)
+const CTFileName &CEntity::FileNameForComponent(long slType, long slID)
 {
   // find the component
   CEntityComponent *pec = en_pecClass->ComponentForTypeAndID(
@@ -2744,7 +2744,7 @@ const CTFileName &CEntity::FileNameForComponent(SLONG slType, SLONG slID)
 }
 
 // Get data for a texture component
-CTextureData *CEntity::GetTextureDataForComponent(SLONG slID)
+CTextureData *CEntity::GetTextureDataForComponent(long slID)
 {
   CEntityComponent *pec = ComponentForTypeAndID( ECT_TEXTURE, slID);
   if (pec!=NULL) {
@@ -2755,7 +2755,7 @@ CTextureData *CEntity::GetTextureDataForComponent(SLONG slID)
 }
 
 // Get data for a model component
-CModelData *CEntity::GetModelDataForComponent(SLONG slID)
+CModelData *CEntity::GetModelDataForComponent(long slID)
 {
   CEntityComponent *pec = ComponentForTypeAndID( ECT_MODEL, slID);
   if (pec!=NULL) {
@@ -2920,20 +2920,20 @@ INDEX CEntity::GetWorldPolygonIndex(CBrushPolygon *pbpo)
 
 /////////////////////////////////////////////////////////////////////
 // Sound functions
-void CEntity::PlaySound(CSoundObject &so, SLONG idSoundComponent, SLONG slPlayType)
+void CEntity::PlaySound(CSoundObject &so, long idSoundComponent, long slPlayType)
 {
   CEntityComponent *pecSound = en_pecClass->ComponentForTypeAndID(ECT_SOUND, idSoundComponent);
   //so.Stop();
   so.Play(pecSound->ec_psdSound, slPlayType);
 }
 
-double CEntity::GetSoundLength(SLONG idSoundComponent)
+double CEntity::GetSoundLength(long idSoundComponent)
 {
   CEntityComponent *pecSound = en_pecClass->ComponentForTypeAndID(ECT_SOUND, idSoundComponent);
   return pecSound->ec_psdSound->GetSecondsLength();
 }
 
-void CEntity::PlaySound(CSoundObject &so, const CTFileName &fnmSound, SLONG slPlayType)
+void CEntity::PlaySound(CSoundObject &so, const CTFileName &fnmSound, long slPlayType)
 {
   // try to
   try {
@@ -3271,10 +3271,10 @@ void CEntity::Read_t( CTStream *istr) // throw char *
   // read base class data from stream
   if (istr->PeekID_t()==CChunkID("ENT4")) { // entity v4
     istr->ExpectID_t("ENT4");
-    ULONG ulID;
-    SLONG slSize;
+    unsigned long ulID;
+    long slSize;
     (*istr)>>ulID>>slSize;    // skip id and size
-    (*istr)>>(ULONG &)en_RenderType
+    (*istr)>>(unsigned long &)en_RenderType
            >>en_ulPhysicsFlags
            >>en_ulCollisionFlags
            >>en_ulSpawnFlags
@@ -3282,7 +3282,7 @@ void CEntity::Read_t( CTStream *istr) // throw char *
     (*istr)>>en_mRotation;
   } else if (istr->PeekID_t()==CChunkID("ENT3")) { // entity v3
     istr->ExpectID_t("ENT3");
-    (*istr)>>(ULONG &)en_RenderType
+    (*istr)>>(unsigned long &)en_RenderType
            >>en_ulPhysicsFlags
            >>en_ulCollisionFlags
            >>en_ulSpawnFlags
@@ -3290,13 +3290,13 @@ void CEntity::Read_t( CTStream *istr) // throw char *
     (*istr)>>en_mRotation;
   } else if (istr->PeekID_t()==CChunkID("ENT2")) { // entity v2
     istr->ExpectID_t("ENT2");
-    (*istr)>>(ULONG &)en_RenderType
+    (*istr)>>(unsigned long &)en_RenderType
            >>en_ulPhysicsFlags
            >>en_ulCollisionFlags
            >>en_ulSpawnFlags
            >>en_ulFlags;
   } else {
-    (*istr)>>(ULONG &)en_RenderType
+    (*istr)>>(unsigned long &)en_RenderType
            >>en_ulPhysicsFlags
            >>en_ulCollisionFlags
            >>en_ulFlags;
@@ -3398,9 +3398,9 @@ void CEntity::Write_t( CTStream *ostr) // throw char *
 
   // write base class data to stream
   ostr->WriteID_t("ENT4");
-  SLONG slSize = 0;
+  long slSize = 0;
   (*ostr)<<en_ulID<<slSize;    // save id and keep space for size
-  (*ostr)<<(ULONG &)en_RenderType
+  (*ostr)<<(unsigned long &)en_RenderType
          <<en_ulPhysicsFlags
          <<en_ulCollisionFlags
          <<en_ulSpawnFlags
@@ -3454,7 +3454,7 @@ void CEntity::Precache(void)
 }
 
 
-void CEntity::ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+void CEntity::ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
 {
   if (iExtensiveSyncCheck>0) {
     CRC_AddLONG(ulCRC, en_ulFlags&~
@@ -3502,7 +3502,7 @@ void CEntity::DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck)  // throw ch
   strm.FPrintF_t("en_ulID: 0x%08x\n", en_ulID);
   if (iExtensiveSyncCheck>0) {
     strm.FPrintF_t("en_fSpatialClassificationRadius: %g(%08x)\n", 
-      en_fSpatialClassificationRadius, (ULONG&)en_fSpatialClassificationRadius);
+      en_fSpatialClassificationRadius, (unsigned long&)en_fSpatialClassificationRadius);
   }
   strm.FPrintF_t("placement: %g,%g,%g : %g,%g,%g\n",
     en_plPlacement.pl_PositionVector(1),
@@ -3513,20 +3513,20 @@ void CEntity::DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck)  // throw ch
     en_plPlacement.pl_OrientationAngle(3));
   if (iExtensiveSyncCheck>0) {
     strm.FPrintF_t("placement raw:\n %08X %08X %08X\n %08X %08X %08X\n",
-      (ULONG&)en_plPlacement.pl_PositionVector(1),
-      (ULONG&)en_plPlacement.pl_PositionVector(2),
-      (ULONG&)en_plPlacement.pl_PositionVector(3),
-      (ULONG&)en_plPlacement.pl_OrientationAngle(1),
-      (ULONG&)en_plPlacement.pl_OrientationAngle(2),
-      (ULONG&)en_plPlacement.pl_OrientationAngle(3));
+      (unsigned long&)en_plPlacement.pl_PositionVector(1),
+      (unsigned long&)en_plPlacement.pl_PositionVector(2),
+      (unsigned long&)en_plPlacement.pl_PositionVector(3),
+      (unsigned long&)en_plPlacement.pl_OrientationAngle(1),
+      (unsigned long&)en_plPlacement.pl_OrientationAngle(2),
+      (unsigned long&)en_plPlacement.pl_OrientationAngle(3));
     strm.FPrintF_t("matrix:\n %g %g %g\n %g %g %g\n %g %g %g\n",
       en_mRotation(1,1), en_mRotation(1,2), en_mRotation(1,3),
       en_mRotation(2,1), en_mRotation(2,2), en_mRotation(2,3),
       en_mRotation(3,1), en_mRotation(3,2), en_mRotation(3,3));
     strm.FPrintF_t("matrix raw:\n %08X %08X %08X\n %08X %08X %08X\n %08X %08X %08X\n",
-      (ULONG&)en_mRotation(1,1), (ULONG&)en_mRotation(1,2), (ULONG&)en_mRotation(1,3),
-      (ULONG&)en_mRotation(2,1), (ULONG&)en_mRotation(2,2), (ULONG&)en_mRotation(2,3),
-      (ULONG&)en_mRotation(3,1), (ULONG&)en_mRotation(3,2), (ULONG&)en_mRotation(3,3));
+      (unsigned long&)en_mRotation(1,1), (unsigned long&)en_mRotation(1,2), (unsigned long&)en_mRotation(1,3),
+      (unsigned long&)en_mRotation(2,1), (unsigned long&)en_mRotation(2,2), (unsigned long&)en_mRotation(2,3),
+      (unsigned long&)en_mRotation(3,1), (unsigned long&)en_mRotation(3,2), (unsigned long&)en_mRotation(3,3));
     if( en_pciCollisionInfo == NULL) {
       strm.FPrintF_t("Collision info NULL\n");
     } else if (en_RenderType==RT_BRUSH || en_RenderType==RT_FIELDBRUSH) {
@@ -3550,7 +3550,7 @@ void CEntity::DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck)  // throw ch
 
 
 // get a pseudo-random number (safe for network gaming)
-ULONG CEntity::IRnd(void) 
+unsigned long CEntity::IRnd(void) 
 {
   return ((_pNetwork->ga_sesSessionState.Rnd()>>(31-16))&0xFFFF);
 }
@@ -3564,10 +3564,10 @@ FLOAT CEntity::FRnd(void)
 
 
 // returns ammount of memory used by entity
-SLONG CEntity::GetUsedMemory(void)
+long CEntity::GetUsedMemory(void)
 {
   // initial size
-  SLONG slUsedMemory = sizeof(CEntity);
+  long slUsedMemory = sizeof(CEntity);
 
   // add relations
   slUsedMemory += en_rdSectors.Count() * sizeof(CRelationLnk);
@@ -3605,13 +3605,13 @@ SLONG CEntity::GetUsedMemory(void)
 
 
 /* Get pointer to entity property from its packed identifier. */
-class CEntityProperty *CEntity::PropertyForTypeAndID(ULONG ulType, ULONG ulID)
+class CEntityProperty *CEntity::PropertyForTypeAndID(unsigned long ulType, unsigned long ulID)
 {
   return en_pecClass->PropertyForTypeAndID(ulType, ulID);
 }
 
 /* Get pointer to entity component from its packed identifier. */
-class CEntityComponent *CEntity::ComponentForTypeAndID(ULONG ulType, ULONG ulID)
+class CEntityComponent *CEntity::ComponentForTypeAndID(unsigned long ulType, unsigned long ulID)
 {
   return en_pecClass->ComponentForTypeAndID((enum EntityComponentType)ulType, ulID);
 }
@@ -3623,7 +3623,7 @@ class CEntityProperty *CEntity::PropertyForName(const CTString &strPropertyName)
 }
  
 /* Create a new entity of given class in this world. */
-CEntity *CEntity::CreateEntity(const CPlacement3D &plPlacement, SLONG idClass)
+CEntity *CEntity::CreateEntity(const CPlacement3D &plPlacement, long idClass)
 {
   CEntityComponent *pecClassComponent = en_pecClass->ComponentForTypeAndID(
     ECT_CLASS, idClass);
@@ -3644,7 +3644,7 @@ CLiveEntity::CLiveEntity(void)
 }
 
 /* Copy entity from another entity of same class. */
-void CLiveEntity::Copy(CEntity &enOther, ULONG ulFlags)
+void CLiveEntity::Copy(CEntity &enOther, unsigned long ulFlags)
 {
   CEntity::Copy(enOther, ulFlags);
   CLiveEntity *plenOther = (CLiveEntity *)(&enOther);
@@ -3713,7 +3713,7 @@ void CRationalEntity::PostMoving(void)
 {
 }
 // create a checksum value for sync-check
-void CRationalEntity::ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+void CRationalEntity::ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
 {
   CEntity::ChecksumForSync(ulCRC, iExtensiveSyncCheck);
 
@@ -3730,14 +3730,14 @@ void CRationalEntity::DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck)  // 
 {
   CEntity::DumpSync_t(strm, iExtensiveSyncCheck);
   if (iExtensiveSyncCheck>0) {
-    strm.FPrintF_t("en_timeTimer:  %g(%08x)\n", en_timeTimer, (ULONG&)en_timeTimer);
+    strm.FPrintF_t("en_timeTimer:  %g(%08x)\n", en_timeTimer, (unsigned long&)en_timeTimer);
     strm.FPrintF_t("en_stslStateStack.Count(): %d\n", en_stslStateStack.Count());
   }
-  strm.FPrintF_t("en_fHealth:    %g(%08x)\n", en_fHealth, (ULONG&)en_fHealth);
+  strm.FPrintF_t("en_fHealth:    %g(%08x)\n", en_fHealth, (unsigned long&)en_fHealth);
 }
 
 /* Copy entity from another entity of same class. */
-void CRationalEntity::Copy(CEntity &enOther, ULONG ulFlags)
+void CRationalEntity::Copy(CEntity &enOther, unsigned long ulFlags)
 {
   CLiveEntity::Copy(enOther, ulFlags);
   if (!(ulFlags&COPY_REINIT)) {
@@ -3828,7 +3828,7 @@ void CRationalEntity::UnsetTimer(void)
 /*
  * Unwind stack to a given state.
  */
-void CRationalEntity::UnwindStack(SLONG slThisState)
+void CRationalEntity::UnwindStack(long slThisState)
 {
   // for each state on the stack (from top to bottom)
   for(INDEX iStateInStack=en_stslStateStack.Count()-1; iStateInStack>=0; iStateInStack--) {
@@ -3846,7 +3846,7 @@ void CRationalEntity::UnwindStack(SLONG slThisState)
 /*
  * Jump to a new state.
  */
-void CRationalEntity::Jump(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput)
+void CRationalEntity::Jump(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput)
 {
   // unwind the stack to this state
   UnwindStack(slThisState);
@@ -3861,7 +3861,7 @@ void CRationalEntity::Jump(SLONG slThisState, SLONG slTargetState, BOOL bOverrid
 /*
  * Call a subautomaton.
  */
-void CRationalEntity::Call(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput)
+void CRationalEntity::Call(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput)
 {
   // unwind the stack to this state
   UnwindStack(slThisState);
@@ -3876,7 +3876,7 @@ void CRationalEntity::Call(SLONG slThisState, SLONG slTargetState, BOOL bOverrid
 /*
  * Return from a subautomaton.
  */
-void CRationalEntity::Return(SLONG slThisState, const CEntityEvent &eeReturn)
+void CRationalEntity::Return(long slThisState, const CEntityEvent &eeReturn)
 {
   // unwind the stack to this state
   UnwindStack(slThisState);
@@ -3893,7 +3893,7 @@ const char *CRationalEntity::PrintStackDebug(void)
 
   INDEX ctStates = en_stslStateStack.Count();
   for(INDEX iState=ctStates-1; iState>=0; iState--) {
-    SLONG slState = en_stslStateStack[iState];
+    long slState = en_stslStateStack[iState];
     _RPT2(_CRT_WARN, "0x%08x %s\n", slState, 
       en_pecClass->ec_pdecDLLClass->HandlerNameForState(slState));
   }

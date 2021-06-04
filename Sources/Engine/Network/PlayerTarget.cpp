@@ -47,7 +47,7 @@ CPlayerTarget::~CPlayerTarget(void) {
 void CPlayerTarget::Read_t(CTStream *pstr) // throw char *
 {
   INDEX iEntity;
-  ULONG bActive;
+  unsigned long bActive;
   // synchronize access to actions
   CTSingleLock slActions(&plt_csAction, TRUE);
 
@@ -72,7 +72,7 @@ void CPlayerTarget::Read_t(CTStream *pstr) // throw char *
 void CPlayerTarget::Write_t(CTStream *pstr) // throw char *
 {
   INDEX iEntity;
-  ULONG bActive = plt_bActive;
+  unsigned long bActive = plt_bActive;
   // synchronize access to actions
   CTSingleLock slActions(&plt_csAction, TRUE);
 

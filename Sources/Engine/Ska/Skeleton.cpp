@@ -272,9 +272,9 @@ void CSkeleton::Clear(void)
 }
 
 // Count used memory
-SLONG CSkeleton::GetUsedMemory(void)
+long CSkeleton::GetUsedMemory(void)
 {
-  SLONG slMemoryUsed = sizeof(*this);
+  long slMemoryUsed = sizeof(*this);
   INDEX ctslods = skl_aSkeletonLODs.Count();
   // for each skeleton lods
   for(INDEX islod=0;islod<ctslods;islod++) {

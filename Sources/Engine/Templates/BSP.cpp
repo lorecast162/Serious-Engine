@@ -1499,7 +1499,7 @@ void BSPTree<Type, iDimensions>::Read_t(CTStream &strm) // throw char *
 
   // read current version and size
   INDEX iVersion;
-  SLONG slSize;
+  long slSize;
   strm>>iVersion>>slSize;
   ASSERT(iVersion==1);
 
@@ -1507,7 +1507,7 @@ void BSPTree<Type, iDimensions>::Read_t(CTStream &strm) // throw char *
   INDEX ctNodes;
   strm>>ctNodes;
   // This assert was less silly when it was basically sizeof (*this), but to serialize this across targets, it looks different now.  --ryan.
-  ASSERT(slSize==(SLONG)(sizeof(INDEX)+ctNodes*((sizeof(Type)*(iDimensions+1))+16)));
+  ASSERT(slSize==(long)(sizeof(INDEX)+ctNodes*((sizeof(Type)*(iDimensions+1))+16)));
   bt_abnNodes.New(ctNodes);
   // for each node
   for(INDEX iNode=0; iNode<ctNodes; iNode++) {
@@ -1536,7 +1536,7 @@ void BSPTree<Type, iDimensions>::Read_t(CTStream &strm) // throw char *
     } else {
       bn.bn_pbnBack = &bt_abnNodes[iBack];
     }
-    ULONG ul;
+    unsigned long ul;
     strm>>ul;
     bn.bn_ulPlaneTag = ul;
   }
@@ -1558,7 +1558,7 @@ void BSPTree<Type, iDimensions>::Write_t(CTStream &strm) // throw char *
   INDEX ctNodes = bt_abnNodes.Count();
 
   // calculate size of chunk to write
-  SLONG slSize = sizeof(INDEX)+ctNodes*sizeof(BSPNode<Type, iDimensions>);
+  long slSize = sizeof(INDEX)+ctNodes*sizeof(BSPNode<Type, iDimensions>);
   // write current version and size
   strm<<INDEX(1)<<slSize;
 

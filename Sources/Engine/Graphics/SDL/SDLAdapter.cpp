@@ -9,7 +9,7 @@
 
 // !!! FIXME: can we move this one function somewhere else?
 
-ULONG DetermineDesktopWidth(void)
+unsigned long DetermineDesktopWidth(void)
 {
     const int dpy = 0;   // !!! FIXME: add a cvar for this?
     SDL_DisplayMode mode;

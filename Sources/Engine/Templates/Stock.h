@@ -41,7 +41,7 @@ public:
   // free all unused elements of the stock
   ENGINE_API void FreeUnused(void);
   // calculate amount of memory used by all objects in the stock
-  SLONG CalculateUsedMemory(void);
+  long CalculateUsedMemory(void);
   // dump memory usage report to a file
   void DumpMemoryUsage_t(CTStream &strm); // throw char *
   // get number of total elements in stock

@@ -311,7 +311,7 @@ void CWorld::ReadState_veryold_t( CTStream *istr) // throw char *
     (*istr)>>ienBackgroundViewer;
   } else {
     BOOL bUseBackgroundTexture;
-    (*istr)>>(SLONG &)bUseBackgroundTexture;
+    (*istr)>>(long &)bUseBackgroundTexture;
 
     // read the world background texture name
     CTString strBackgroundTexture;
@@ -606,7 +606,7 @@ void CWorld::ReadState_new_t( CTStream *istr) // throw char *
   // for each entity
   {for(INDEX iEntity=0; iEntity<ctEntities; iEntity++) {
     // read entity id if needed
-    ULONG ulID = 0;
+    unsigned long ulID = 0;
     if (_bReadEntitiesByID) {
       (*istr)>>ulID;
     }
@@ -670,7 +670,7 @@ void CWorld::ReadState_new_t( CTStream *istr) // throw char *
     wo_cenEntities.Clear();
     // for each non-deleted entity
     for(INDEX i=0; i<ctEntities; i++) {
-      ULONG ulID;
+      unsigned long ulID;
       *istr>>ulID;
       wo_cenEntities.Add(EntityFromID(ulID));
     }
@@ -779,13 +779,13 @@ void CWorld::WriteState_t( CTStream *ostr, BOOL bImportDictionary /* = FALSE */)
   // for each entity
   {FOREACHINDYNAMICCONTAINER(wo_cenAllEntities, CEntity, iten) {
     // remember stream position
-    SLONG slOffset = ostr->GetPos_t();
+    long slOffset = ostr->GetPos_t();
     // serialize entity into stream
     iten->Write_t(ostr);
     // save the size of data in start chunk, after chunkid and entity id
-    SLONG slOffsetAfter = ostr->GetPos_t();
-    ostr->SetPos_t(slOffset+2*sizeof(SLONG));
-    *ostr<<SLONG(slOffsetAfter-slOffset-3*sizeof(SLONG));
+    long slOffsetAfter = ostr->GetPos_t();
+    ostr->SetPos_t(slOffset+2*sizeof(long));
+    *ostr<<long(slOffsetAfter-slOffset-3*sizeof(long));
     ostr->SetPos_t(slOffsetAfter);
   }}
 

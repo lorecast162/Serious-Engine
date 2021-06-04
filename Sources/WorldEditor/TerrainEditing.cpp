@@ -898,7 +898,7 @@ void ApplyPosterizeOntoTerrain(void)
   EditTerrain(NULL, FLOAT3D(0,0,0), theApp.m_fPosterizeStep, TE_ALTITUDE_POSTERIZE);
 }
 
-CEntity *GetEntityForID(ULONG iEntityID)
+CEntity *GetEntityForID(unsigned long iEntityID)
 {
   CWorldEditorDoc* pDoc = theApp.GetActiveDocument();
   FOREACHINDYNAMICCONTAINER(pDoc->m_woWorld.wo_cenEntities, CEntity, iten)
@@ -932,7 +932,7 @@ void DeleteTerrainUndo(CWorldEditorDoc* pDoc)
   }
 }
 
-CTerrain *GetUndoTerrain(ULONG ulEntityID)
+CTerrain *GetUndoTerrain(unsigned long ulEntityID)
 {
   // obtain terrain entity
   CEntity *penTerrain=GetEntityForID(_iTerrainEntityID);

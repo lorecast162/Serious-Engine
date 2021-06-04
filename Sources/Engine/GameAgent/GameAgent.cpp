@@ -198,7 +198,7 @@ void _initializeWinsock(void)
   // create the socket destination address
   _sin = new sockaddr_in;
   _sin->sin_family = AF_INET;
-  _sin->sin_addr.s_addr = *(ULONG*)phe->h_addr_list[0];
+  _sin->sin_addr.s_addr = *(unsigned long*)phe->h_addr_list[0];
   if(!ga_bMSLegacy) {
     _sin->sin_port = htons(9005);
   } else {
@@ -602,7 +602,7 @@ extern void GameAgent_EnumTrigger(BOOL bInternet)
     _pNetwork->ga_strEnumerationStatus = ".";
 
 	PHOSTENT _phHostinfo;
-	ULONG    _uIP,*_pchIP = &_uIP;
+	unsigned long    _uIP,*_pchIP = &_uIP;
 	USHORT   _uPort,*_pchPort = &_uPort;
 	LONG     _iLen;
 	char     _cName[256],*_pch,_strFinal[8] = {0};

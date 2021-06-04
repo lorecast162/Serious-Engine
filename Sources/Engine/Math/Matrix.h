@@ -88,7 +88,7 @@ __forceinline Matrix<Type, iRows, iColumns>::Matrix(void)
 {
 #ifndef NDEBUG
   // set whole matrix to trash
-  ULONG ulTrash = 0xCDCDCDCDul;
+  unsigned long ulTrash = 0xCDCDCDCDul;
   for(int iRow=1; iRow<=iRows; iRow++) {
     for(int iColumn=1; iColumn<=iColumns; iColumn++) {
       (*this)(iRow, iColumn) = *reinterpret_cast<Type *>(&ulTrash);

@@ -47,7 +47,7 @@ extern void InternalShader_Mask(void)
   ASSERT( (ctIdx%3) == 0); // must have triangles?
 
   // prepare texture
-  ULONG *pulTexFrame = NULL;
+  unsigned long *pulTexFrame = NULL;
   PIX pixMipWidth=0, pixMipHeight=0;
 
   if( pto!=NULL && ptex!=NULL) {

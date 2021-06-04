@@ -114,7 +114,7 @@ typedef union YYSTYPE
 {
   value val;                  // for constants and expressions
   arguments arg;               // for function input arguments
-  ULONG ulFlags;              // for declaration qualifiers
+  unsigned long ulFlags;              // for declaration qualifiers
   INDEX istType;              // for types
   CShellSymbol *pssSymbol;    // for symbols
   struct LValue lvLValue;

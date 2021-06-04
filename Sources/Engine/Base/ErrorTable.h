@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #endif
 
 struct ErrorCode {
-  SLONG ec_Code;        // error code value
+  long ec_Code;        // error code value
   const char *ec_Name;        // error code constant name (in .h files)
   const char *ec_Description; // error description (in help files)
 };
@@ -35,9 +35,9 @@ struct ErrorTable {
 // macro for defining error table
 #define ERRORTABLE(errorcodes) {sizeof(errorcodes)/sizeof(struct ErrorCode), errorcodes}
 /* Get the name string for error code. */
-ENGINE_API extern const char *ErrorName(const struct ErrorTable *pet, SLONG slErrCode);
+ENGINE_API extern const char *ErrorName(const struct ErrorTable *pet, long slErrCode);
 /* Get the description string for error code. */
-ENGINE_API extern const char *ErrorDescription(const struct ErrorTable *pet, SLONG slErrCode);
+ENGINE_API extern const char *ErrorDescription(const struct ErrorTable *pet, long slErrCode);
 
 
 #endif  /* include-once check. */

@@ -118,7 +118,7 @@ public:
 
 class CGrowthCache {
 public:
-  ULONG   ulID;
+  unsigned long   ulID;
   FLOAT3D vLastPos;
   INDEX   iGridSide;
   FLOAT   fStep;

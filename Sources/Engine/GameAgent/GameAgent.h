@@ -52,7 +52,7 @@ void* _LocalNet_Thread(void *arg);
 /// Server request structure. Primarily used for getting server pings.
 class CServerRequest {
 public:
-  ULONG sr_ulAddress;
+  unsigned long sr_ulAddress;
   USHORT sr_iPort;
   long long sr_tmRequestTime;
 

@@ -46,8 +46,8 @@ class CSoundParameters {
 public:
   FLOAT sp_fLeftVolume;      // left channel volume  (0.0f-1.0f)
   FLOAT sp_fRightVolume;     // right channel volume
-  SLONG sp_slLeftFilter;     // left channel bass enhance (32767-0, 0=max)
-  SLONG sp_slRightFilter;    // right channel bass enhance
+  long sp_slLeftFilter;     // left channel bass enhance (32767-0, 0=max)
+  long sp_slRightFilter;    // right channel bass enhance
   FLOAT sp_fPhaseShift;      // right channel(!) delay in seconds (signed! fixint 16:16)
   FLOAT sp_fPitchShift;      // playing speed factor (>0, 1.0=normal)
   FLOAT sp_fDelay;           // seconds to wait before actual sound play start
@@ -70,7 +70,7 @@ public:
 
 public: //private:
   CSoundData *so_pCsdLink;   // linked on SoundData
-  SLONG so_slFlags;          // playing flags
+  long so_slFlags;          // playing flags
 
   // internal mixer parameters
   FLOAT so_fDelayed;         // seconds already passed from start playing sound request
@@ -98,10 +98,10 @@ public: //private:
   void PrepareSound(void);
 
   // get proper sound object for predicted events - return NULL the event is already predicted
-  CSoundObject *GetPredictionTail(ULONG ulTypeID, ULONG ulEventID);
+  CSoundObject *GetPredictionTail(unsigned long ulTypeID, unsigned long ulEventID);
 
   // play sound - internal function - doesn't account for prediction
-  void Play_internal( CSoundData *pCsdLink, SLONG slFlags);
+  void Play_internal( CSoundData *pCsdLink, long slFlags);
   void Stop_internal(void);
 
 public:
@@ -113,7 +113,7 @@ public:
   void Copy(CSoundObject &soOther);
 
   // play sound
-  void Play( CSoundData *pCsdLink, SLONG slFlags);
+  void Play( CSoundData *pCsdLink, long slFlags);
   // stop playing sound
   void Stop( void);
   // Pause -> Stop playing sound but keep it linked to data
@@ -173,7 +173,7 @@ public:
   void Write_t(CTStream *postr); // throw char *
 
   // Obtain sound and play it for this object
-  void Play_t(const CTFileName &fnmSound, SLONG slFlags); // throw char *
+  void Play_t(const CTFileName &fnmSound, long slFlags); // throw char *
   // hard set sound offset in seconds
   void SetOffset(FLOAT fOffset);
 };

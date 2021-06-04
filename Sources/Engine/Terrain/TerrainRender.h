@@ -34,6 +34,6 @@ void gfxDrawWireBox(FLOATaabbox3D &bbox, COLOR col);
 // Draw selected vertices
 void DrawSelectedVertices(GFXVertex *pavVertices, GFXColor *pacolColors, INDEX ctVertices);
 
-SLONG GetUsedMemoryForTileBatching(void);
+long GetUsedMemoryForTileBatching(void);
 
 #endif

@@ -54,7 +54,7 @@ struct ConversionTriangle {
 };
 
 struct ConversionMaterial {
-  ULONG cm_ulTag;                           // for recognition of material
+  unsigned long cm_ulTag;                           // for recognition of material
   CTString cm_strName;                      // material's name
   COLOR cm_colColor;                        // material's color
   CDynamicContainer<INDEX> ms_Polygons;     // indices of polygons in this material
@@ -100,15 +100,15 @@ CObjectSectorLock::~CObjectSectorLock() {
 }
 
 //--------------------------------------------------------------------------------------------
-// function makes Little-Big indian conversion of 4 bytes and returns valid SLONG
-inline SLONG ConvertLong( SBYTE *pfm)
+// function makes Little-Big indian conversion of 4 bytes and returns valid long
+inline long ConvertLong( SBYTE *pfm)
 {
   UBYTE i;
   UBYTE ret_long[ 4];
 
   for( i=0; i<4; i++)
     ret_long[ i] = *((UBYTE *) pfm + 3 - i);
-  return( *((SLONG *) ret_long) );
+  return( *((long *) ret_long) );
 };
 
 //--------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ void FillConversionArrays_t(const FLOATmatrix3D &mTransform)
     for( INDEX iMat=0; iMat<acmMaterials.Count(); iMat++)
     {
       // if this material already exist in array of materu
-      if( acmMaterials[ iMat].cm_ulTag == (ULONG) pe3Mat)
+      if( acmMaterials[ iMat].cm_ulTag == (unsigned long) pe3Mat)
       {
         // set index of surface
         ctTriangle.ct_iMaterial = iMat;
@@ -382,7 +382,7 @@ void FillConversionArrays_t(const FLOATmatrix3D &mTransform)
       acmMaterials[ iNewMaterial].ms_Polygons.Add( piNewTriangle);
       
       // remember recognition tag (ptr)
-      pcmNew->cm_ulTag = (ULONG) pe3Mat;
+      pcmNew->cm_ulTag = (unsigned long) pe3Mat;
 
       // ---------- Set material's name
       // if not default material

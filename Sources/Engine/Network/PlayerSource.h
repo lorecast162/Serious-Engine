@@ -57,7 +57,7 @@ public:
   /* Set current player action. */
   void SetAction(const CPlayerAction &paAction);
   // get mask of this player for chat messages
-  ULONG GetChatMask(void);
+  unsigned long GetChatMask(void);
 };
 
 

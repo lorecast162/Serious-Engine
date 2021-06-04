@@ -214,7 +214,7 @@ void Particle_RenderSquare( const FLOAT3D &vPos, FLOAT fSize, ANGLE aRotation, C
   if( _Particle_bHasHaze)
   { // get haze strength at particle position
     ptexFogHaze[0].st.s = (-vProjected(3)+_haze_fAdd)*_haze_fMul;
-    const ULONG ulH = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
+    const unsigned long ulH = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
     if( ulH<4) return;
     if( _colAttMask) { // apply haze color (if not transparent)
       const COLOR colH = _colAttMask | RGBAToColor( ulH,ulH,ulH,ulH);
@@ -226,7 +226,7 @@ void Particle_RenderSquare( const FLOAT3D &vPos, FLOAT fSize, ANGLE aRotation, C
   { // get fog strength at particle position
     ptexFogHaze[0].st.s = -vProjected(3)*_fog_fMulZ;
     ptexFogHaze[0].st.t = (vProjected%_fog_vHDirView+_fog_fAddH)*_fog_fMulH;
-    const ULONG ulF = 255-GetFogAlpha(ptexFogHaze[0]);
+    const unsigned long ulF = 255-GetFogAlpha(ptexFogHaze[0]);
     if( ulF<4) return;
     if( _colAttMask) { // apply fog color (if not transparent)
       const COLOR colF = _colAttMask | RGBAToColor( ulF,ulF,ulF,ulF);
@@ -318,8 +318,8 @@ void Particle_RenderLine( const FLOAT3D &vPos0, const FLOAT3D &vPos1, FLOAT fWid
   { // get haze strength at particle positions
     ptexFogHaze[0].st.s = (-vProjected0(3)+_haze_fAdd)*_haze_fMul;
     ptexFogHaze[1].st.s = (-vProjected1(3)+_haze_fAdd)*_haze_fMul;
-    const ULONG ulH0 = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
-    const ULONG ulH1 = 255-GetHazeAlpha(ptexFogHaze[1].st.s);
+    const unsigned long ulH0 = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
+    const unsigned long ulH1 = 255-GetHazeAlpha(ptexFogHaze[1].st.s);
     if( (ulH0|ulH1)<4) return;
     if( _colAttMask) { // apply haze color (if not transparent)
       COLOR colH;
@@ -334,8 +334,8 @@ void Particle_RenderLine( const FLOAT3D &vPos0, const FLOAT3D &vPos1, FLOAT fWid
     ptexFogHaze[0].st.t = (vProjected0%_fog_vHDirView+_fog_fAddH)*_fog_fMulH;
     ptexFogHaze[1].st.s = -vProjected1(3)*_fog_fMulZ;
     ptexFogHaze[1].st.t = (vProjected1%_fog_vHDirView+_fog_fAddH)*_fog_fMulH;
-    const ULONG ulF0 = 255-GetFogAlpha(ptexFogHaze[0]);
-    const ULONG ulF1 = 255-GetFogAlpha(ptexFogHaze[1]);
+    const unsigned long ulF0 = 255-GetFogAlpha(ptexFogHaze[0]);
+    const unsigned long ulF1 = 255-GetFogAlpha(ptexFogHaze[1]);
     if( (ulF0|ulF1)<4) return;
     if( _colAttMask) { // apply fog color (if not transparent)
       COLOR colF; // apply fog color
@@ -436,10 +436,10 @@ void Particle_RenderQuad3D( const FLOAT3D &vPos0, const FLOAT3D &vPos1, const FL
     ptexFogHaze[1].st.s = (-vProjected1(3)+_haze_fAdd)*_haze_fMul;
     ptexFogHaze[2].st.s = (-vProjected2(3)+_haze_fAdd)*_haze_fMul;
     ptexFogHaze[3].st.s = (-vProjected3(3)+_haze_fAdd)*_haze_fMul;
-    const ULONG ulH0 = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
-    const ULONG ulH1 = 255-GetHazeAlpha(ptexFogHaze[1].st.s);
-    const ULONG ulH2 = 255-GetHazeAlpha(ptexFogHaze[2].st.s);
-    const ULONG ulH3 = 255-GetHazeAlpha(ptexFogHaze[3].st.s);
+    const unsigned long ulH0 = 255-GetHazeAlpha(ptexFogHaze[0].st.s);
+    const unsigned long ulH1 = 255-GetHazeAlpha(ptexFogHaze[1].st.s);
+    const unsigned long ulH2 = 255-GetHazeAlpha(ptexFogHaze[2].st.s);
+    const unsigned long ulH3 = 255-GetHazeAlpha(ptexFogHaze[3].st.s);
     if( (ulH0|ulH1|ulH2|ulH3)<4) return;
     if( _colAttMask) { // apply haze color (if not transparent)
       COLOR colH;
@@ -460,10 +460,10 @@ void Particle_RenderQuad3D( const FLOAT3D &vPos0, const FLOAT3D &vPos1, const FL
     ptexFogHaze[2].st.t = (vProjected2%_fog_vHDirView+_fog_fAddH)*_fog_fMulH;
     ptexFogHaze[3].st.s = -vProjected3(3)*_fog_fMulZ;
     ptexFogHaze[3].st.t = (vProjected3%_fog_vHDirView+_fog_fAddH)*_fog_fMulH;
-    const ULONG ulF0 = 255-GetFogAlpha(ptexFogHaze[0]);
-    const ULONG ulF1 = 255-GetFogAlpha(ptexFogHaze[1]);
-    const ULONG ulF2 = 255-GetFogAlpha(ptexFogHaze[2]);
-    const ULONG ulF3 = 255-GetFogAlpha(ptexFogHaze[3]);
+    const unsigned long ulF0 = 255-GetFogAlpha(ptexFogHaze[0]);
+    const unsigned long ulF1 = 255-GetFogAlpha(ptexFogHaze[1]);
+    const unsigned long ulF2 = 255-GetFogAlpha(ptexFogHaze[2]);
+    const unsigned long ulF3 = 255-GetFogAlpha(ptexFogHaze[3]);
     if( (ulF0|ulF1|ulF2|ulF3)<4) return;
     if( _colAttMask) { // apply fog color (if not transparent)
       COLOR colF; 

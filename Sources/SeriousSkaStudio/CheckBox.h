@@ -30,7 +30,7 @@ class CCheckBox : public CButton
 // Construction
 public:
 	CCheckBox();
-  void SetIndex(INDEX iFlagIndex, ULONG ulFlags);
+  void SetIndex(INDEX iFlagIndex, unsigned long ulFlags);
 
 // Attributes
 public:

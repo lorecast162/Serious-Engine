@@ -285,9 +285,9 @@ void CTString::OnlyFirstLine(void)
 
 
 /* Calculate hashing value for the string. */
-ULONG CTString::GetHash(void) const
+unsigned long CTString::GetHash(void) const
 {
-  ULONG ulKey = 0;
+  unsigned long ulKey = 0;
   INDEX len = strlen(str_String);
 
   for(INDEX i=0; i<len; i++) {
@@ -384,7 +384,7 @@ BOOL CTString::IsValid(void) const
 void CTString::ReadUntilEOF_t(CTStream &strmFile)  // throw char *
 {
   // get the file size
-  SLONG slFileSize = strmFile.GetStreamSize()-strmFile.GetPos_t();
+  long slFileSize = strmFile.GetStreamSize()-strmFile.GetPos_t();
 
   // allocate that much memory
   FreeMemory(str_String);
@@ -432,7 +432,7 @@ void CTString::LoadKeepCRLF_t(const class CTFileName &fnmFile)  // throw char *
   CTFileStream strmFile;
   strmFile.Open_t(fnmFile);
   // get the file size
-  SLONG slFileSize = strmFile.GetStreamSize();
+  long slFileSize = strmFile.GetStreamSize();
 
   // allocate that much memory
   FreeMemory(str_String);

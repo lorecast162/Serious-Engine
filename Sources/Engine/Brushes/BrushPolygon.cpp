@@ -577,10 +577,10 @@ CBrushPolygon &CBrushPolygon::CopyPolygon(CBrushPolygon &bp)
 
 
 // get amount of memory used by this object
-SLONG CBrushPolygon::GetUsedMemory(void)
+long CBrushPolygon::GetUsedMemory(void)
 {
   // basic size of class
-  SLONG slUsedMemory = sizeof(CBrushPolygon);
+  long slUsedMemory = sizeof(CBrushPolygon);
   // add arrays
   slUsedMemory += bpo_abpePolygonEdges.sa_Count      * sizeof(CBrushPolygonEdge);
   slUsedMemory += bpo_apbvxTriangleVertices.sa_Count * sizeof(CBrushVertex*);

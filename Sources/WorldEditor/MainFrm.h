@@ -87,7 +87,7 @@ public:
 // Operations
 public:
   void DockControlBarRelativeTo(CControlBar* Bar,CControlBar* LeftOf,
-                                ULONG ulDockDirection = DOCK_RIGHT);
+                                unsigned long ulDockDirection = DOCK_RIGHT);
   BOOL OnIdle(LONG lCount);
   // toggle info window
   void ToggleInfoWindow();

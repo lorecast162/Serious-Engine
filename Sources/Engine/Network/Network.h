@@ -106,11 +106,11 @@ public:
   INDEX ga_ulDemoMinorVersion;  // minor version of build that created this demo
   CTFileName ga_fnmWorld;       // filename of current world
   UBYTE *ga_pubDefaultState;    // default state for connecting (server only)
-  SLONG ga_slDefaultStateSize;
+  long ga_slDefaultStateSize;
   UBYTE ga_aubDefaultProperties[NET_MAXSESSIONPROPERTIES];
   UBYTE *ga_pubCRCList;         // list of files for CRC checking (server only)
-  SLONG ga_slCRCList;
-  ULONG ga_ulCRC; // CRC of CRCs of all files in the list
+  long ga_slCRCList;
+  unsigned long ga_ulCRC; // CRC of CRCs of all files in the list
 
   BOOL ga_bLocalPause;            // local pause for single player/demo
   BOOL ga_bDemoRec;               // set if currently recording a demo
@@ -167,7 +167,7 @@ public:
   void AutoAdjustSettings(void);
 
   // make default state data for creating deltas
-  void MakeDefaultState(const CTFileName &fnmWorld, ULONG ulSpawnFlags, void *pvSessionProperties);
+  void MakeDefaultState(const CTFileName &fnmWorld, unsigned long ulSpawnFlags, void *pvSessionProperties);
 
   // initialize gathering of file CRCs to CRC table
   void InitCRCGather(void);
@@ -192,7 +192,7 @@ public:
   void Init(const CTString &strGameID);
   /* Start a peer-to-peer game session. */
   void StartPeerToPeer_t(const CTString &strSessionName,
-    const CTFileName &fnmWorld, ULONG ulSpawnFlags, 
+    const CTFileName &fnmWorld, unsigned long ulSpawnFlags, 
     INDEX ctMaxPlayers, BOOL bWaitAllPlayers,
     void *pvSessionProperties); // throw char *
   /* Trigger sessions enumeration over LAN and iNet. */
@@ -293,21 +293,21 @@ public:
   void *GetSessionProperties(void);
 
   /* Send chat message from some players to some other players. */
-  void SendChat(ULONG ulFrom, ULONG ulTo, const CTString &strMessage);
+  void SendChat(unsigned long ulFrom, unsigned long ulTo, const CTString &strMessage);
 };
 
 // make default state for a network game
 extern void NET_MakeDefaultState_t(
-  const CTFileName &fnmWorld, ULONG ulSpawnFlags, void *pvSessionProperties,
+  const CTFileName &fnmWorld, unsigned long ulSpawnFlags, void *pvSessionProperties,
   CTStream &strmState); // throw char *
 
 // pointer to global instance of the only network object in the application
 ENGINE_API extern CNetworkLibrary *_pNetwork;
 
 // convert string address to a number
-ENGINE_API extern ULONG StringToAddress(const CTString &strAddress);
+ENGINE_API extern unsigned long StringToAddress(const CTString &strAddress);
 // convert address to a printable string
-ENGINE_API extern CTString AddressToString(ULONG ulHost);
+ENGINE_API extern CTString AddressToString(unsigned long ulHost);
 
 
 #endif  /* include-once check. */

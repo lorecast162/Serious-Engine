@@ -158,7 +158,7 @@ inline void CTerrainTile::AddTriangle(INDEX iind1,INDEX iind2,INDEX iind3)
     pvx[2] = &GetVertices()[iind3];
 
     // check if all vertices all visible
-    SLONG slTriangleMask = pvx[0]->shade + pvx[1]->shade + pvx[2]->shade;
+    long slTriangleMask = pvx[0]->shade + pvx[1]->shade + pvx[2]->shade;
     if(slTriangleMask!=255*3) {
       return;
     }
@@ -999,9 +999,9 @@ __forceinline CTextureData *CTerrainTile::GetTopMap()
 }
 
 // Count used memory
-SLONG CTerrainTile::GetUsedMemory(void)
+long CTerrainTile::GetUsedMemory(void)
 {
-  SLONG slUsedMemory=0;
+  long slUsedMemory=0;
   slUsedMemory += sizeof(CTerrainTile);
   return slUsedMemory;
 }

@@ -168,16 +168,16 @@ void CImageInfo::Read_t( CTStream *inFile)   // throw char *
   inFile->ExpectID_t( CChunkID("CTII"));
   if( inFile->GetSize_t() != 5*4) throw( "Invalid image info file.");
 
-  SLONG tmp;
+  long tmp;
   *inFile >> tmp;
   ii_Width = (PIX) tmp;
   *inFile >> tmp;
   ii_Height = (PIX) tmp;
   *inFile >> tmp;
-  ii_BitsPerPixel = (SLONG) tmp;
+  ii_BitsPerPixel = (long) tmp;
 
   // read image contents (all channels)
-  ULONG pic_size = ii_Width*ii_Height * ii_BitsPerPixel/8;
+  unsigned long pic_size = ii_Width*ii_Height * ii_BitsPerPixel/8;
   ii_Picture = (UBYTE*)AllocMemory( pic_size);
   inFile->ReadFullChunk_t( CChunkID("IPIC"), ii_Picture, pic_size);
 
@@ -195,10 +195,10 @@ void CImageInfo::Write_t( CTStream *outFile) const  // throw char *
 
   *outFile << (PIX)ii_Width;
   *outFile << (PIX)ii_Height;
-  *outFile << (SLONG)ii_BitsPerPixel;
+  *outFile << (long)ii_BitsPerPixel;
 
   // write image contents (all channels)
-  ULONG pic_size = ii_Width*ii_Height * ii_BitsPerPixel/8;
+  unsigned long pic_size = ii_Width*ii_Height * ii_BitsPerPixel/8;
   outFile->WriteFullChunk_t( CChunkID("IPIC"), ii_Picture, pic_size);
 
   #if PLATFORM_BIGENDIAN
@@ -208,7 +208,7 @@ void CImageInfo::Write_t( CTStream *outFile) const  // throw char *
 
 
 // initializes structure members and attaches pointer to image
-void CImageInfo::Attach( UBYTE *pPicture, PIX pixWidth, PIX pixHeight, SLONG slBitsPerPixel)
+void CImageInfo::Attach( UBYTE *pPicture, PIX pixWidth, PIX pixHeight, long slBitsPerPixel)
 {
   // parameters must be meaningful
   ASSERT( (pPicture != NULL) && (pixWidth>0) && (pixHeight>0));
@@ -246,9 +246,9 @@ void CImageInfo::ExpandEdges( INDEX ctPasses/*=8192*/)
   if( ii_Width<3 || ii_Height<3 || ii_BitsPerPixel!=32) return;
 
   // allocate some memory for spare picture and wipe it clean
-  SLONG slSize = ii_Width*ii_Height*ii_BitsPerPixel/8;
-  ULONG *pulSrc = (ULONG*)ii_Picture;
-  ULONG *pulDst = (ULONG*)AllocMemory(slSize);
+  long slSize = ii_Width*ii_Height*ii_BitsPerPixel/8;
+  unsigned long *pulSrc = (unsigned long*)ii_Picture;
+  unsigned long *pulDst = (unsigned long*)AllocMemory(slSize);
   memcpy( pulDst, pulSrc, slSize);
 
   // loop while there are some more pixels to be processed or for specified number of passes
@@ -266,7 +266,7 @@ void CImageInfo::ExpandEdges( INDEX ctPasses/*=8192*/)
         if( ((col&CT_AMASK)>>CT_ASHIFT)>3) continue;
         bAllPixelsVisible = FALSE;
         // average all surrounding pixels that are visible
-        ULONG ulRa=0, ulGa=0, ulBa=0;
+        unsigned long ulRa=0, ulGa=0, ulBa=0;
         INDEX ctVisible=0;
         for( INDEX j=-1; j<=1; j++) {
           for( INDEX i=-1; i<=1; i++) {
@@ -354,7 +354,7 @@ void CImageInfo::LoadTGA_t( const CTFileName &strFileName) // throw char *
 {
   TGAHeader *pTGAHdr;
   UBYTE *pTGABuffer, *pTGAImage;
-  SLONG slFileSize;
+  long slFileSize;
   CTFileStream TGAFile;
 
   Clear();
@@ -376,10 +376,10 @@ STUBBED("Byte swapping TGA data");
   pTGAImage = pTGABuffer + sizeof(struct TGAHeader) + pTGAHdr->IdLength;
 
   // detremine picture size dimensions
-  ii_Width        = (SLONG)pTGAHdr->Width;
-  ii_Height       = (SLONG)pTGAHdr->Height;
-  ii_BitsPerPixel = (SLONG)pTGAHdr->BitsPerPixel;
-  SLONG slBytesPerPixel = ii_BitsPerPixel/8;
+  ii_Width        = (long)pTGAHdr->Width;
+  ii_Height       = (long)pTGAHdr->Height;
+  ii_BitsPerPixel = (long)pTGAHdr->BitsPerPixel;
+  long slBytesPerPixel = ii_BitsPerPixel/8;
   PIX pixBitmapSize     = ii_Width*ii_Height;
   BOOL bAlphaChannel    = (slBytesPerPixel==4);
 
@@ -457,12 +457,12 @@ void CImageInfo::SaveTGA_t( const CTFileName &strFileName) const // throw char *
 {
   TGAHeader *pTGAHdr;
   UBYTE *pTGABuffer, *pTGAImage;
-  SLONG slFileSize;
+  long slFileSize;
   PIX pixBitmapSize = ii_Width*ii_Height;
   CTFileStream TGAFile;
 
   // determine and check image info format
-  SLONG slBytesPerPixel = ii_BitsPerPixel/8;
+  long slBytesPerPixel = ii_BitsPerPixel/8;
   ASSERT( slBytesPerPixel==3 || slBytesPerPixel==4);
   if( slBytesPerPixel!=3 && slBytesPerPixel!=4) throw( TRANS( "Unsupported BitsPerPixel in ImageInfo header."));
 
@@ -511,7 +511,7 @@ void CImageInfo::LoadPCX_t( const CTFileName &strFileName) // throw char *
   PCXHeader *pPCXHdr;
   UBYTE *pPCXBuffer, *pPCXImage, *pPCXDecodedImage, *pTmp;
   UBYTE data, counter;
-  SLONG pic_size, PCX_size, slFileSize;
+  long pic_size, PCX_size, slFileSize;
   CTFileStream PCXFile;
 
   Clear();
@@ -532,16 +532,16 @@ STUBBED("Byte swapping PCX data");
   pPCXImage = pPCXBuffer + sizeof( struct PCXHeader);
 
   // detremine picture size dimensions
-  ii_Width  = (SLONG)(pPCXHdr->Xmax - pPCXHdr->Xmin +1);
-  ii_Height = (SLONG)(pPCXHdr->Ymax - pPCXHdr->Ymin +1);
-  ii_BitsPerPixel = (SLONG)pPCXHdr->Planes*8;
+  ii_Width  = (long)(pPCXHdr->Xmax - pPCXHdr->Xmin +1);
+  ii_Height = (long)(pPCXHdr->Ymax - pPCXHdr->Ymin +1);
+  ii_BitsPerPixel = (long)pPCXHdr->Planes*8;
   pic_size = ii_Width * ii_Height * ii_BitsPerPixel/8;
 
   // allocate memory for image content
   ii_Picture = (UBYTE*)AllocMemory( pic_size);
 
   // allocate memory for decoded PCX file that hasn't been converted to CT RAW Image format
-  PCX_size = (SLONG)(pPCXHdr->BytesPerLine * ii_Height * ii_BitsPerPixel/8);
+  PCX_size = (long)(pPCXHdr->BytesPerLine * ii_Height * ii_BitsPerPixel/8);
   pPCXDecodedImage = (UBYTE*)AllocMemory( PCX_size);
   pTmp = pPCXDecodedImage;  // save pointer for latter usage
 
@@ -569,15 +569,15 @@ STUBBED("Byte swapping PCX data");
   pPCXDecodedImage = pTmp;  // reset pointer
 
   // convert decoded PCX image to CroTeam RAW Image Info format
-  SLONG slBytesPerPixel = ii_BitsPerPixel/8;
+  long slBytesPerPixel = ii_BitsPerPixel/8;
   for( INDEX y=0; y<ii_Height; y++)
   {
-    SLONG slYSrcOfs = y * ii_Width * slBytesPerPixel;
-    SLONG slYDstOfs = y * pPCXHdr->BytesPerLine * slBytesPerPixel;
+    long slYSrcOfs = y * ii_Width * slBytesPerPixel;
+    long slYDstOfs = y * pPCXHdr->BytesPerLine * slBytesPerPixel;
     // channel looper
     for( INDEX p=0; p<slBytesPerPixel; p++)
     {
-      SLONG slPOffset = p * pPCXHdr->BytesPerLine;
+      long slPOffset = p * pPCXHdr->BytesPerLine;
       // byte looper
       for( INDEX x=0; x<ii_Width; x++)
         *(ii_Picture + slYSrcOfs + x*slBytesPerPixel + p) =

@@ -2,9 +2,9 @@
 
 #include <windows.h>
 
-ULONG DetermineDesktopWidth(void)
+unsigned long DetermineDesktopWidth(void)
 {
-  return((ULONG) ::GetSystemMetrics(SM_CXSCREEN));
+  return((unsigned long) ::GetSystemMetrics(SM_CXSCREEN));
 }
 
 

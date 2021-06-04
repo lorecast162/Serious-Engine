@@ -43,7 +43,7 @@ struct CClientEntry {
 class CEntityHashItem {
 // implementation
 public:
-  ULONG ehi_ulEntityID;
+  unsigned long ehi_ulEntityID;
   CEntityPointer ehi_epEntityPointer;
   CClientEntry ehi_ceClientEntries[SERVER_CLIENTS];
 
@@ -59,7 +59,7 @@ public:
 };
 
 
-#define VALUE_TYPE ULONG
+#define VALUE_TYPE unsigned long
 #define TYPE CEntityHashItem
 #define CHashTableSlot_TYPE CEntityHashTableSlot
 #define CHashTable_TYPE     CEntityHashTable
@@ -75,13 +75,13 @@ public:
   CEntityHash();
   ~CEntityHash();
 
-  ULONG GetItemKey(ULONG ulEntityID) {return ulEntityID;}
-  ULONG GetItemValue(CEntityHashItem* ehiItem) {return ehiItem->ehi_ulUntityID;}
+  unsigned long GetItemKey(unsigned long ulEntityID) {return ulEntityID;}
+  unsigned long GetItemValue(CEntityHashItem* ehiItem) {return ehiItem->ehi_ulUntityID;}
 
 
 // interface
 public:
-  BOOL ClientNeedsUpdate(INDEX iClient,ULONG ulEntityID,CNetworkMessage &nmMessage);
+  BOOL ClientNeedsUpdate(INDEX iClient,unsigned long ulEntityID,CNetworkMessage &nmMessage);
 
   void AddEntity(CEntityPointer* penEntity);
   void RemoveEntity(CEntityPointer* penEntity);

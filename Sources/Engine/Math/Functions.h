@@ -100,7 +100,7 @@ inline Type Clamp( const Type x, const Type dnlimit, const Type uplimit)
 
 inline DOUBLE Abs( const DOUBLE f) { return fabs(f); }
 inline FLOAT  Abs( const FLOAT f)  { return (FLOAT)fabs(f); }
-inline SLONG  Abs( const SLONG sl) { return labs(sl); }
+inline long  Abs( const long sl) { return labs(sl); }
 
 
 /*
@@ -133,9 +133,9 @@ inline FLOAT Max( const FLOAT fA, const FLOAT fB)
 }
 
 
-inline SLONG Min( const SLONG slA, const SLONG slB)
+inline long Min( const long slA, const long slB)
 {
-  SLONG slRet;
+  long slRet;
   __asm {
     mov     eax,D [slA]
     cmp     eax,D [slB]
@@ -145,9 +145,9 @@ inline SLONG Min( const SLONG slA, const SLONG slB)
   return slRet;
 }
 
-inline ULONG Min( const ULONG slA, const ULONG slB)
+inline unsigned long Min( const unsigned long slA, const unsigned long slB)
 {
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     mov     eax,D [slA]
     cmp     eax,D [slB]
@@ -157,9 +157,9 @@ inline ULONG Min( const ULONG slA, const ULONG slB)
   return ulRet;
 }
 
-inline SLONG Max( const SLONG slA, const SLONG slB)
+inline long Max( const long slA, const long slB)
 {
-  SLONG slRet;
+  long slRet;
   __asm {
     mov     eax,D [slA]
     cmp     eax,D [slB]
@@ -169,9 +169,9 @@ inline SLONG Max( const SLONG slA, const SLONG slB)
   return slRet;
 }
 
-inline ULONG Max( const ULONG slA, const ULONG slB)
+inline unsigned long Max( const unsigned long slA, const unsigned long slB)
 {
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     mov     eax,D [slA]
     cmp     eax,D [slB]
@@ -229,9 +229,9 @@ inline FLOAT Clamp( const FLOAT f, const FLOAT fdnlimit, const FLOAT fuplimit)
 }
 
 
-inline SLONG ClampDn( const SLONG sl, const SLONG sldnlimit)
+inline long ClampDn( const long sl, const long sldnlimit)
 {
-  SLONG slRet;
+  long slRet;
   __asm {
     mov     eax,D [sl]
     cmp     eax,D [sldnlimit]
@@ -241,9 +241,9 @@ inline SLONG ClampDn( const SLONG sl, const SLONG sldnlimit)
   return slRet;
 }
 
-inline SLONG ClampUp( const SLONG sl, const SLONG sluplimit)
+inline long ClampUp( const long sl, const long sluplimit)
 {
-  SLONG slRet;
+  long slRet;
   __asm {
     mov     eax,D [sl]
     cmp     eax,D [sluplimit]
@@ -253,9 +253,9 @@ inline SLONG ClampUp( const SLONG sl, const SLONG sluplimit)
   return slRet;
 }
 
-inline SLONG Clamp( const SLONG sl, const SLONG sldnlimit, const SLONG sluplimit)
+inline long Clamp( const long sl, const long sldnlimit, const long sluplimit)
 {
-  SLONG slRet;
+  long slRet;
   __asm {
     mov     eax,D [sl]
     cmp     eax,D [sldnlimit]
@@ -284,12 +284,12 @@ inline FLOAT FastRcp( const FLOAT f)
 }
 
 // convert float from 0.0f to 1.0f -> ulong form 0 to 255
-inline ULONG NormFloatToByte( const FLOAT f)
+inline unsigned long NormFloatToByte( const FLOAT f)
 {
     /* rcg10042001 !!! FIXME: Move this elsewhere. */
 #ifdef __MSVC_INLINE__
   const FLOAT f255 = 255.0f;
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     fld   D [f]
     fmul  D [f255]
@@ -298,22 +298,22 @@ inline ULONG NormFloatToByte( const FLOAT f)
   return ulRet;
 #else
   ASSERT((f >= 0.0f) && (f <= 1.0f));
-  return( (ULONG) (f * 255.0f) );
+  return( (unsigned long) (f * 255.0f) );
 #endif
 }
 
 // convert ulong from 0 to 255 -> float form 0.0f to 255.0f
-inline FLOAT NormByteToFloat( const ULONG ul)
+inline FLOAT NormByteToFloat( const unsigned long ul)
 {
   return (FLOAT)ul * (1.0f/255.0f);
 }
 
 
 // fast float to int conversion
-inline SLONG FloatToInt( FLOAT f)
+inline long FloatToInt( FLOAT f)
 {
 #if (defined __MSVC_INLINE__)
-  SLONG slRet;
+  long slRet;
   __asm {
     fld    D [f]
     fistp  D [slRet]
@@ -321,7 +321,7 @@ inline SLONG FloatToInt( FLOAT f)
   return slRet;
 
 #elif (defined __GNU_INLINE_X86_32__)
-  SLONG slRet;
+  long slRet;
   __asm__ __volatile__ (
     "flds     (%%eax)   \n\t"
     "fistpl   (%%esi)   \n\t"
@@ -331,9 +331,9 @@ inline SLONG FloatToInt( FLOAT f)
   );
   return(slRet);
 #else
-  // round to nearest by adding/subtracting 0.5 (depending on f pos/neg) before converting to SLONG
+  // round to nearest by adding/subtracting 0.5 (depending on f pos/neg) before converting to long
   float addToRound = copysignf(0.5f, f); // copy f's signbit to 0.5 => if f<0 then addToRound = -0.5, else 0.5
-  return((SLONG) (f + addToRound));
+  return((long) (f + addToRound));
 
 #endif
 }
@@ -370,10 +370,10 @@ inline FLOAT Log2( FLOAT f) {
 
 
 // returns accurate values only for integers that are power of 2
-inline SLONG FastLog2( SLONG x)
+inline long FastLog2( long x)
 {
 #if (defined __MSVC_INLINE__)
-  SLONG slRet;
+  long slRet;
   __asm {
     bsr   eax,D [x]
     mov   D [slRet],eax
@@ -381,7 +381,7 @@ inline SLONG FastLog2( SLONG x)
   return slRet;
 
 #elif (defined __GNU_INLINE_X86_32__)
-  SLONG slRet;
+  long slRet;
   __asm__ __volatile__ (
     "bsrl   %%ecx, %%eax      \n\t"
         : "=a" (slRet)
@@ -394,8 +394,8 @@ inline SLONG FastLog2( SLONG x)
   int numLeadingZeros  = __builtin_clz(x);
   return 31 - numLeadingZeros;
 #else
-  register SLONG val = x;
-  register SLONG retval = 31;
+  register long val = x;
+  register long retval = 31;
   while (retval > 0)
   {
     if (val & (1 << retval))
@@ -409,10 +409,10 @@ inline SLONG FastLog2( SLONG x)
 
 /* DG: function is unused => doesn't matter that portable implementation is not optimal :)
 // returns log2 of first larger value that is a power of 2
-inline SLONG FastMaxLog2( SLONG x)
+inline long FastMaxLog2( long x)
 { 
 #if (defined __MSVC_INLINE__)
-  SLONG slRet;
+  long slRet;
   __asm {
     bsr   eax,D [x]
     bsf   edx,D [x]
@@ -423,7 +423,7 @@ inline SLONG FastMaxLog2( SLONG x)
   return slRet;
 
 #elif (defined __GNU_INLINE_X86_32__)
-  SLONG slRet;
+  long slRet;
   __asm__ __volatile__ (
     "bsrl  %%ecx, %%eax     \n\t"
     "bsfl  %%ecx, %%edx     \n\t"
@@ -436,7 +436,7 @@ inline SLONG FastMaxLog2( SLONG x)
   return(slRet);
 #else
 printf("CHECK THIS: %s:%d\n", __FILE__, __LINE__);
-  return((SLONG) log2((double) x));
+  return((long) log2((double) x));
 
 #endif
 }

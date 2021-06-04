@@ -69,7 +69,7 @@ public:
   // Clear layer
   void Clear();
   // Count used memory
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 
 public:
   CTextureData *tl_ptdTexture;  // Texture this layer is using

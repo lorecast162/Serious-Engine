@@ -481,11 +481,11 @@ const CTString &CWorld::GetName(void)
 }
 
 // get/set spawn flags for the world
-void CWorld::SetSpawnFlags(ULONG ulFlags)
+void CWorld::SetSpawnFlags(unsigned long ulFlags)
 {
   wo_ulSpawnFlags = ulFlags;
 }
-ULONG CWorld::GetSpawnFlags(void)
+unsigned long CWorld::GetSpawnFlags(void)
 {
   return wo_ulSpawnFlags;
 }
@@ -786,7 +786,7 @@ void CWorld::PrecacheEntities_t(void)
   }
 }
 // delete all entities that don't fit given spawn flags
-void CWorld::FilterEntitiesBySpawnFlags(ULONG ulFlags)
+void CWorld::FilterEntitiesBySpawnFlags(unsigned long ulFlags)
 {
   // must be in 24bit mode when managing entities
   CSetFPUPrecision FPUPrecision(FPT_24BIT);
@@ -806,7 +806,7 @@ void CWorld::FilterEntitiesBySpawnFlags(ULONG ulFlags)
     }
 
     // if it shouldn't exist
-    ULONG ulEntityFlags = iten->GetSpawnFlags();
+    unsigned long ulEntityFlags = iten->GetSpawnFlags();
     if (!(ulEntityFlags&ulFlags&SPF_MASK_DIFFICULTY)
       ||!(ulEntityFlags&ulFlags&SPF_MASK_GAMEMODE)) {
       // add it to the selection
@@ -1104,7 +1104,7 @@ void CWorld::DeletePredictors(void)
 }
 
 // get entity by its ID
-CEntity *CWorld::EntityFromID(ULONG ulID)
+CEntity *CWorld::EntityFromID(unsigned long ulID)
 {
   FOREACHINDYNAMICCONTAINER(wo_cenAllEntities, CEntity, iten) {
     if (iten->en_ulID==ulID) {

@@ -235,7 +235,7 @@ INDEX CCustomComboWnd::InsertItem(CTString strText, CTFileName fnmIcons/*=""*/, 
   return iCount-1;
 }
 
-void CCustomComboWnd::SetItemValue(INDEX iItem, ULONG ulValue)
+void CCustomComboWnd::SetItemValue(INDEX iItem, unsigned long ulValue)
 {
   m_dcComboLines[iItem].cl_ulValue=ulValue;
 }

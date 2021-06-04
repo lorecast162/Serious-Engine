@@ -1023,8 +1023,8 @@ void CGame::InitInternal( void)
   extern CTString GetGameTypeName(INDEX);
   extern CTString GetGameTypeNameCfunc(void* pArgs);
   extern CTString GetCurrentGameTypeName(void);
-  extern ULONG GetSpawnFlagsForGameType(INDEX);
-  extern ULONG GetSpawnFlagsForGameTypeCfunc(void* pArgs);
+  extern unsigned long GetSpawnFlagsForGameType(INDEX);
+  extern unsigned long GetSpawnFlagsForGameTypeCfunc(void* pArgs);
   extern BOOL IsMenuEnabled_(const CTString &);
   extern BOOL IsMenuEnabledCfunc(void* pArgs);
   _pShell->DeclareSymbol("user CTString GetGameAgentRulesInfo(void);",   (void *)&GetGameAgentRulesInfo);
@@ -1482,7 +1482,7 @@ CHighScoreEntry::CHighScoreEntry(void)
   hse_ctKills = -1;
   hse_ctScore = 0;
 }
-SLONG CGame::PackHighScoreTable(void)
+long CGame::PackHighScoreTable(void)
 {
   // start at the beginning of buffer
   UBYTE *pub = _aubHighScoreBuffer;
@@ -1524,7 +1524,7 @@ SLONG CGame::PackHighScoreTable(void)
   return MAX_HIGHSCORETABLESIZE;
 }
 
-void CGame::UnpackHighScoreTable(SLONG slSize)
+void CGame::UnpackHighScoreTable(long slSize)
 {
   // just copy it for now
   memcpy(_aubHighScoreBuffer, _aubHighScorePacked, slSize);
@@ -1606,7 +1606,7 @@ void CGame::Load_t( void)
   strmFile>>(INDEX&)gm_MenuSplitScreenCfg;
 
   // read high-score table
-  SLONG slHSSize;
+  long slHSSize;
   strmFile>>slHSSize;
   strmFile.Read_t(&_aubHighScorePacked, slHSSize);
   UnpackHighScoreTable(slHSSize);
@@ -1638,7 +1638,7 @@ void CGame::Save_t( void)
   strmFile.Write_t( &gm_MenuSplitScreenCfg, sizeof( enum SplitScreenCfg));
 
   // write high-score table
-  SLONG slHSSize = PackHighScoreTable();
+  long slHSSize = PackHighScoreTable();
   strmFile<<slHSSize;
   strmFile.Write_t(&_aubHighScorePacked, slHSSize);
 }
@@ -1815,8 +1815,8 @@ static  INDEX _iCheckMax  = 0;
 static void PrintStats( CDrawPort *pdpDrawPort)
 {
   // cache some general vars
-  SLONG slDPWidth  = pdpDrawPort->GetWidth();
-  SLONG slDPHeight = pdpDrawPort->GetHeight();
+  long slDPWidth  = pdpDrawPort->GetWidth();
+  long slDPHeight = pdpDrawPort->GetHeight();
   
   // determine proper text scale for statistics display
   FLOAT fTextScale = (FLOAT)slDPWidth/640.0f;
@@ -1839,7 +1839,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
     pdpDrawPort->SetTextAspect( 1.0f);
     // calculate elapsed time
     CTimerValue tvNow = _pTimer->CurrentTick();
-    ULONG ulTime = (ULONG)tvNow.GetSeconds();
+    unsigned long ulTime = (unsigned long)tvNow.GetSeconds();
     // printout elapsed time
     CTString strTime;
     if( ulTime >= (60*60)) {
@@ -1892,7 +1892,7 @@ static void PrintStats( CDrawPort *pdpDrawPort)
       else if( nge==NGET_REPLICATEDACTION)  colLine = C_BLUE;   // duplicated action
       else if( nge==NGET_SKIPPEDACTION)     colLine = C_YELLOW; // skipped action
       else                 colLine = C_BLACK;  // unknown ???
-      ULONG ulAlpha = FloatToInt( ((FLOAT)ctLines-(i*0.3333f)) *f192oLines);
+      unsigned long ulAlpha = FloatToInt( ((FLOAT)ctLines-(i*0.3333f)) *f192oLines);
       pdpDrawPort->DrawLine( slDPWidth-2, pixJ-i, slDPWidth-2-fWidth, pixJ-i, colLine|ulAlpha);
     }
   }
@@ -2145,7 +2145,7 @@ static void MakeSplitDrawports(enum CGame::SplitScreenCfg ssc, INDEX iCount, CDr
 static BOOL _bPlayerViewRendered = FALSE;
 
 // redraw all game views (for case of split-screens and such)
-void CGame::GameRedrawView( CDrawPort *pdpDrawPort, ULONG ulFlags)
+void CGame::GameRedrawView( CDrawPort *pdpDrawPort, unsigned long ulFlags)
 {
   // if thumbnail saving has been required
   if( _fnmThumb!="")
@@ -2816,7 +2816,7 @@ static PIX _pixSizeI_SE;
 static PIX _pixSizeJ_SE;
 CDrawPort *_pdp_SE = NULL;
 static FLOAT _tmNow_SE;
-static ULONG _ulA_SE;
+static unsigned long _ulA_SE;
 static BOOL  _bPopup;
 
 void TiledTextureSE( PIXaabbox2D &_boxScreen, FLOAT fStretch, const MEX2D &vScreen, MEXaabbox2D &boxTexture)

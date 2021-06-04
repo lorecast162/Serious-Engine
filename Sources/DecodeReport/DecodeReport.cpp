@@ -28,7 +28,7 @@ int main( int argc, char *argv[])
   return 0;
 }
 
-void FindInMapFile(const CTFileName &fnSymbols, const CTString &strImage, ULONG ulSeg, ULONG ulOff, CTString &strFunction, SLONG &slDelta)
+void FindInMapFile(const CTFileName &fnSymbols, const CTString &strImage, unsigned long ulSeg, unsigned long ulOff, CTString &strFunction, long &slDelta)
 {
   CTFileName fnmImage = strImage;
   CTFileName fnmMap = fnSymbols+fnmImage.FileName()+".map";
@@ -59,8 +59,8 @@ void FindInMapFile(const CTFileName &fnSymbols, const CTString &strImage, ULONG 
       strmMap.GetLine_t(strLine);
       char strFunctionLine[1024];
       strFunctionLine[0]=0;
-      ULONG ulSegLine=-1;
-      ULONG ulOfsLine=-1;
+      unsigned long ulSegLine=-1;
+      unsigned long ulOfsLine=-1;
       strLine.ScanF("%x:%x %s", &ulSegLine, &ulOfsLine, strFunctionLine);
       if (ulSegLine!=ulSeg) {
         continue;
@@ -127,12 +127,12 @@ void SubMain( int argc, char *argv[])
         // parse the line
         char strImage[1024];
         strImage[0]=0;
-        ULONG ulSegment=-1;
-        ULONG ulOffset=-1;
+        unsigned long ulSegment=-1;
+        unsigned long ulOffset=-1;
         sscanf(strAdr, "$adr: %s %x:%x", strImage, &ulSegment, &ulOffset);
         // find the function
         CTString strFunction;
-        SLONG slDelta;
+        long slDelta;
         FindInMapFile(fnSymbols, CTString(strImage), ulSegment, ulOffset, strFunction, slDelta);
         // out put the result
         CTString strResult;

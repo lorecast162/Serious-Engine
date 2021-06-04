@@ -82,8 +82,8 @@ public:
   BOOL ReceiveFromServerReliable(CNetworkMessage &nmMessage);
   BOOL ReceiveFromServerReliable(CTMemoryStream &strmMessage);
   /* Send/receive broadcast messages. */
-  void SendBroadcast(const CNetworkMessage &nmMessage, ULONG ulAddr, UWORD uwPort);
-  BOOL ReceiveBroadcast(CNetworkMessage &nmMessage, ULONG &ulAddr, UWORD &uwPort);
+  void SendBroadcast(const CNetworkMessage &nmMessage, unsigned long ulAddr, UWORD uwPort);
+  BOOL ReceiveBroadcast(CNetworkMessage &nmMessage, unsigned long &ulAddr, UWORD &uwPort);
 };
 
 

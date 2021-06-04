@@ -44,8 +44,8 @@ extern INDEX mdl_iShadowQuality;
 CAnyProjection3D _aprProjection;
 CDrawPort *_pdp = NULL;
 UBYTE *_pubMask = NULL;
-SLONG _slMaskWidth  = 0;
-SLONG _slMaskHeight = 0;
+long _slMaskWidth  = 0;
+long _slMaskHeight = 0;
 static enum FPUPrecisionType _fpuOldPrecision;
 
 
@@ -107,7 +107,7 @@ void EndModelRenderingView( BOOL bRestoreOrtho/*=TRUE*/)
 
 
 // begin/end model rendering to shadow mask
-void BeginModelRenderingMask( CAnyProjection3D &prProjection, UBYTE *pubMask, SLONG slMaskWidth, SLONG slMaskHeight)
+void BeginModelRenderingMask( CAnyProjection3D &prProjection, UBYTE *pubMask, long slMaskWidth, long slMaskHeight)
 {
   ASSERT( _iRenderingType==0);
   _iRenderingType = 2;

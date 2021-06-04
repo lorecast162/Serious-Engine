@@ -88,12 +88,12 @@ public:
   FLOAT wo_fThumbnailTargetDistance;// target distance for thumbnail in WED
 
   CTFileName wo_fnmFileName;  // the file that the world was loaded from
-  SLONG wo_slStateDictionaryOffset;   // offset of the world state filename dictionary
+  long wo_slStateDictionaryOffset;   // offset of the world state filename dictionary
   CTString wo_strName;    // name of the level to be shown to player
-  ULONG wo_ulSpawnFlags;  // spawn flags telling in which game modes can the level be played
+  unsigned long wo_ulSpawnFlags;  // spawn flags telling in which game modes can the level be played
   CTString wo_strDescription; // description of the level (intro, mission, etc.)
 
-  ULONG wo_ulNextEntityID;    // next free ID for entities
+  unsigned long wo_ulNextEntityID;    // next free ID for entities
   CListHead wo_lhTimers;      // timer scheduled entities
   CListHead wo_lhMovers;        // entities that want to/have to move
   BOOL wo_bPortalLinksUpToDate; // set if portal-sector links are up to date
@@ -178,7 +178,7 @@ public:
   void DeletePredictors(void);
 
   // get entity by its ID
-  CEntity *EntityFromID(ULONG ulID);
+  CEntity *EntityFromID(unsigned long ulID);
   // triangularize selected polygons
   void TriangularizePolygons(CDynamicContainer<CBrushPolygon> &dcPolygons);
 public:
@@ -246,8 +246,8 @@ public:
   void SetName(const CTString &strName);
   const CTString &GetName(void);
   // get/set spawn flags for the world
-  void SetSpawnFlags(ULONG ulFlags);
-  ULONG GetSpawnFlags(void);
+  void SetSpawnFlags(unsigned long ulFlags);
+  unsigned long GetSpawnFlags(void);
 
   /* Save entire world (both brushes and current state). */
   void Save_t(const CTFileName &fnmWorld); // throw char *
@@ -258,7 +258,7 @@ public:
   /* Precache data needed by entities. */
   void PrecacheEntities_t(void);  // throw char *
   // delete all entities that don't fit given spawn flags
-  void FilterEntitiesBySpawnFlags(ULONG ulFlags);
+  void FilterEntitiesBySpawnFlags(unsigned long ulFlags);
 
   /* Read entire world (both brushes and current state). */
   void Read_t(CTStream *pistrm); // throw char *

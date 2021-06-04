@@ -29,22 +29,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define DIFF_XOR  2   // xor between an old block and a new block
 
 UBYTE *_pubOld = NULL;
-SLONG _slSizeOld = 0;
+long _slSizeOld = 0;
 UBYTE *_pubNew = NULL;
-SLONG _slSizeNew = 0;
-ULONG _ulCRC;
+long _slSizeNew = 0;
+unsigned long _ulCRC;
 
 CTStream *_pstrmOut;
 
 // emit one block copied from old file
-void EmitOld_t(SLONG slOffsetOld, SLONG slSizeOld)
+void EmitOld_t(long slOffsetOld, long slSizeOld)
 {
   (*_pstrmOut)<<UBYTE(DIFF_OLD);
   (*_pstrmOut)<<slOffsetOld;
   (*_pstrmOut)<<slSizeOld;
 }
 // emit one block copied from new file
-void EmitNew_t(SLONG slOffsetNew, SLONG slSizeNew)
+void EmitNew_t(long slOffsetNew, long slSizeNew)
 {
   (*_pstrmOut)<<UBYTE(DIFF_NEW);
   (*_pstrmOut)<<slSizeNew;
@@ -52,10 +52,10 @@ void EmitNew_t(SLONG slOffsetNew, SLONG slSizeNew)
 }
 
 // emit one block xor-ed between new and old file
-void EmitXor_t(SLONG slOffsetOld, SLONG slSizeOld, SLONG slOffsetNew, SLONG slSizeNew)
+void EmitXor_t(long slOffsetOld, long slSizeOld, long slOffsetNew, long slSizeNew)
 {
   // xor it
-  SLONG slSizeXor = Min(slSizeOld, slSizeNew);
+  long slSizeXor = Min(slSizeOld, slSizeNew);
   UBYTE *pub0 = _pubOld+slOffsetOld;
   UBYTE *pub1 = _pubNew+slOffsetNew;
   for (INDEX i=0; i<slSizeXor; i++) {
@@ -71,9 +71,9 @@ void EmitXor_t(SLONG slOffsetOld, SLONG slSizeOld, SLONG slOffsetNew, SLONG slSi
 }
 
 struct EntityBlockInfo {
-  ULONG ebi_ulID;
-  SLONG ebi_slOffset;
-  SLONG ebi_slSize;
+  unsigned long ebi_ulID;
+  long ebi_slOffset;
+  long ebi_slSize;
 };
 
 CStaticStackArray<EntityBlockInfo> _aebiOld;
@@ -84,7 +84,7 @@ CStaticStackArray<EntityBlockInfo> _aebiNew;
 
 // make array of entity offsets in a block
 void MakeInfos(CStaticStackArray<EntityBlockInfo> &aebi, 
-               UBYTE *pubBlock, SLONG slSize, UBYTE *pubFirst, UBYTE *&pubEnd)
+               UBYTE *pubBlock, long slSize, UBYTE *pubFirst, UBYTE *&pubEnd)
 {
   // clear all offsets
   aebi.PopAll();
@@ -93,7 +93,7 @@ void MakeInfos(CStaticStackArray<EntityBlockInfo> &aebi,
   UBYTE *pub = pubFirst;
   while (pub<pubBlock+slSize) {
     // if no more entities
-    if (*(ULONG*)pub != ENT4) {
+    if (*(unsigned long*)pub != ENT4) {
       pubEnd = pub;
       // stop
       return;
@@ -101,34 +101,34 @@ void MakeInfos(CStaticStackArray<EntityBlockInfo> &aebi,
     // remember it
     EntityBlockInfo &ebi = aebi.Push();
     ebi.ebi_slOffset = pub-pubBlock;
-    pub+=sizeof(ULONG);
+    pub+=sizeof(unsigned long);
 
     // get id and size
-    ULONG ulID = *(ULONG*)pub;
+    unsigned long ulID = *(unsigned long*)pub;
     ebi.ebi_ulID     = ulID;
-    pub+=sizeof(ULONG);
+    pub+=sizeof(unsigned long);
 
-    SLONG slSizeChunk = *(SLONG*)pub;
-    pub+=sizeof(ULONG);
-    ebi.ebi_slSize   = slSizeChunk+sizeof(SLONG)*3;
+    long slSizeChunk = *(long*)pub;
+    pub+=sizeof(unsigned long);
+    ebi.ebi_slSize   = slSizeChunk+sizeof(long)*3;
 
     pub+=slSizeChunk;
   }
 }
 
 // find first entity in given block
-UBYTE *FindFirstEntity(UBYTE *pubBlock, SLONG slSize)
+UBYTE *FindFirstEntity(UBYTE *pubBlock, long slSize)
 {
   UBYTE *pub = pubBlock;
   while (pub<pubBlock+slSize) {
-    if (*(ULONG*)pub == ENT4) {
+    if (*(unsigned long*)pub == ENT4) {
       UBYTE *pubTmp = pub;
-      pubTmp+=sizeof(ULONG);
-      //ULONG ulID = *(ULONG*)pubTmp;
-      pubTmp+=sizeof(ULONG);
-      SLONG slSizeChunk = *(SLONG*)pubTmp;
-      pubTmp+=sizeof(ULONG);
-      if (*(ULONG*)(pubTmp+slSizeChunk) == ENT4) {
+      pubTmp+=sizeof(unsigned long);
+      //unsigned long ulID = *(unsigned long*)pubTmp;
+      pubTmp+=sizeof(unsigned long);
+      long slSizeChunk = *(long*)pubTmp;
+      pubTmp+=sizeof(unsigned long);
+      if (*(unsigned long*)(pubTmp+slSizeChunk) == ENT4) {
         return pub;
       }
     }
@@ -223,16 +223,16 @@ void UnDiff_t(void)
   // start at beginning
   //UBYTE *pubOld = _pubOld;
   UBYTE *pubNew = _pubNew;
-  SLONG slSizeOldStream = 0;
-  //SLONG slSizeOutStream = 0;
+  long slSizeOldStream = 0;
+  //long slSizeOutStream = 0;
   // get header with size of files
-  if (*(SLONG*)pubNew!=DIFF) {
+  if (*(long*)pubNew!=DIFF) {
     ThrowF_t(TRANS("Not a DIFF stream!"));
   }
-  pubNew+=sizeof(SLONG);
-  slSizeOldStream = *(SLONG*)pubNew; pubNew+=sizeof(SLONG);
-  /* slSizeOutStream = *(SLONG*)pubNew; */ pubNew+=sizeof(SLONG);
-  ULONG ulCRC =  *(ULONG*)pubNew; pubNew+=sizeof(ULONG);
+  pubNew+=sizeof(long);
+  slSizeOldStream = *(long*)pubNew; pubNew+=sizeof(long);
+  /* slSizeOutStream = *(long*)pubNew; */ pubNew+=sizeof(long);
+  unsigned long ulCRC =  *(unsigned long*)pubNew; pubNew+=sizeof(unsigned long);
 
   CRC_Start(_ulCRC);
 
@@ -247,8 +247,8 @@ void UnDiff_t(void)
     // if block type is 'copy from old file'
     case DIFF_OLD: {
       // get data offset and size
-      SLONG slOffsetOld = *(SLONG*)pubNew;  pubNew+=sizeof(SLONG);
-      SLONG slSizeOld = *(SLONG*)pubNew;    pubNew+=sizeof(SLONG);
+      long slOffsetOld = *(long*)pubNew;  pubNew+=sizeof(long);
+      long slSizeOld = *(long*)pubNew;    pubNew+=sizeof(long);
       // copy it from there
       (*_pstrmOut).Write_t(_pubOld+slOffsetOld, slSizeOld);
       CRC_AddBlock(_ulCRC, _pubOld+slOffsetOld, slSizeOld);
@@ -256,7 +256,7 @@ void UnDiff_t(void)
     // if block type is 'copy from new file'
     case DIFF_NEW: {
       // get data size
-      SLONG slSizeNew = *(SLONG*)pubNew;    pubNew+=sizeof(SLONG);
+      long slSizeNew = *(long*)pubNew;    pubNew+=sizeof(long);
       // copy it from there
       (*_pstrmOut).Write_t(pubNew, slSizeNew);
       CRC_AddBlock(_ulCRC, pubNew, slSizeNew);
@@ -265,12 +265,12 @@ void UnDiff_t(void)
     // if block type is 'xor between an old block and a new block'
     case DIFF_XOR: {
       // get data offset and sizes
-      SLONG slOffsetOld = *(SLONG*)pubNew;  pubNew+=sizeof(SLONG);
-      SLONG slSizeOld = *(SLONG*)pubNew;    pubNew+=sizeof(SLONG);
-      SLONG slSizeNew = *(SLONG*)pubNew;    pubNew+=sizeof(SLONG);
+      long slOffsetOld = *(long*)pubNew;  pubNew+=sizeof(long);
+      long slSizeOld = *(long*)pubNew;    pubNew+=sizeof(long);
+      long slSizeNew = *(long*)pubNew;    pubNew+=sizeof(long);
 
       // xor it
-      SLONG slSizeXor = Min(slSizeOld, slSizeNew);
+      long slSizeXor = Min(slSizeOld, slSizeNew);
       UBYTE *pub0 = _pubOld+slOffsetOld;
       UBYTE *pub1 = pubNew;
 

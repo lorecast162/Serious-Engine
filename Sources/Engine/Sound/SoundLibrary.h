@@ -34,12 +34,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // Mixer
 // set master volume and resets mixer buffer (wipes it with zeroes and keeps pointers)
-void ResetMixer( const SLONG *pslBuffer, const SLONG slBufferSize);
+void ResetMixer( const long *pslBuffer, const long slBufferSize);
 // copy mixer buffer to the output buffer(s)
-void CopyMixerBuffer_stereo( const SLONG slSrcOffset, void *pDstBuffer, const SLONG slBytes);
-void CopyMixerBuffer_mono(   const SLONG slSrcOffset, void *pDstBuffer, const SLONG slBytes);
+void CopyMixerBuffer_stereo( const long slSrcOffset, void *pDstBuffer, const long slBytes);
+void CopyMixerBuffer_mono(   const long slSrcOffset, void *pDstBuffer, const long slBytes);
 // normalize mixed sounds
-void NormalizeMixerBuffer( const FLOAT snd_fNormalizer, const SLONG slBytes, FLOAT &_fLastNormalizeValue);
+void NormalizeMixerBuffer( const FLOAT snd_fNormalizer, const long slBytes, FLOAT &_fLastNormalizeValue);
 // mix in one sound object to mixer buffer
 void MixSound( class CSoundObject *pso);
 
@@ -96,10 +96,10 @@ public:
 
   SoundFormat  sl_EsfFormat;             // sound format (external)
   WAVEFORMATEX sl_SwfeFormat;            // primary sound buffer format
-  SLONG *sl_pslMixerBuffer;              // buffer for mixing sounds (32-bit!)
+  long *sl_pslMixerBuffer;              // buffer for mixing sounds (32-bit!)
   SWORD *sl_pswDecodeBuffer;             // buffer for decoding encoded sounds (ogg, mpeg...)
-  SLONG  sl_slMixerBufferSize;           // mixer buffer size
-  SLONG  sl_slDecodeBufferSize;          // decoder buffer size
+  long  sl_slMixerBufferSize;           // mixer buffer size
+  long  sl_slDecodeBufferSize;          // decoder buffer size
 
   CListHead sl_ClhAwareList;	 					         // list of sound mode aware objects
   CListHead sl_lhActiveListeners;                // active listeners for current frame of listening

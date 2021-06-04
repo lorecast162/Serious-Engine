@@ -38,8 +38,8 @@ static BOOL _bTexture = FALSE;
 static BOOL _bDepth = FALSE;
 static BOOL _bMultiTexture = FALSE;
 static UBYTE *_pubTexture;
-static ULONG _ulTexObject;
-static ULONG _ulTexFormat;
+static unsigned long _ulTexObject;
+static unsigned long _ulTexFormat;
 static BOOL _bSubImage = FALSE;
 static INDEX _ctR = 100;
 static INDEX _ctC = 100;
@@ -166,7 +166,7 @@ static DOUBLE FillRate(void)
 
 static void InitTexture(void)
 {
-  const SLONG slSize = 256*256 *4 *4/3 +16;
+  const long slSize = 256*256 *4 *4/3 +16;
   _pubTexture = (UBYTE*)AllocMemory(slSize);
   for( INDEX i=0; i<256; i++) {
     for( INDEX j=0; j<256; j++) {
@@ -176,7 +176,7 @@ static void InitTexture(void)
       _pubTexture[(j*256+i)*4+3] = i-j;
     }
   }
-  MakeMipmaps( 15, (ULONG*)_pubTexture, 256,256);
+  MakeMipmaps( 15, (unsigned long*)_pubTexture, 256,256);
   _tpLocal.tp_bSingleMipmap = FALSE;
   gfxGenerateTexture( _ulTexObject);
   gfxSetTexture( _ulTexObject, _tpLocal);
@@ -317,8 +317,8 @@ static DOUBLE TrisTroughput(void)
 static DOUBLE TextureUpload(void)
 {
   StartTimer();
-  gfxUploadTexture( (ULONG*)_pubTexture, 256, 256, _ulTexFormat, _bSubImage);
-  const SLONG slTotal = 256*256*4 *4/3;
+  gfxUploadTexture( (unsigned long*)_pubTexture, 256, 256, _ulTexFormat, _bSubImage);
+  const long slTotal = 256*256*4 *4/3;
   return slTotal/StopTimer();
 }
 

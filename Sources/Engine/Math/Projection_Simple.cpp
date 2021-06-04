@@ -227,7 +227,7 @@ void CSimpleProjection3D::MakeOoKGradient(const FLOATplane3D &plViewerPlane, CPl
 /*
  * Clip a line.
  */
-ULONG CSimpleProjection3D::ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const
+unsigned long CSimpleProjection3D::ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const
 {
   // check that the projection object is prepared for projecting
   ASSERT(pr_Prepared);

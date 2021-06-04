@@ -17,7 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Clipping functions
 
 // check if a polygon is to be visible
-__forceinline ULONG CRenderer::GetPolygonVisibility(const CBrushPolygon &bpo)
+__forceinline unsigned long CRenderer::GetPolygonVisibility(const CBrushPolygon &bpo)
 {
   // get transformed polygon's plane
   CWorkingPlane *pwplPolygonPlane = bpo.bpo_pbplPlane->bpl_pwplWorking;
@@ -61,7 +61,7 @@ __forceinline ULONG CRenderer::GetPolygonVisibility(const CBrushPolygon &bpo)
     return 0;
   }
 
-  ULONG ulDirection = PDF_POLYGONVISIBLE;
+  unsigned long ulDirection = PDF_POLYGONVISIBLE;
   BOOL bProjectionInverted = re_prProjection->pr_bInverted;
   if (bProjectionInverted && !bInvertPolygon) {
     ulDirection |= PDF_FLIPEDGESPRE;
@@ -79,7 +79,7 @@ __forceinline BOOL CRenderer::IsPolygonCulled(const CBrushPolygon &bpo)
 {
   CBrushSector  &bsc = *bpo.bpo_pbscSector;
   // setup initial mask
-  ULONG ulMask = 0xFFFFFFFF;
+  unsigned long ulMask = 0xFFFFFFFF;
 
   // for each vertex
   INDEX ctVtx = bpo.bpo_apbvxTriangleVertices.Count();
@@ -87,7 +87,7 @@ __forceinline BOOL CRenderer::IsPolygonCulled(const CBrushPolygon &bpo)
     CBrushVertex *pbvx = bpo.bpo_apbvxTriangleVertices[i];
     INDEX ivx = bsc.bsc_abvxVertices.Index(pbvx);
     // get the outcodes for that vertex
-    ULONG ulCode = re_avvxViewVertices[bsc.bsc_ivvx0+ivx].vvx_ulOutcode;
+    unsigned long ulCode = re_avvxViewVertices[bsc.bsc_ivvx0+ivx].vvx_ulOutcode;
     // and them to the mask
     ulMask &= ulCode;
   }}
@@ -148,7 +148,7 @@ void CRenderer::MakeNonDetailScreenPolygons(void)
 
   re_pbscCurrent->bsc_ispo0 = re_aspoScreenPolygons.Count();
   // detail polygons are not skipped if rendering shadows
-  const ULONG ulDetailMask = re_bRenderingShadows ? 0 : BPOF_DETAILPOLYGON;
+  const unsigned long ulDetailMask = re_bRenderingShadows ? 0 : BPOF_DETAILPOLYGON;
 
   // for all polygons in sector
   FOREACHINSTATICARRAY(re_pbscCurrent->bsc_abpoPolygons, CBrushPolygon, itpo) {
@@ -166,7 +166,7 @@ void CRenderer::MakeNonDetailScreenPolygons(void)
 
     // skip if the polygon is not visible
     ASSERT( !IsPolygonCulled(bpo));  // cannot be culled yet!
-    const ULONG ulVisible = GetPolygonVisibility(bpo);
+    const unsigned long ulVisible = GetPolygonVisibility(bpo);
     if( ulVisible==0) continue;
 
     _sfStats.IncrementCounter(CStatForm::SCI_POLYGONS);
@@ -352,7 +352,7 @@ void CRenderer::ClipToAllPlanes(CAnyProjection3D &pr)
 // make outcodes for current clip plane for all active vertices
 __forceinline BOOL CRenderer::MakeOutcodes(void)
 {
-  SLONG slMask = 0;
+  long slMask = 0;
   // for each active view vertex
   INDEX iVxTop = re_avvxViewVertices.Count();
   for(INDEX ivx = re_iViewVx0; ivx<iVxTop; ivx++) {
@@ -360,7 +360,7 @@ __forceinline BOOL CRenderer::MakeOutcodes(void)
     // calculate the distance
     vvx.vvx_fD = re_plClip.PointDistance(vvx.vvx_vView);
     // calculate the outcode
-    const ULONG ulOutCode = (*(SLONG*)&vvx.vvx_fD) & 0x80000000;
+    const unsigned long ulOutCode = (*(long*)&vvx.vvx_fD) & 0x80000000;
     // add to the outcode of the vertex
     vvx.vvx_ulOutcode = (vvx.vvx_ulOutcode>>1)|ulOutCode;
     // add to mask
@@ -417,7 +417,7 @@ void CRenderer::ClipOnePolygon(CScreenPolygon &spo)
       }
     } else {
       // if first is front, second back
-      if ((SLONG&)fD1<=0) {
+      if ((long&)fD1<=0) {
         // make new vertex
         INDEX ivxNew = re_avvxViewVertices.Count();
         CViewVertex &vvxNew = re_avvxViewVertices.Push();

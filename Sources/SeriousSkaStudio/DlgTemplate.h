@@ -31,7 +31,7 @@ public:
   virtual CSize CalcDynamicLayout(int nLength, DWORD nMode);
   virtual CSize CalcFixedLayout(BOOL bStretch, BOOL bHorz);
   virtual INDEX GetDockingSide();
-  void EnableDockingSides(ULONG ulDockingSides);
+  void EnableDockingSides(unsigned long ulDockingSides);
   void DockCtrlBar();
 
   void SetSplitterControlID(INDEX iSplitterID);
@@ -39,7 +39,7 @@ public:
 
   CSize m_Size;
 
-  ULONG dlg_ulEnabledDockingSides;
+  unsigned long dlg_ulEnabledDockingSides;
 protected:
   CSplitterFrame dlg_spSlitter;
   INDEX dlg_iSplitterID;

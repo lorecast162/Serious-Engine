@@ -207,7 +207,7 @@ void CDlgTemplate::AdjustSplitter()
   dlg_spSlitter.SetDockingSide(iSplitterSide);
 }
 
-void CDlgTemplate::EnableDockingSides(ULONG ulDockingSides)
+void CDlgTemplate::EnableDockingSides(unsigned long ulDockingSides)
 {
   CDialogBar::EnableDocking(ulDockingSides);
   dlg_ulEnabledDockingSides = ulDockingSides;

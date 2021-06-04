@@ -55,7 +55,7 @@ void CBuffer::Clear(void)
 }
 
 // expand buffer to be given number of bytes in size
-void CBuffer::Expand(SLONG slNewSize)
+void CBuffer::Expand(long slNewSize)
 {
   ASSERT(slNewSize>0);
   ASSERT(bu_slSize>=0);
@@ -72,7 +72,7 @@ void CBuffer::Expand(SLONG slNewSize)
     // if already allocated
   } else {
     ASSERT(slNewSize>bu_slSize);
-    SLONG slSizeDiff = slNewSize-bu_slSize;
+    long slSizeDiff = slNewSize-bu_slSize;
     ASSERT(bu_pubBuffer!=NULL);
     // grow buffer
     GrowMemory((void**)&bu_pubBuffer, slNewSize);
@@ -93,7 +93,7 @@ void CBuffer::Expand(SLONG slNewSize)
 }
 
 // set how many bytes to add when buffer overflows
-void CBuffer::SetAllocationStep(SLONG slStep)
+void CBuffer::SetAllocationStep(long slStep)
 {
   ASSERT(slStep>0);
   bu_slAllocationStep = slStep;
@@ -105,13 +105,13 @@ void CBuffer::SetAllocationStep(SLONG slStep)
 #endif
 
 // read bytes from buffer
-SLONG CBuffer::ReadBytes(void *pv, SLONG slSize)
+long CBuffer::ReadBytes(void *pv, long slSize)
 {
   ASSERT(slSize>0 && pv!=NULL);
   UBYTE *pub = (UBYTE*)pv;
 
   // clamp size to amount of bytes actually in the buffer
-  SLONG slUsed = bu_slSize-bu_slFree;
+  long slUsed = bu_slSize-bu_slFree;
   if (slUsed<slSize) {
     slSize = slUsed;
   }
@@ -122,7 +122,7 @@ SLONG CBuffer::ReadBytes(void *pv, SLONG slSize)
   }
 
   // read part of block after read pointer to the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
   memcpy(pub, bu_pubBuffer+bu_slReadOffset, slSizeEnd);
   pub+=slSizeEnd;
   // if that is not all
@@ -142,12 +142,12 @@ SLONG CBuffer::ReadBytes(void *pv, SLONG slSize)
 }
 
 // skip bytes from buffer (read without actually reading)
-SLONG CBuffer::SkipBytes(SLONG slSize)
+long CBuffer::SkipBytes(long slSize)
 {
   ASSERT(slSize>0);
 
   // clamp size to amount of bytes actually in the buffer
-  SLONG slUsed = bu_slSize-bu_slFree;
+  long slUsed = bu_slSize-bu_slFree;
   if (slUsed<slSize) {
     slSize = slUsed;
   }
@@ -169,12 +169,12 @@ SLONG CBuffer::SkipBytes(SLONG slSize)
 }
 
 // read bytes from buffer to stream
-SLONG CBuffer::ReadBytesToStream(CTStream &strm, SLONG slSize)
+long CBuffer::ReadBytesToStream(CTStream &strm, long slSize)
 {
   ASSERT(slSize>0);
 
   // clamp size to amount of bytes actually in the buffer
-  SLONG slUsed = bu_slSize-bu_slFree;
+  long slUsed = bu_slSize-bu_slFree;
   if (slUsed<slSize) {
     slSize = slUsed;
   }
@@ -185,7 +185,7 @@ SLONG CBuffer::ReadBytesToStream(CTStream &strm, SLONG slSize)
   }
 
   // read part of block after read pointer to the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
   strm.Write_t(bu_pubBuffer+bu_slReadOffset, slSizeEnd);
   // if that is not all
   if (slSizeEnd<slSize) {
@@ -204,7 +204,7 @@ SLONG CBuffer::ReadBytesToStream(CTStream &strm, SLONG slSize)
 }
 
 // unread bytes from buffer
-void CBuffer::UnreadBytes(SLONG slSize)
+void CBuffer::UnreadBytes(long slSize)
 {
   ASSERT(bu_slFree>=slSize);
 
@@ -221,14 +221,14 @@ void CBuffer::UnreadBytes(SLONG slSize)
 }
 
 // check how many bytes are there to read
-SLONG CBuffer::QueryReadBytes(void)
+long CBuffer::QueryReadBytes(void)
 {
   // return amount of bytes actually in the buffer
   return bu_slSize-bu_slFree;
 }
 
 // write bytes to buffer
-void CBuffer::WriteBytes(const void *pv, SLONG slSize)
+void CBuffer::WriteBytes(const void *pv, long slSize)
 {
   ASSERT(slSize>=0 && pv!=NULL);
   // if there is nothing to write
@@ -253,7 +253,7 @@ void CBuffer::WriteBytes(const void *pv, SLONG slSize)
   UBYTE *pub = (UBYTE*)pv;
 
   // write part of block at the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-bu_slWriteOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-bu_slWriteOffset, slSize);
   memcpy(bu_pubBuffer+bu_slWriteOffset, pub, slSizeEnd);
   pub+=slSizeEnd;
   memcpy(bu_pubBuffer, pub, slSize-slSizeEnd);
@@ -273,7 +273,7 @@ void CBuffer::MoveBuffer(CBuffer &buFrom)
   for(;;){
     // read a block from the other buffer
     UBYTE aub[256];
-    SLONG slSize = buFrom.ReadBytes(aub, sizeof(aub));
+    long slSize = buFrom.ReadBytes(aub, sizeof(aub));
     // if nothing read
     if (slSize<=0) {
       // stop
@@ -290,7 +290,7 @@ void CBlockBufferStats::Clear(void)
 }
 
 // get time when block of given size will be finished if started now
-CTimerValue CBlockBufferStats::GetBlockFinalTime(SLONG slSize)
+CTimerValue CBlockBufferStats::GetBlockFinalTime(long slSize)
 {
   CTimerValue tvNow = _pTimer->GetHighPrecisionTimer();
 
@@ -350,7 +350,7 @@ void CBlockBuffer::Clear(void)
 #endif
 
 struct BlockHeader {
-  SLONG bh_slSize;              // block size
+  long bh_slSize;              // block size
 
   #ifdef NETSTRUCTS_PACKED
     UBYTE packing[4];
@@ -364,7 +364,7 @@ struct BlockHeader {
 #endif
 
 // read one block if possible
-BOOL CBlockBuffer::ReadBlock(void *pv, SLONG &slSize)
+BOOL CBlockBuffer::ReadBlock(void *pv, long &slSize)
 {
   // must not be inside block reading
   ASSERT(bb_slBlockSizeRead==0);
@@ -379,7 +379,7 @@ BOOL CBlockBuffer::ReadBlock(void *pv, SLONG &slSize)
 // rcg10272001 !!! FIXME:  side, swapping byte order as necessary.
 
   struct BlockHeader bh;
-  SLONG slbhSize;
+  long slbhSize;
   slbhSize = ReadBytes(&bh, sizeof(bh));
 
   // if the header information is not in buffer
@@ -436,7 +436,7 @@ BOOL CBlockBuffer::ReadBlockToStream(CTStream &strm)
 
   // read header of next block in incoming buffer
   struct BlockHeader bh;
-  SLONG slbhSize;
+  long slbhSize;
   slbhSize = ReadBytes(&bh, sizeof(bh));
 
   // if the header information is not in buffer
@@ -468,7 +468,7 @@ BOOL CBlockBuffer::ReadBlockToStream(CTStream &strm)
 
   // read from buffer to destination buffer
   try {
-    SLONG slSize = ReadBytesToStream(strm, bh.bh_slSize);
+    long slSize = ReadBytesToStream(strm, bh.bh_slSize);
     ASSERT(slSize == bh.bh_slSize);
   } catch (char *strError) {
     ASSERT(FALSE);
@@ -480,7 +480,7 @@ BOOL CBlockBuffer::ReadBlockToStream(CTStream &strm)
 }
 
 // write one block
-void CBlockBuffer::WriteBlock(const void *pv, SLONG slSize)
+void CBlockBuffer::WriteBlock(const void *pv, long slSize)
 {
   // must not be inside block writing
   ASSERT(bb_slBlockSizeWrite==0);
@@ -499,13 +499,13 @@ void CBlockBuffer::WriteBlock(const void *pv, SLONG slSize)
 }
 
 // unread one block
-void CBlockBuffer::UnreadBlock(SLONG slSize)
+void CBlockBuffer::UnreadBlock(long slSize)
 {
   UnreadBytes(slSize+sizeof(struct BlockHeader));
 }
 
 // read raw block data
-SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
+long CBlockBuffer::ReadRawBlock(void *pv, long slSize)
 {
   // if inside block reading
   if(bb_slBlockSizeRead>0) {
@@ -513,7 +513,7 @@ SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
     slSize = Min(slSize, bb_slBlockSizeRead);
 
     // read the raw block
-    SLONG slResult = ReadBytes(pv, slSize);
+    long slResult = ReadBytes(pv, slSize);
     ASSERT(slResult==slSize);
     // decrement block size counter
     bb_slBlockSizeRead-=slResult;
@@ -525,7 +525,7 @@ SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
   } else {
     // read header of next block in incoming buffer
     struct BlockHeader bh;
-    SLONG slbhSize;
+    long slbhSize;
     slbhSize = ReadBytes(&bh, sizeof(bh));
 
     // if the header information is not in buffer
@@ -564,7 +564,7 @@ SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
     slSize = Min(slSize, bb_slBlockSizeRead);
 
     // read the raw block with header
-    SLONG slResult = ReadBytes(pv, slSize);
+    long slResult = ReadBytes(pv, slSize);
     ASSERT(slResult==slSize);
     // decrement block size counter
     bb_slBlockSizeRead-=slResult;
@@ -576,14 +576,14 @@ SLONG CBlockBuffer::ReadRawBlock(void *pv, SLONG slSize)
 }
 
 // write raw block data
-void CBlockBuffer::WriteRawBlock(const void *pv, SLONG slSize)
+void CBlockBuffer::WriteRawBlock(const void *pv, long slSize)
 {
   // while there is something to write
   while (slSize>0) {
 
     // if inside block writing
     if(bb_slBlockSizeWrite>0) {
-      SLONG slToWrite = Min(bb_slBlockSizeWrite, slSize);
+      long slToWrite = Min(bb_slBlockSizeWrite, slSize);
       // write the raw block
       WriteBytes(pv, slToWrite);
       slSize-=slToWrite;
@@ -608,7 +608,7 @@ void CBlockBuffer::WriteRawBlock(const void *pv, SLONG slSize)
         bh.bh_tvFinalTime.Clear();
       }
 
-      SLONG slToWrite = Min(bb_slBlockSizeWrite, slSize);
+      long slToWrite = Min(bb_slBlockSizeWrite, slSize);
       // write the raw block, with the new header
       WriteBytes(pv, slToWrite);
       slSize-=slToWrite;
@@ -622,7 +622,7 @@ void CBlockBuffer::WriteRawBlock(const void *pv, SLONG slSize)
 }
 
 // peek sizes of next block
-void CBlockBuffer::PeekBlockSize(SLONG &slExpectedSize, SLONG &slReceivedSoFar)
+void CBlockBuffer::PeekBlockSize(long &slExpectedSize, long &slReceivedSoFar)
 {
   // if inside block reading
   if(bb_slBlockSizeRead>0) {
@@ -634,7 +634,7 @@ void CBlockBuffer::PeekBlockSize(SLONG &slExpectedSize, SLONG &slReceivedSoFar)
   } else {
     // read header of next block in incoming buffer
     struct BlockHeader bh;
-    SLONG slbhSize;
+    long slbhSize;
     slbhSize = ReadBytes(&bh, sizeof(bh));
     // unwind
     UnreadBytes(slbhSize);
@@ -655,7 +655,7 @@ void CBlockBuffer::PeekBlockSize(SLONG &slExpectedSize, SLONG &slReceivedSoFar)
 }
 
 // unread raw block data
-void CBlockBuffer::UnreadRawBlock(SLONG slSize)
+void CBlockBuffer::UnreadRawBlock(long slSize)
 {
   bb_slBlockSizeRead+=slSize;
   UnreadBytes(slSize);
@@ -668,7 +668,7 @@ void CBlockBuffer::MoveBlockBuffer(CBlockBuffer &buFrom)
   for(;;){
     // read a block from the other buffer
     UBYTE aub[256];
-    SLONG slSize = buFrom.ReadRawBlock(aub, sizeof(aub));
+    long slSize = buFrom.ReadRawBlock(aub, sizeof(aub));
     // if nothing read
     if (slSize<=0) {
       // stop

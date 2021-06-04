@@ -315,7 +315,7 @@ public:
   void ManualOn( PIX pixManualX, PIX pixManualY, 
     TTCFunction_type *pCallBack, void *pThis);
   void ManualOff( void);
-  void MouseMoveNotify( HWND hwndCaller, ULONG ulTime, TTCFunction_type *pCallBack, void *pThis);
+  void MouseMoveNotify( HWND hwndCaller, unsigned long ulTime, TTCFunction_type *pCallBack, void *pThis);
 };
 
 class CWorldEditorApp : public CWinApp

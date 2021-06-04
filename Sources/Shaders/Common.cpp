@@ -34,12 +34,12 @@ void DoSpecularLayer(INDEX iSpeculaTexture,INDEX iSpecularColor)
 
   // cache light intensities (-1 in case of overbrighting compensation)
   const INDEX iBright = bOverbright ?  0 : 1;
-  SLONG slLR = (colLight & CT_RMASK)>>(CT_RSHIFT-iBright);
-  SLONG slLG = (colLight & CT_GMASK)>>(CT_GSHIFT-iBright);
-  SLONG slLB = (colLight & CT_BMASK)>>(CT_BSHIFT-iBright);
-  SLONG slAR = (colAmbient & CT_RMASK)>>(CT_RSHIFT-iBright);
-  SLONG slAG = (colAmbient & CT_GMASK)>>(CT_GSHIFT-iBright);
-  SLONG slAB = (colAmbient & CT_BMASK)>>(CT_BSHIFT-iBright);
+  long slLR = (colLight & CT_RMASK)>>(CT_RSHIFT-iBright);
+  long slLG = (colLight & CT_GMASK)>>(CT_GSHIFT-iBright);
+  long slLB = (colLight & CT_BMASK)>>(CT_BSHIFT-iBright);
+  long slAR = (colAmbient & CT_RMASK)>>(CT_RSHIFT-iBright);
+  long slAG = (colAmbient & CT_GMASK)>>(CT_GSHIFT-iBright);
+  long slAB = (colAmbient & CT_BMASK)>>(CT_BSHIFT-iBright);
   if( bOverbright) {
     slAR = ClampUp( slAR, 127);
     slAG = ClampUp( slAG, 127);
@@ -80,7 +80,7 @@ void DoSpecularLayer(INDEX iSpeculaTexture,INDEX iSpecularColor)
   // for each vertex in the surface
   for(ivx=0;ivx<ctVertices;ivx++) {
     // set specular color
-    const SLONG slShade = pcolBase[ivx].ub.a;
+    const long slShade = pcolBase[ivx].ub.a;
     pcolSpec[ivx].ul.abgr =    (((colSrfSpec.ub.r)*slShade)>>8)
                              | (((colSrfSpec.ub.g)*slShade)&0x0000FF00)
                              |((((colSrfSpec.ub.b)*slShade)<<8)&0x00FF0000);

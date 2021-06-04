@@ -53,7 +53,7 @@ public:
 #define HPF_VISIBLEFROMOUTSIDE  (1UL<<0)  // can be viewed from sectors that are not hazed
 class CHazeParameters {
 public:
-  ULONG hp_ulFlags;
+  unsigned long hp_ulFlags;
   FLOAT hp_fNear; // nearest point in LUT
   FLOAT hp_fFar;  // farthest point in LUT
   INDEX hp_iSize; // LUT size in distance (must be pow2)

@@ -31,10 +31,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CObjectVertex : public DOUBLE3D {
 public:
   CObjectVertex *ovx_Remap;         // pointer for index remapping
-  ULONG ovx_Tag;                    // tag for format-specific data
+  unsigned long ovx_Tag;                    // tag for format-specific data
   INDEX ovx_Index;                  // index for easier conversions
   // flags 0-7 are used by CObjectVertex, flags 8-31 are reserved for custom formats
-  ULONG ovx_ulFlags;                // flags
+  unsigned long ovx_ulFlags;                // flags
 
   /* Default constructor. */
   inline CObjectVertex(void) { ovx_ulFlags = 0;};
@@ -48,7 +48,7 @@ public:
 class CObjectPlane : public DOUBLEplane3D {
 public:
   CObjectPlane *opl_Remap;          // pointer for index remapping
-  ULONG opl_Tag;                    // tag for format-specific data
+  unsigned long opl_Tag;                    // tag for format-specific data
   INDEX opl_Index;                  // index for easier conversions
 
   /* Default constructor. */
@@ -63,7 +63,7 @@ public:
 // an edge in 3d object
 class CObjectEdge {
 public:
-  ULONG oed_Tag;                  // tag for format-specific data
+  unsigned long oed_Tag;                  // tag for format-specific data
   INDEX oed_Index;                // index for easier conversions
   union {
     struct {  // used in optimization
@@ -94,7 +94,7 @@ public:
 // a material in 3d object
 class CObjectMaterial {
 public:
-  ULONG omt_Tag;                  // tag for format-specific data
+  unsigned long omt_Tag;                  // tag for format-specific data
   INDEX omt_Index;                // index for easier conversions
   CTString omt_Name;              // name of this material
   CTString omt_strName2;
@@ -170,7 +170,7 @@ public:
 
 class ENGINE_API CObjectPolygon {
 public:
-  ULONG opo_Tag;                                  // tag for format-specific data
+  unsigned long opo_Tag;                                  // tag for format-specific data
   INDEX opo_Index;                                // index for easier conversions
 
 #define OPO_MAXUSERDATA 64
@@ -180,7 +180,7 @@ public:
   CDynamicArray<CObjectPolygonEdge> opo_PolygonEdges;  // edges in this polygon
   CObjectMaterial *opo_Material;                  // material of this polygon
   CMappingDefinition opo_amdMappings[4];          // mapping of textures on this polygon
-  ULONG opo_ulFlags;                              // various flags
+  unsigned long opo_ulFlags;                              // various flags
   COLOR opo_colorColor;                           // color of this polygon
   void *opo_pvOriginal;                           // used for format conversions
 
@@ -292,11 +292,11 @@ public:
   CDynamicArray<CObjectEdge> osc_aoedEdges;           // edges
   CDynamicArray<CObjectPolygon> osc_aopoPolygons;     // polygons
 
-  ULONG osc_Tag;                                      // tag for format-specific data
+  unsigned long osc_Tag;                                      // tag for format-specific data
   INDEX osc_Index;                                    // index for easier conversions
   COLOR osc_colColor;                                 // color of this sector
   COLOR osc_colAmbient;                               // ambient lightning of this sector
-  ULONG osc_ulFlags[3];                               // flags (not used in CTMath)
+  unsigned long osc_ulFlags[3];                               // flags (not used in CTMath)
 
   CTString osc_strName;     // name of the sector
 
@@ -319,10 +319,10 @@ public:
 
   /* Create a new polygon in given sector. */
   ENGINE_API CObjectPolygon *CreatePolygon(INDEX ctVertices, INDEX aivVertices[],
-    CObjectMaterial &omaMaterial, ULONG ulFlags, BOOL bReverse);
+    CObjectMaterial &omaMaterial, unsigned long ulFlags, BOOL bReverse);
   /* Create a new polygon in given sector. */
   ENGINE_API CObjectPolygon *CreatePolygon(INDEX ctVertices, DOUBLE3D avVertices[],
-    CObjectMaterial &omaMaterial, ULONG ulFlags, BOOL bReverse);
+    CObjectMaterial &omaMaterial, unsigned long ulFlags, BOOL bReverse);
   /* Find bounding box of the sector. */
   void GetBoundingBox(DOUBLEaabbox3D &boxSector);
 };

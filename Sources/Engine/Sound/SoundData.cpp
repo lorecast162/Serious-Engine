@@ -167,12 +167,12 @@ void CSoundData::Read_t(CTStream *inFile)  // throw char *
     if (_pSound->IsActive()) {
       // create Buffer
       sd_slBufferSampleSize = CpwiLoad.GetDataLength(sd_wfeFormat);
-      SLONG slBufferSize = CpwiLoad.DetermineBufferSize(sd_wfeFormat);
+      long slBufferSize = CpwiLoad.DetermineBufferSize(sd_wfeFormat);
       sd_pswBuffer = (SWORD*)AllocMemory( slBufferSize+8);
       // load data into buffer
       CpwiLoad.LoadData_t( inFile, sd_pswBuffer, sd_wfeFormat);
       // copy first sample to the last one (this is needed for linear interpolation)
-      (ULONG&)(((UBYTE*)sd_pswBuffer)[slBufferSize]) = *(ULONG*)sd_pswBuffer;
+      (unsigned long&)(((UBYTE*)sd_pswBuffer)[slBufferSize]) = *(unsigned long*)sd_pswBuffer;
     }
   }
 
@@ -233,9 +233,9 @@ BOOL CSoundData::IsAutoFreed(void)
 
 
 // get amount of memory used by this object
-SLONG CSoundData::GetUsedMemory(void)
+long CSoundData::GetUsedMemory(void)
 {
-  SLONG slUsed = sizeof(*this);
+  long slUsed = sizeof(*this);
   if( sd_pswBuffer!=NULL) {
     ASSERT( sd_wfeFormat.nChannels==1 || sd_wfeFormat.nChannels==2);
     slUsed += sd_slBufferSampleSize * sd_wfeFormat.nChannels *2; // all sounds are 16-bit

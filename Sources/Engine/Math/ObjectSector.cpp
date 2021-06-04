@@ -412,7 +412,7 @@ void CObjectSector::CreateIndices(void)
  * Create a new polygon in given sector.
  */
 CObjectPolygon *CObjectSector::CreatePolygon(INDEX ctVertices, DOUBLE3D avVertices[],
-  CObjectMaterial &omaMaterial, ULONG ulFlags, BOOL bReverse)
+  CObjectMaterial &omaMaterial, unsigned long ulFlags, BOOL bReverse)
 {
   // reset areas on axial planes
   DOUBLE fXY=0.0, fXZ=0.0, fYZ=0.0;
@@ -488,7 +488,7 @@ CObjectPolygon *CObjectSector::CreatePolygon(INDEX ctVertices, DOUBLE3D avVertic
  * Create a new polygon in given sector.
  */
 CObjectPolygon *CObjectSector::CreatePolygon(INDEX ctVertices, INDEX aivVertices[],
-  CObjectMaterial &omaMaterial, ULONG ulFlags, BOOL bReverse)
+  CObjectMaterial &omaMaterial, unsigned long ulFlags, BOOL bReverse)
 {
   // create a new polygon in object
   CObjectPolygon &opoPolygon = *osc_aopoPolygons.New();

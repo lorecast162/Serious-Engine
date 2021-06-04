@@ -467,13 +467,13 @@ void CPerspectiveProjection3D::MakeOoKGradient(const FLOATplane3D &plViewerPlane
 /*
  * Clip a line.
  */
-ULONG CPerspectiveProjection3D::ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const
+unsigned long CPerspectiveProjection3D::ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const
 {
   // check that the projection object is prepared for projecting
   ASSERT(pr_Prepared);
 
-  ULONG ulCode0 = LCFVERTEX0(LCF_UNCLIPPED);
-  ULONG ulCode1 = LCFVERTEX1(LCF_UNCLIPPED);
+  unsigned long ulCode0 = LCFVERTEX0(LCF_UNCLIPPED);
+  unsigned long ulCode1 = LCFVERTEX1(LCF_UNCLIPPED);
 
   // clip the line by each plane at the time, skip if some removes entire line
   if (ClipLineByNearPlane(v3dPoint0, v3dPoint1, pr_NearClipDistance, ulCode0, ulCode1, LCF_NEAR)

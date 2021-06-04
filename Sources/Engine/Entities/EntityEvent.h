@@ -31,10 +31,10 @@ public:
  */
 class ENGINE_API CEntityEvent {
 public:
-  SLONG ee_slEvent;   // event code
+  long ee_slEvent;   // event code
   // other data members are placed in derived class
 
-  CEntityEvent(SLONG slEventCode) : ee_slEvent(slEventCode) {};
+  CEntityEvent(long slEventCode) : ee_slEvent(slEventCode) {};
   virtual ~CEntityEvent(void) {}; // destructor must be virtual
   // used for copying events for later delivery
   virtual CEntityEvent *MakeCopy(void) {

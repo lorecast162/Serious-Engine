@@ -157,7 +157,7 @@ static struct ErrorTable SocketErrors = ERRORTABLE(ErrorCodes);
 CPacketBufferStats _pbsSend;
 CPacketBufferStats _pbsRecv;
 
-ULONG cm_ulLocalHost;			// configured local host address
+unsigned long cm_ulLocalHost;			// configured local host address
 CTString cm_strAddress;   // local address
 CTString cm_strName;			// local address
 
@@ -185,9 +185,9 @@ CCommunicationInterface _cmiComm;
 */
 
 // convert address to a printable string
-CTString AddressToString(ULONG ulHost)
+CTString AddressToString(unsigned long ulHost)
 {
-  ULONG ulHostNet = htonl(ulHost);
+  unsigned long ulHostNet = htonl(ulHost);
 
   // initially not converted
   struct hostent *hostentry = NULL;
@@ -210,10 +210,10 @@ CTString AddressToString(ULONG ulHost)
 };
 
 // convert string address to a number
-ULONG StringToAddress(const CTString &strAddress)
+unsigned long StringToAddress(const CTString &strAddress)
 {
   // first try to convert numeric address
-  ULONG ulAddress = ntohl(inet_addr(strAddress));
+  unsigned long ulAddress = ntohl(inet_addr(strAddress));
   // if not a valid numeric address
   if (ulAddress==INADDR_NONE) {
     // lookup the host
@@ -221,7 +221,7 @@ ULONG StringToAddress(const CTString &strAddress)
     // if succeeded
     if (phe!=NULL) {
       // get that address
-      ulAddress = ntohl(*(ULONG*)phe->h_addr_list[0]);
+      ulAddress = ntohl(*(unsigned long*)phe->h_addr_list[0]);
     }
   }
 
@@ -467,7 +467,7 @@ void CCommunicationInterface::CreateSocket_t()
 };
 
 // bind socket to the given address
-void CCommunicationInterface::Bind_t(ULONG ulLocalHost, ULONG ulLocalPort)
+void CCommunicationInterface::Bind_t(unsigned long ulLocalHost, unsigned long ulLocalPort)
 {
   if (cci_hSocket==INVALID_SOCKET) {
     ASSERT(FALSE);
@@ -496,7 +496,7 @@ void CCommunicationInterface::SetNonBlocking_t(void)
   }
 
 #ifdef PLATFORM_WIN32
-  ULONG ulArgNonBlocking = 1;
+  unsigned long ulArgNonBlocking = 1;
   if (ioctlsocket(cci_hSocket, FIONBIO, &ulArgNonBlocking) == SOCKET_ERROR) {
     ThrowF_t(TRANS("Cannot set socket to non-blocking mode. %s"), 
       (const char*)GetSocketError(WSAGetLastError()));
@@ -529,7 +529,7 @@ CTString CCommunicationInterface::GetSocketError(INDEX iError)
 
 
 // open an UDP socket at given port
-void CCommunicationInterface::OpenSocket_t(ULONG ulLocalHost, ULONG ulLocalPort)
+void CCommunicationInterface::OpenSocket_t(unsigned long ulLocalHost, unsigned long ulLocalPort)
 {
   // create the socket as UDP
   CreateSocket_t();
@@ -547,7 +547,7 @@ void CCommunicationInterface::OpenSocket_t(ULONG ulLocalHost, ULONG ulLocalPort)
 };
 
 // get address of this host
-void CCommunicationInterface::GetLocalAddress_t(ULONG &ulHost, ULONG &ulPort)
+void CCommunicationInterface::GetLocalAddress_t(unsigned long &ulHost, unsigned long &ulPort)
 {
   ulHost = 0;
   ulPort = 0;
@@ -574,7 +574,7 @@ void CCommunicationInterface::GetLocalAddress_t(ULONG &ulHost, ULONG &ulPort)
 }
 
 // get address of the peer host connected to this socket
-void CCommunicationInterface::GetRemoteAddress_t(ULONG &ulHost, ULONG &ulPort)
+void CCommunicationInterface::GetRemoteAddress_t(unsigned long &ulHost, unsigned long &ulPort)
 {
   ulHost = 0;
   ulPort = 0;
@@ -605,7 +605,7 @@ void CCommunicationInterface::GetRemoteAddress_t(ULONG &ulHost, ULONG &ulPort)
  */
 
 // broadcast communication
-void CCommunicationInterface::Broadcast_Send(const void *pvSend, SLONG slSendSize,CAddress &adrDestination)
+void CCommunicationInterface::Broadcast_Send(const void *pvSend, long slSendSize,CAddress &adrDestination)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
 
@@ -616,7 +616,7 @@ void CCommunicationInterface::Broadcast_Send(const void *pvSend, SLONG slSendSiz
   cm_ciBroadcast.Send(pvSend, slSendSize,FALSE);
 }
 
-BOOL CCommunicationInterface::Broadcast_Receive(void *pvReceive, SLONG &slReceiveSize,CAddress &adrAddress)
+BOOL CCommunicationInterface::Broadcast_Receive(void *pvReceive, long &slReceiveSize,CAddress &adrAddress)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   return cm_ciBroadcast.ReceiveFrom(pvReceive, slReceiveSize,&adrAddress,FALSE);
@@ -628,7 +628,7 @@ void CCommunicationInterface::Broadcast_Update_t() {
 	CPacket* ppaConnectionRequest;
 	BOOL bIsAlready;
 	BOOL bFoundEmpty;
-	ULONG iClient;
+	unsigned long iClient;
 	//UBYTE ubDummy=65;
 
 	
@@ -786,14 +786,14 @@ CTString CCommunicationInterface::Server_GetClientName(INDEX iClient)
 /*
  *  Server Send/Receive Reliable
  */
-void CCommunicationInterface::Server_Send_Reliable(INDEX iClient, const void *pvSend, SLONG slSendSize)
+void CCommunicationInterface::Server_Send_Reliable(INDEX iClient, const void *pvSend, long slSendSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   ASSERT(iClient>=0 && iClient<SERVER_CLIENTS);
   cm_aciClients[iClient].Send(pvSend, slSendSize,TRUE);
 };
 
-BOOL CCommunicationInterface::Server_Receive_Reliable(INDEX iClient, void *pvReceive, SLONG &slReceiveSize)
+BOOL CCommunicationInterface::Server_Receive_Reliable(INDEX iClient, void *pvReceive, long &slReceiveSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   ASSERT(iClient>=0 && iClient<SERVER_CLIENTS);
@@ -803,14 +803,14 @@ BOOL CCommunicationInterface::Server_Receive_Reliable(INDEX iClient, void *pvRec
 /*
  *  Server Send/Receive Unreliable
  */
-void CCommunicationInterface::Server_Send_Unreliable(INDEX iClient, const void *pvSend, SLONG slSendSize)
+void CCommunicationInterface::Server_Send_Unreliable(INDEX iClient, const void *pvSend, long slSendSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   ASSERT(iClient>=0 && iClient<SERVER_CLIENTS);
   cm_aciClients[iClient].Send(pvSend, slSendSize,FALSE);
 };
 
-BOOL CCommunicationInterface::Server_Receive_Unreliable(INDEX iClient, void *pvReceive, SLONG &slReceiveSize)
+BOOL CCommunicationInterface::Server_Receive_Unreliable(INDEX iClient, void *pvReceive, long &slReceiveSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   ASSERT(iClient>=0 && iClient<SERVER_CLIENTS);
@@ -944,7 +944,7 @@ void CCommunicationInterface::Client_Init_t(char* strServerName)
   ASSERT(!cci_bClientInitialized);
 
   // retrieve server address from server name
-  ULONG ulServerAddress = StringToAddress(strServerName);
+  unsigned long ulServerAddress = StringToAddress(strServerName);
   // if lookup failed
   if (ulServerAddress==INADDR_NONE) {
     ThrowF_t(TRANS("Host '%s' not found!\n"), strServerName);
@@ -954,7 +954,7 @@ void CCommunicationInterface::Client_Init_t(char* strServerName)
   Client_Init_t(ulServerAddress);
 };
 
-void CCommunicationInterface::Client_Init_t(ULONG ulServerAddress)
+void CCommunicationInterface::Client_Init_t(unsigned long ulServerAddress)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
 
@@ -1030,7 +1030,7 @@ void CCommunicationInterface::Client_OpenLocal(void)
 /*
  *  Open client remote
  */
-void CCommunicationInterface::Client_OpenNet_t(ULONG ulServerAddress)
+void CCommunicationInterface::Client_OpenNet_t(unsigned long ulServerAddress)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
 	CPacket* ppaInfoPacket;
@@ -1039,7 +1039,7 @@ void CCommunicationInterface::Client_OpenNet_t(ULONG ulServerAddress)
 	UBYTE ubReliable;
 
   // check for reconnection
-  static ULONG ulLastServerAddress = (ULONG) -1;
+  static unsigned long ulLastServerAddress = (unsigned long) -1;
   BOOL bReconnecting = ulServerAddress == ulLastServerAddress;
   ulLastServerAddress = ulServerAddress;
 
@@ -1135,13 +1135,13 @@ BOOL CCommunicationInterface::Client_IsConnected(void)
 /*
  *  Client Send/Receive Reliable
  */
-void CCommunicationInterface::Client_Send_Reliable(const void *pvSend, SLONG slSendSize)
+void CCommunicationInterface::Client_Send_Reliable(const void *pvSend, long slSendSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   cm_ciLocalClient.Send(pvSend, slSendSize,TRUE);
 };
 
-BOOL CCommunicationInterface::Client_Receive_Reliable(void *pvReceive, SLONG &slReceiveSize)
+BOOL CCommunicationInterface::Client_Receive_Reliable(void *pvReceive, long &slReceiveSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   return cm_ciLocalClient.Receive(pvReceive, slReceiveSize,TRUE);
@@ -1153,7 +1153,7 @@ BOOL CCommunicationInterface::Client_Receive_Reliable(CTStream &strmReceive)
   return cm_ciLocalClient.Receive(strmReceive,TRUE);
 };
 
-void CCommunicationInterface::Client_PeekSize_Reliable(SLONG &slExpectedSize,SLONG &slReceivedSize)
+void CCommunicationInterface::Client_PeekSize_Reliable(long &slExpectedSize,long &slReceivedSize)
 {
   slExpectedSize = cm_ciLocalClient.GetExpectedReliableSize();
   slReceivedSize = cm_ciLocalClient.GetCurrentReliableSize();
@@ -1163,13 +1163,13 @@ void CCommunicationInterface::Client_PeekSize_Reliable(SLONG &slExpectedSize,SLO
 /*
  *  Client Send/Receive Unreliable
  */
-void CCommunicationInterface::Client_Send_Unreliable(const void *pvSend, SLONG slSendSize)
+void CCommunicationInterface::Client_Send_Unreliable(const void *pvSend, long slSendSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   cm_ciLocalClient.Send(pvSend, slSendSize,FALSE);
 };
 
-BOOL CCommunicationInterface::Client_Receive_Unreliable(void *pvReceive, SLONG &slReceiveSize)
+BOOL CCommunicationInterface::Client_Receive_Unreliable(void *pvReceive, long &slReceiveSize)
 {
   CTSingleLock slComm(&cm_csComm, TRUE);
   return cm_ciLocalClient.Receive(pvReceive, slReceiveSize,FALSE);
@@ -1269,8 +1269,8 @@ void CCommunicationInterface::UpdateMasterBuffers()
 	CAddress adrIncomingAddress;
 	SOCKADDR_IN sa;
 	socklen_t size = sizeof(sa);
-	SLONG slSizeReceived;
-	SLONG slSizeSent;
+	long slSizeReceived;
+	long slSizeSent;
 	BOOL bSomethingDone;
 	CPacket* ppaNewPacket;
 	CTimerValue tvNow;
@@ -1319,7 +1319,7 @@ void CCommunicationInterface::UpdateMasterBuffers()
 					ppaNewPacket->pa_adrAddress.adr_uwPort = adrIncomingAddress.adr_uwPort;						
 
 					if (net_bReportPackets == TRUE) {
-						CPrintF("%lu: Received sequence: %d from ID: %d, reliable flag: %d\n",(ULONG) tvNow.GetMilliseconds(),ppaNewPacket->pa_ulSequence,ppaNewPacket->pa_adrAddress.adr_uwID,ppaNewPacket->pa_ubReliable);
+						CPrintF("%lu: Received sequence: %d from ID: %d, reliable flag: %d\n",(unsigned long) tvNow.GetMilliseconds(),ppaNewPacket->pa_ulSequence,ppaNewPacket->pa_adrAddress.adr_uwID,ppaNewPacket->pa_ubReliable);
 					}
 
 					cci_pbMasterInput.AppendPacket(*ppaNewPacket,FALSE);
@@ -1365,7 +1365,7 @@ void CCommunicationInterface::UpdateMasterBuffers()
     } else {
 			
 			if (net_bReportPackets == TRUE)	{
-				CPrintF("%lu: Sent sequence: %d to ID: %d, reliable flag: %d\n",(ULONG)tvNow.GetMilliseconds(),ppaNewPacket->pa_ulSequence,ppaNewPacket->pa_adrAddress.adr_uwID,ppaNewPacket->pa_ubReliable);
+				CPrintF("%lu: Sent sequence: %d to ID: %d, reliable flag: %d\n",(unsigned long)tvNow.GetMilliseconds(),ppaNewPacket->pa_ulSequence,ppaNewPacket->pa_adrAddress.adr_uwID,ppaNewPacket->pa_ubReliable);
 			}
 
 			cci_pbMasterOutput.RemoveFirstPacket(TRUE);

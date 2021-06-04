@@ -1117,7 +1117,7 @@ void CClipMove::ClipMoveToModels(void)
   }
 
   // create mask for skipping deleted entities
-  ULONG ulSkipMask = ENF_DELETED;
+  unsigned long ulSkipMask = ENF_DELETED;
   // if the moving entity is predictor
   if (cm_penMoving->IsPredictor()) {
     // add predicted entities to the mask

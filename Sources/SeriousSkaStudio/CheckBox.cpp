@@ -37,7 +37,7 @@ CCheckBox::CCheckBox()
 CCheckBox::~CCheckBox()
 {
 }
-void CCheckBox::SetIndex(INDEX iFlagIndex, ULONG ulFlags)
+void CCheckBox::SetIndex(INDEX iFlagIndex, unsigned long ulFlags)
 {
   if(ulFlags&((1UL<<iFlagIndex))) {
     SetCheck(1);

@@ -206,7 +206,7 @@ public:
   void EditRemovePatch( INDEX iMaskBit);            // Removes given patch
   void EditRemoveAllPatches( void);
   INDEX CountPatches(void);
-  ULONG GetExistingPatchesMask(void);
+  unsigned long GetExistingPatchesMask(void);
   BOOL GetFirstEmptyPatchIndex( INDEX &iMaskBit);   // Finds first empty space ready to recieve new patch
   BOOL GetFirstValidPatchIndex( INDEX &iMaskBit);   // Finds first valid patch index
   void GetPreviousValidPatchIndex( INDEX &iMaskBit);// Sets previous valid patch index

@@ -38,8 +38,8 @@ extern PIX _fog_pixSizeH;
 extern PIX _fog_pixSizeL;
 extern FLOAT _fog_fStart;
 extern FLOAT _fog_fEnd;  
-extern ULONG _fog_ulAlpha;
-extern ULONG _fog_ulTexture;
+extern unsigned long _fog_ulAlpha;
+extern unsigned long _fog_ulTexture;
 extern UBYTE *_fog_pubTable;
 
 // start fog with given parameters
@@ -59,8 +59,8 @@ extern FLOAT3D _haze_vViewDirAbs;
 extern FLOAT _haze_fMul;
 extern FLOAT _haze_fAdd;
 extern PIX _haze_pixSize;
-extern ULONG _haze_ulAlpha;
-extern ULONG _haze_ulTexture;
+extern unsigned long _haze_ulAlpha;
+extern unsigned long _haze_ulTexture;
 extern FLOAT _haze_fStart;
 
 // start haze with given parameters
@@ -71,7 +71,7 @@ extern void StopHaze(void);
 
 
 // returns lineary-interpolated fog strength in fog texture
-__forceinline ULONG GetFogAlpha( const GFXTexCoord &tex)
+__forceinline unsigned long GetFogAlpha( const GFXTexCoord &tex)
 {
   // point sampling of height
   PIX pixT = FloatToInt( tex.st.t * _fog_pixSizeH);
@@ -80,9 +80,9 @@ __forceinline ULONG GetFogAlpha( const GFXTexCoord &tex)
   const PIX pixSF = FloatToInt( tex.st.s*(FLOAT)_fog_pixSizeL*255.499f);
   const PIX pixS1 = Clamp( (PIX)((pixSF>>8)+0), 0, _fog_pixSizeL-1);
   const PIX pixS2 = Clamp( (PIX)((pixSF>>8)+1), 0, _fog_pixSizeL-1);
-  const ULONG ulF  = pixSF & 255;
-  const ULONG ulA1 = _fog_pubTable[pixT +pixS1];
-  const ULONG ulA2 = _fog_pubTable[pixT +pixS2];
+  const unsigned long ulF  = pixSF & 255;
+  const unsigned long ulA1 = _fog_pubTable[pixT +pixS1];
+  const unsigned long ulA2 = _fog_pubTable[pixT +pixS2];
   return ((ulA1*(ulF^255)+ulA2*ulF) * _fog_ulAlpha) >>16;
 }
 
@@ -96,15 +96,15 @@ __forceinline BOOL InFog( const FLOAT fT)
 
 
 // returns lineary-interpolated haze strength in haze texture
-__forceinline ULONG GetHazeAlpha( const FLOAT fS)
+__forceinline unsigned long GetHazeAlpha( const FLOAT fS)
 {
   // linear interpolation of depth
   const PIX pixSH = FloatToInt( fS*(FLOAT)_haze_pixSize*255.4999f);
   const PIX pixS1 = Clamp( (PIX)((pixSH>>8)+0), 0, _haze_pixSize-1);
   const PIX pixS2 = Clamp( (PIX)((pixSH>>8)+1), 0, _haze_pixSize-1);
-  const ULONG ulH  = pixSH & 255;
-  const ULONG ulA1 = _haze_pubTable[pixS1];
-  const ULONG ulA2 = _haze_pubTable[pixS2];
+  const unsigned long ulH  = pixSH & 255;
+  const unsigned long ulA1 = _haze_pubTable[pixS1];
+  const unsigned long ulA2 = _haze_pubTable[pixS2];
   return ((ulA1*(ulH^255)+ulA2*ulH) * _haze_ulAlpha) >>16;
 }
 

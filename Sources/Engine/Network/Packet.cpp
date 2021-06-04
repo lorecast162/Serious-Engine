@@ -105,7 +105,7 @@ void CPacket::operator=(const CPacket &paOriginal)
 
 
 // Takes data from a pointer, adds the packet header and copies the data to the packet
-BOOL CPacket::WriteToPacket(void* pv,SLONG slSize,UBYTE ubReliable,ULONG ulSequence,UWORD uwClientID,SLONG slTransferSize) 
+BOOL CPacket::WriteToPacket(void* pv,long slSize,UBYTE ubReliable,unsigned long ulSequence,UWORD uwClientID,long slTransferSize) 
 {
 	UBYTE* pubData;
 
@@ -125,13 +125,13 @@ BOOL CPacket::WriteToPacket(void* pv,SLONG slSize,UBYTE ubReliable,ULONG ulSeque
 	*pubData = pa_ubReliable;
 	pubData++;
 
-	*(ULONG*)pubData = pa_ulSequence;
+	*(unsigned long*)pubData = pa_ulSequence;
 	pubData+=sizeof(pa_ulSequence);
 
 	*(UWORD*)pubData = pa_adrAddress.adr_uwID;
 	pubData+=sizeof(pa_adrAddress.adr_uwID);
   
-  *(SLONG*)pubData = pa_slTransferSize;
+  *(long*)pubData = pa_slTransferSize;
 	pubData+=sizeof(pa_slTransferSize);
 
 	// copy the data the packet is to contain
@@ -145,7 +145,7 @@ BOOL CPacket::WriteToPacket(void* pv,SLONG slSize,UBYTE ubReliable,ULONG ulSeque
 
 
 // Takes data from a pointer, reads the packet header and copies the data to the packet
-BOOL CPacket::WriteToPacketRaw(void* pv,SLONG slSize) 
+BOOL CPacket::WriteToPacketRaw(void* pv,long slSize) 
 {
 	UBYTE* pubData;
 
@@ -156,11 +156,11 @@ BOOL CPacket::WriteToPacketRaw(void* pv,SLONG slSize)
 	pubData = (UBYTE*)pv;
 	pa_ubReliable = *pubData;
 	pubData++;
-	pa_ulSequence = *(ULONG*)pubData;
+	pa_ulSequence = *(unsigned long*)pubData;
 	pubData+=sizeof(pa_ulSequence);
   pa_adrAddress.adr_uwID = *(UWORD*)pubData;
 	pubData+=sizeof(pa_adrAddress.adr_uwID);
-  pa_slTransferSize = *(SLONG*)pubData;
+  pa_slTransferSize = *(long*)pubData;
 	pubData+=sizeof(pa_slTransferSize);
 
 	pa_slSize = slSize;
@@ -175,7 +175,7 @@ BOOL CPacket::WriteToPacketRaw(void* pv,SLONG slSize)
 
 // Copies the data from the packet to the location specified by the *pv. 
 // packet header data is skipped
-BOOL CPacket::ReadFromPacket(void* pv,SLONG &slExpectedSize) 
+BOOL CPacket::ReadFromPacket(void* pv,long &slExpectedSize) 
 {
 	UBYTE* pubData;
 
@@ -218,7 +218,7 @@ BOOL CPacket::IsReliableTail()
 };
 
 // return the sequence of a packet
-ULONG CPacket::GetSequence()
+unsigned long CPacket::GetSequence()
 {
 	ASSERT(pa_ubReliable);
 	return pa_ulSequence;
@@ -250,7 +250,7 @@ void CPacket::Drop()
 	}
 };
 
-SLONG CPacket::GetTransferSize() 
+long CPacket::GetTransferSize() 
 {
   return pa_slTransferSize;
 };
@@ -286,7 +286,7 @@ void CPacketBufferStats::Clear(void)
 };
 
 // when can a certian ammount of data be sent?
-CTimerValue CPacketBufferStats::GetPacketSendTime(SLONG slSize) 
+CTimerValue CPacketBufferStats::GetPacketSendTime(long slSize) 
 {
 	CTimerValue tvNow = _pTimer->GetHighPrecisionTimer();
 
@@ -356,7 +356,7 @@ BOOL CPacketBuffer::IsEmpty()
 
 
 // Calculate when the packet can be output from the buffer
-CTimerValue CPacketBuffer::GetPacketSendTime(SLONG slSize) {
+CTimerValue CPacketBuffer::GetPacketSendTime(long slSize) {
 	CTimerValue tvSendTime;
 	
 	// if traffic emulation is in use, use the time with the lower bandwidth limit
@@ -503,7 +503,7 @@ CPacket* CPacketBuffer::GetFirstPacket()
 };
 
 // Reads the data from the packet with the requested sequence, but does not remove it
-CPacket* CPacketBuffer::PeekPacket(ULONG ulSequence)
+CPacket* CPacketBuffer::PeekPacket(unsigned long ulSequence)
 {
 	FOREACHINLIST(CPacket,pa_lnListNode,pb_lhPacketStorage,litPacketIter) {
 		if (litPacketIter->pa_ulSequence == ulSequence) {
@@ -514,7 +514,7 @@ CPacket* CPacketBuffer::PeekPacket(ULONG ulSequence)
 };
 
 // Returns te packet with the matching sequence from the buffer
-CPacket* CPacketBuffer::GetPacket(ULONG ulSequence)
+CPacket* CPacketBuffer::GetPacket(unsigned long ulSequence)
 {
 	
 	FOREACHINLIST(CPacket,pa_lnListNode,pb_lhPacketStorage,litPacketIter) {
@@ -579,7 +579,7 @@ BOOL CPacketBuffer::RemoveFirstPacket(BOOL bDelete) {
 };
 
 // Removes the packet with the requested sequence from the buffer
-BOOL CPacketBuffer::RemovePacket(ULONG ulSequence,BOOL bDelete)
+BOOL CPacketBuffer::RemovePacket(unsigned long ulSequence,BOOL bDelete)
 {
 //	ASSERT(pb_ulNumOfPackets > 0);
 	FORDELETELIST(CPacket,pa_lnListNode,pb_lhPacketStorage,litPacketIter) {
@@ -624,7 +624,7 @@ BOOL CPacketBuffer::RemoveConnectResponsePackets() {
 
 
 // Gets the sequence number of the first packet in the buffer
-ULONG CPacketBuffer::GetFirstSequence()
+unsigned long CPacketBuffer::GetFirstSequence()
 {
 	ASSERT(pb_ulNumOfPackets > 0);
 
@@ -633,7 +633,7 @@ ULONG CPacketBuffer::GetFirstSequence()
 };
 
 // Gets the sequence number of the last packet in the buffer
-ULONG CPacketBuffer::GetLastSequence()
+unsigned long CPacketBuffer::GetLastSequence()
 {
 	ASSERT(pb_ulNumOfPackets > 0);
 
@@ -642,7 +642,7 @@ ULONG CPacketBuffer::GetLastSequence()
 };
 
 // Removes the packet with the requested sequence from the buffer
-BOOL CPacketBuffer::IsSequenceInBuffer(ULONG ulSequence)
+BOOL CPacketBuffer::IsSequenceInBuffer(unsigned long ulSequence)
 {
 	FOREACHINLIST(CPacket,pa_lnListNode,pb_lhPacketStorage,litPacketIter) {
 		if (litPacketIter->pa_ulSequence == ulSequence) {
@@ -654,11 +654,11 @@ BOOL CPacketBuffer::IsSequenceInBuffer(ULONG ulSequence)
 
 
 // Check if the buffer contains a complete sequence of reliable packets	at the start of the buffer
-BOOL CPacketBuffer::CheckSequence(SLONG &slSize)
+BOOL CPacketBuffer::CheckSequence(long &slSize)
 {
 
 	CPacket* paPacket;
-	ULONG ulSequence;
+	unsigned long ulSequence;
 
   slSize=0;
 

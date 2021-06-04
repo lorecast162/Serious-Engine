@@ -56,7 +56,7 @@ void RemapLevelNames(INDEX &iLevel)
 static void LoadingHook_t(CProgressHookInfo *pphi)
 {
   // if user presses escape
-  ULONG ulCheckFlags = 0x8000;
+  unsigned long ulCheckFlags = 0x8000;
   if (pphi->phi_fCompleted>0) {
     ulCheckFlags |= 0x0001;
   }
@@ -100,7 +100,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
 
   // get session properties currently loading
   CSessionProperties *psp = (CSessionProperties *)_pNetwork->GetSessionProperties();
-  ULONG ulLevelMask = psp->sp_ulLevelsMask;
+  unsigned long ulLevelMask = psp->sp_ulLevelsMask;
   if (psp->sp_bCooperative) {
     INDEX iLevel = -1;
     INDEX iLevelNext = -1;
@@ -140,7 +140,7 @@ static void LoadingHook_t(CProgressHookInfo *pphi)
 
   if (ulLevelMask!=0 && !_pNetwork->IsPlayingDemo()) {
     // map hook
-    extern void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi);
+    extern void RenderMap( CDrawPort *pdp, unsigned long ulLevelMask, CProgressHookInfo *pphi);
     RenderMap(&dpHook, ulLevelMask, pphi);
 
     // finish rendering

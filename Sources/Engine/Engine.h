@@ -162,8 +162,8 @@ ENGINE_API void SE_UpdateWindowHandle( HWND hwndWindowed);
 ENGINE_API void SE_PretouchIfNeeded(void);
 
 ENGINE_API extern CTString _strEngineBuild;  // not valid before InitEngine()!
-ENGINE_API extern ULONG _ulEngineBuildMajor;
-ENGINE_API extern ULONG _ulEngineBuildMinor;
+ENGINE_API extern unsigned long _ulEngineBuildMajor;
+ENGINE_API extern unsigned long _ulEngineBuildMinor;
 
 ENGINE_API extern BOOL _bDedicatedServer;
 ENGINE_API extern BOOL _bWorldEditorApp; // is this world editor app

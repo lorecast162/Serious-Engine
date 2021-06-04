@@ -27,15 +27,15 @@ private:
   // Wave data
   WAVEFORMATEX pwi_wfeWave;
   WAVEFORMATEX pwi_wfeDesired;
-  ULONG  pwi_ulRiffLength, pwi_ulDataLength;
+  unsigned long  pwi_ulRiffLength, pwi_ulDataLength;
   BOOL   pwi_bInfoLoaded,  pwi_bDataLoaded; // Status
   SWORD *pwi_pswMemory; // Memory
 
   /* Conversion */
   DOUBLE pwi_dRatio;
   // get and store data
-  inline ULONG GetData_t( CTStream *pCstrInput);
-  inline void  StoreData( ULONG ulData);
+  inline unsigned long GetData_t( CTStream *pCstrInput);
+  inline void  StoreData( unsigned long ulData);
   void CopyData_t(   CTStream *pCstrInput);
   void ShrinkData_t( CTStream *pCstrInput);
 
@@ -51,14 +51,14 @@ public:
   void LoadData_t( CTStream *pCstrInput, SWORD *pswMemory, WAVEFORMATEX &SwfeDesired);
 
   /* Length in bytes / blocks / seconds */
-  ULONG  GetByteLength(void);
-  ULONG  GetDataLength(void);
-  ULONG  GetDataLength( WAVEFORMATEX SwfeDesired);
+  unsigned long  GetByteLength(void);
+  unsigned long  GetDataLength(void);
+  unsigned long  GetDataLength( WAVEFORMATEX SwfeDesired);
   DOUBLE GetSecondsLength(void);
 
   /* Buffer length in bytes */
-  ULONG DetermineBufferSize(void);
-  ULONG DetermineBufferSize( WAVEFORMATEX SwfeDesired);
+  unsigned long DetermineBufferSize(void);
+  unsigned long DetermineBufferSize( WAVEFORMATEX SwfeDesired);
 };
 
 

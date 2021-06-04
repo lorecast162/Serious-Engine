@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CNameTableSlot_TYPE {
 public:
-  ULONG nts_ulKey;      // hashing key
+  unsigned long nts_ulKey;      // hashing key
   TYPE *nts_ptElement;  // the element inhere
   CNameTableSlot_TYPE(void)  { nts_ptElement = NULL; };
   void Clear(void) { nts_ptElement = NULL; };
@@ -40,7 +40,7 @@ public:
   CStaticArray<CNameTableSlot_TYPE > nt_antsSlots;  // all slots are here
 
   // internal finding
-  CNameTableSlot_TYPE *FindSlot(ULONG ulKey, const CTString &strName);
+  CNameTableSlot_TYPE *FindSlot(unsigned long ulKey, const CTString &strName);
   // expand the name table to next step
   void Expand(void);
 

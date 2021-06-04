@@ -28,9 +28,9 @@ struct PolyVertex2D
 };
 
 // functions for rendering triangles
-extern void SetTriangleTexture( ULONG *pulCurrentMipmap, PIX pixMipWidth, PIX pixMipHeight);
+extern void SetTriangleTexture( unsigned long *pulCurrentMipmap, PIX pixMipWidth, PIX pixMipHeight);
 
-extern void DrawTriangle_Mask( UBYTE *pubMaskPlane, SLONG slMaskWidth, SLONG slMaskHeight,
+extern void DrawTriangle_Mask( UBYTE *pubMaskPlane, long slMaskWidth, long slMaskHeight,
                                struct PolyVertex2D *ppv2Vtx1, struct PolyVertex2D *ppv2Vtx2,
                                struct PolyVertex2D *ppv2Vtx3, BOOL bTransparency);
 

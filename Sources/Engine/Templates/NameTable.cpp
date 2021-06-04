@@ -47,7 +47,7 @@ void CNameTable_TYPE::Clear(void)
 }
 
 // internal finding
-CNameTableSlot_TYPE *CNameTable_TYPE::FindSlot(ULONG ulKey, const CTString &strName)
+CNameTableSlot_TYPE *CNameTable_TYPE::FindSlot(unsigned long ulKey, const CTString &strName)
 {
   ASSERT(nt_ctCompartments>0 && nt_ctSlotsPerComp>0);
 
@@ -141,7 +141,7 @@ void CNameTable_TYPE::Add(TYPE *ptNew)
 {
   ASSERT(nt_ctCompartments>0 && nt_ctSlotsPerComp>0);
 
-  ULONG ulKey = ptNew->GetName().GetHash();
+  unsigned long ulKey = ptNew->GetName().GetHash();
 
   // find compartment number
   INDEX iComp = ulKey%nt_ctCompartments;

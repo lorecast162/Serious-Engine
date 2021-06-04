@@ -127,17 +127,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define CT_rASHIFT 24
 
 // global factors for saturation and stuff
-extern SLONG _slTexSaturation;
-extern SLONG _slTexHueShift;
-extern SLONG _slShdSaturation; 
-extern SLONG _slShdHueShift;
+extern long _slTexSaturation;
+extern long _slTexHueShift;
+extern long _slShdSaturation; 
+extern long _slShdHueShift;
 
 
 // COLOR FORMAT CONVERSION ROUTINES
 
-// convert separate R,G and B color components to CroTeam COLOR format (ULONG type)
+// convert separate R,G and B color components to CroTeam COLOR format (unsigned long type)
 __forceinline COLOR RGBToColor( UBYTE const ubR, UBYTE const ubG, UBYTE const ubB) {
-  return ((ULONG)ubR<<CT_RSHIFT) | ((ULONG)ubG<<CT_GSHIFT) | ((ULONG)ubB<<CT_BSHIFT);
+  return ((unsigned long)ubR<<CT_RSHIFT) | ((unsigned long)ubG<<CT_GSHIFT) | ((unsigned long)ubB<<CT_BSHIFT);
 }
 // convert CroTeam COLOR format to separate R,G and B color components
 __forceinline void ColorToRGB( COLOR const col, UBYTE &ubR, UBYTE &ubG, UBYTE &ubB) {
@@ -147,8 +147,8 @@ __forceinline void ColorToRGB( COLOR const col, UBYTE &ubR, UBYTE &ubG, UBYTE &u
 }
 // combine CroTeam COLOR format from separate R,G and B color components
 __forceinline COLOR RGBAToColor( UBYTE const ubR, UBYTE const ubG, UBYTE const ubB, UBYTE const ubA) {
-  return ((ULONG)ubR<<CT_RSHIFT) | ((ULONG)ubG<<CT_GSHIFT)
-       | ((ULONG)ubB<<CT_BSHIFT) | ((ULONG)ubA<<CT_ASHIFT);
+  return ((unsigned long)ubR<<CT_RSHIFT) | ((unsigned long)ubG<<CT_GSHIFT)
+       | ((unsigned long)ubB<<CT_BSHIFT) | ((unsigned long)ubA<<CT_ASHIFT);
 }
 // separate CroTeam COLOR format to R,G and B color components
 __forceinline void ColorToRGBA( COLOR const col, UBYTE &ubR, UBYTE &ubG, UBYTE &ubB, UBYTE &ubA) {
@@ -165,7 +165,7 @@ ENGINE_API extern void  ColorToHSV( COLOR const colSrc, UBYTE &ubH, UBYTE &ubS, 
 
 // convert HSVA components to CroTeam COLOR format
 __forceinline COLOR HSVAToColor( UBYTE const ubH, UBYTE const ubS, UBYTE const ubV, UBYTE const ubA) {
-  return HSVToColor( ubH,ubS,ubV) | ((ULONG)ubA<<CT_ASHIFT);
+  return HSVToColor( ubH,ubS,ubV) | ((unsigned long)ubA<<CT_ASHIFT);
 }
 // convert CroTeam COLOR format to HSVA components
 __forceinline void ColorToHSVA( COLOR const colSrc, UBYTE &ubH, UBYTE &ubS, UBYTE &ubV, UBYTE &ubA) {
@@ -187,7 +187,7 @@ ENGINE_API extern BOOL IsBigger( COLOR const col1, COLOR const col2);
 ENGINE_API extern BOOL CompareChroma( COLOR col1, COLOR col2);
 
 // adjust color saturation and/or hue (hue shift in 0-255 range!)
-ENGINE_API extern COLOR AdjustColor( COLOR const col, SLONG const slHueShift, SLONG const slSaturation);
+ENGINE_API extern COLOR AdjustColor( COLOR const col, long const slHueShift, long const slSaturation);
 ENGINE_API extern COLOR AdjustGamma( COLOR const col, FLOAT const fGamma);
 // color lerping functions
 ENGINE_API extern COLOR LerpColor( COLOR col0, COLOR col1, FLOAT fRatio);
@@ -201,11 +201,11 @@ ENGINE_API extern COLOR AddColors( COLOR col1, COLOR col2); // fast color addito
 
 // converts colors between Croteam, OpenGL and DirectX
 
-__forceinline ULONG ByteSwap( ULONG ul)
+__forceinline unsigned long ByteSwap( unsigned long ul)
 {
 /* rcg10052001 Platform-wrappers. */
 #if (defined __MSVC_INLINE__)
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     mov   eax,dword ptr [ul]
     bswap eax
@@ -235,10 +235,10 @@ __forceinline ULONG ByteSwap( ULONG ul)
 #endif
 }
 
-__forceinline ULONG rgba2argb( ULONG ul)
+__forceinline unsigned long rgba2argb( unsigned long ul)
 {
 #if (defined __MSVC_INLINE__)
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     mov   eax,dword ptr [ul]
     ror   eax,8
@@ -247,7 +247,7 @@ __forceinline ULONG rgba2argb( ULONG ul)
   return ulRet;
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm__ __volatile__ (
     "rorl   $8, %%eax       \n\t"
         : "=a" (ulRet)
@@ -262,10 +262,10 @@ __forceinline ULONG rgba2argb( ULONG ul)
 #endif
 }
 
-__forceinline ULONG abgr2argb( COLOR col)
+__forceinline unsigned long abgr2argb( COLOR col)
 {
 #if (defined __MSVC_INLINE__)
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm {
     mov   eax,dword ptr [col]
     bswap eax
@@ -275,7 +275,7 @@ __forceinline ULONG abgr2argb( COLOR col)
   return ulRet;
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG ulRet;
+  unsigned long ulRet;
   __asm__ __volatile__ (
     "bswapl %%eax           \n\t"
     "rorl   $8, %%eax       \n\t"
@@ -298,11 +298,11 @@ __forceinline ULONG abgr2argb( COLOR col)
 
 
 // multiple conversion from OpenGL color to DirectX color
-extern void abgr2argb( ULONG *pulSrc, ULONG *pulDst, INDEX ct);
+extern void abgr2argb( unsigned long *pulSrc, unsigned long *pulDst, INDEX ct);
 
 
-// fast memory copy of ULONGs
-inline void CopyLongs( ULONG *pulSrc, ULONG *pulDst, INDEX ctLongs)
+// fast memory copy of unsigned longs
+inline void CopyLongs( unsigned long *pulSrc, unsigned long *pulDst, INDEX ctLongs)
 {
 #if (defined __MSVC_INLINE__)
   __asm {
@@ -318,8 +318,8 @@ inline void CopyLongs( ULONG *pulSrc, ULONG *pulDst, INDEX ctLongs)
 }
 
 
-// fast memory set of ULONGs
-inline void StoreLongs( ULONG ulVal, ULONG *pulDst, INDEX ctLongs)
+// fast memory set of unsigned longs
+inline void StoreLongs( unsigned long ulVal, unsigned long *pulDst, INDEX ctLongs)
 {
 #if (defined __MSVC_INLINE__)
   __asm {

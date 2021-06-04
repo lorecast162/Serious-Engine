@@ -180,10 +180,10 @@ FLOAT CBrushShadowLayer::GetLightStrength(PIX pixU, PIX pixV, FLOAT fLRRatio, FL
   // get the coordinates of the four pixels
   PIX pixU0 = pixU-bsl_pixMinU; PIX pixU1 = Min(pixU0+1, bsl_pixSizeU-1);
   PIX pixV0 = pixV-bsl_pixMinV; PIX pixV1 = Min(pixV0+1, bsl_pixSizeV-1);
-  ULONG ulOffsetUL = pixU0+pixV0*bsl_pixSizeU;
-  ULONG ulOffsetUR = pixU1+pixV0*bsl_pixSizeU;
-  ULONG ulOffsetDL = pixU0+pixV1*bsl_pixSizeU;
-  ULONG ulOffsetDR = pixU1+pixV1*bsl_pixSizeU;
+  unsigned long ulOffsetUL = pixU0+pixV0*bsl_pixSizeU;
+  unsigned long ulOffsetUR = pixU1+pixV0*bsl_pixSizeU;
+  unsigned long ulOffsetDL = pixU0+pixV1*bsl_pixSizeU;
+  unsigned long ulOffsetDR = pixU1+pixV1*bsl_pixSizeU;
   // get light at the four pixels
   FLOAT fUL=0.0f, fUR=0.0f, fDL=0.0f, fDR=0.0f;
   if (bsl_pubLayer[ulOffsetUL/8]&(1<<(ulOffsetUL%8))) { fUL = 1.0f; };
@@ -221,7 +221,7 @@ void CBrushShadowMap::ReadLayers_t( CTStream *pstrm)  // throw char *
       *pstrm>>pbsl->bsl_ulFlags;    // flags
       // if it is new version
       if (pbsl->bsl_ulFlags&BSLF_RECTANGLE) {
-        SLONG slLayerSize;
+        long slLayerSize;
         *pstrm>>slLayerSize;
         if (slLayerSize != 0) {
           pbsl->bsl_pubLayer = (UBYTE *)AllocMemory(slLayerSize);
@@ -238,7 +238,7 @@ void CBrushShadowMap::ReadLayers_t( CTStream *pstrm)  // throw char *
       // if it is old version
       } else {
         // skip it
-        SLONG slLayerSize;
+        long slLayerSize;
         *pstrm>>slLayerSize;
         if (slLayerSize != 0) {
           pstrm->Seek_t(slLayerSize, CTStream::SD_CUR);
@@ -277,7 +277,7 @@ void CBrushShadowMap::ReadLayers_t( CTStream *pstrm)  // throw char *
 
       // read the layer data
       *pstrm>>pbsl->bsl_ulFlags;    // flags
-      SLONG slLayerSize;
+      long slLayerSize;
       *pstrm>>slLayerSize;
       if (slLayerSize != 0) {
         pstrm->Seek_t(slLayerSize, CTStream::SD_CUR);
@@ -322,7 +322,7 @@ void CBrushShadowMap::ReadLayers_t( CTStream *pstrm)  // throw char *
       *pstrm>>pbsl->bsl_ulFlags;    // flags
       *pstrm>>pbsl->bsl_slSizeInPixels;
       if (pbsl->bsl_slSizeInPixels != 0) {
-        SLONG slLayerSize = (pbsl->bsl_slSizeInPixels+7)/8;
+        long slLayerSize = (pbsl->bsl_slSizeInPixels+7)/8;
         pbsl->bsl_pubLayer = (UBYTE *)AllocMemory(slLayerSize);
         pstrm->Read_t(pbsl->bsl_pubLayer, slLayerSize); // the bit packed layer mask
       } else {
@@ -382,10 +382,10 @@ void CBrushShadowMap::WriteLayers_t( CTStream *pstrm) // throw char *
     // write the layer data
     *pstrm<<bsl.bsl_ulFlags;    // flags
     if (bsl.bsl_pubLayer == NULL ) {
-      *pstrm<<SLONG(0);
+      *pstrm<<long(0);
     } else {
       *pstrm<<bsl.bsl_slSizeInPixels;
-      SLONG slLayerSize = (bsl.bsl_slSizeInPixels+7)/8;
+      long slLayerSize = (bsl.bsl_slSizeInPixels+7)/8;
       pstrm->Write_t(bsl.bsl_pubLayer, slLayerSize); // the bit packed layer mask
     }
     // write layer rectangle
@@ -604,7 +604,7 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
 
   COLOR col;
   UBYTE ubR,ubG,ubB, ubR1,ubG1,ubB1;
-  SLONG slR=0,slG=0,slB=0;
+  long slR=0,slG=0,slB=0;
   //INDEX ctPointLights=0;
   CBrushPolygon *pbpo = GetBrushPolygon();
 
@@ -620,7 +620,7 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
   slR += ubR;  slG += ubG;  slB += ubB; 
 
   // if gradient layer is present
-  const ULONG ulGradientType = pbpo->bpo_bppProperties.bpp_ubGradientType;
+  const unsigned long ulGradientType = pbpo->bpo_bppProperties.bpp_ubGradientType;
   if( ulGradientType>0)
   { 
     CGradientParameters gp;
@@ -631,9 +631,9 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
       // unless it has been forced
       ColorToRGB( gp.gp_col0, ubR, ubG, ubB);
       ColorToRGB( gp.gp_col1, ubR1,ubG1,ubB1);
-      const SLONG slAvgR = ((ULONG)ubR + ubR1) /2;
-      const SLONG slAvgG = ((ULONG)ubG + ubG1) /2;
-      const SLONG slAvgB = ((ULONG)ubB + ubB1) /2;
+      const long slAvgR = ((unsigned long)ubR + ubR1) /2;
+      const long slAvgG = ((unsigned long)ubG + ubG1) /2;
+      const long slAvgB = ((unsigned long)ubB + ubB1) /2;
       if( gp.gp_bDark) { slR -= slAvgR;  slG -= slAvgG;  slB -= slAvgB; }
       else             { slR += slAvgR;  slG += slAvgG;  slB += slAvgB; }
     }
@@ -675,7 +675,7 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
         const FLOAT fIntensity = -((pbpo->bpo_pbplPlane->bpl_plAbsolute)%vLightDirection);
         // done if polygon is turn away from light source (we already added ambient component)
         if( fIntensity<0.01f) continue;
-        ULONG ulIntensity = NormFloatToByte(fIntensity);
+        unsigned long ulIntensity = NormFloatToByte(fIntensity);
         ulIntensity = (ulIntensity<<CT_RSHIFT) | (ulIntensity<<CT_GSHIFT) | (ulIntensity<<CT_BSHIFT);
         col = MulColors( col, ulIntensity);
       }
@@ -721,15 +721,15 @@ BOOL CBrushShadowMap::IsShadowFlat( COLOR &colFlat)
 
 
 // get amount of memory used by this object
-SLONG CBrushShadowMap::GetUsedMemory(void)
+long CBrushShadowMap::GetUsedMemory(void)
 {
   // basic size of class
-  SLONG slUsedMemory = sizeof(CBrushShadowMap);
+  long slUsedMemory = sizeof(CBrushShadowMap);
 
   // add polyhon mask (if any)
   if( bsm_pubPolygonMask!=NULL) {
     // loop and add mip-maps
-    SLONG slPolyMaskSize = 0;
+    long slPolyMaskSize = 0;
     PIX pixPolySizeU = sm_pixPolygonSizeU;
     PIX pixPolySizeV = sm_pixPolygonSizeV;
     while( pixPolySizeU>0 && pixPolySizeV>0) {

@@ -208,7 +208,7 @@ void CBrushSector::FromObjectSector_t(CObjectSector &osc) // throw char *
     memcpy(&bpo.bpo_abptTextures[2].bpt_auProperties,
       pubUserData+sizePolygonProperties+2*sizeTextureProperties,
       sizeTextureProperties);
-    bpo.bpo_colShadow = *(ULONG*)(pubUserData+sizePolygonProperties+3*sizeTextureProperties),
+    bpo.bpo_colShadow = *(unsigned long*)(pubUserData+sizePolygonProperties+3*sizeTextureProperties),
 
     // set polygon flags
     bpo.bpo_ulFlags = opo.opo_ulFlags & ~(OPOF_IGNOREDBYCSG|BPOF_SELECTED);

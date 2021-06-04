@@ -52,7 +52,7 @@ public:
   FLOAT ci_fHandleY;  // y coordinate of handle sphere to stand on
   FLOAT ci_fHandleR;  // radius of handle sphere to stand on
   FLOATaabbox3D ci_boxCurrent;  // current bounding box
-  ULONG ci_ulFlags;
+  unsigned long ci_ulFlags;
 
   CCollisionInfo(void) {};
   CCollisionInfo(const CCollisionInfo &ciOrg);

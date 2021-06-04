@@ -754,10 +754,10 @@ void RenderMessagePicture(CDrawPort *pdp)
 void RenderMessageStats(CDrawPort *pdp)
 {
   CSessionProperties *psp = (CSessionProperties *)_pNetwork->GetSessionProperties();
-  ULONG ulLevelMask = psp->sp_ulLevelsMask;
+  unsigned long ulLevelMask = psp->sp_ulLevelsMask;
   //INDEX iLevel = -1;
   if (psp->sp_bCooperative) {
-    extern void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi);
+    extern void RenderMap( CDrawPort *pdp, unsigned long ulLevelMask, CProgressHookInfo *pphi);
     if (pdp->Lock()) {
       // get sizes
       PIX pixSizeI = pdp->GetWidth();
@@ -1245,7 +1245,7 @@ void CGame::ComputerRender(CDrawPort *pdp)
 
   // get current time and alpha value
   //FLOAT tmNow = (FLOAT)tvNow.GetSeconds();
-  //ULONG ulA   = NormFloatToByte(fComputerFadeValue);
+  //unsigned long ulA   = NormFloatToByte(fComputerFadeValue);
 
   _colLight  = LCDFadedColor(C_WHITE|255);
   _colMedium = LCDFadedColor(SE_COL_BLUE_LIGHT|255);

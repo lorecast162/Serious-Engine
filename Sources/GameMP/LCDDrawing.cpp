@@ -23,7 +23,7 @@ static PIX _pixSizeI;
 static PIX _pixSizeJ;
 static PIXaabbox2D _boxScreen;
 static FLOAT _tmNow;
-static ULONG _ulA;
+static unsigned long _ulA;
 
 // rcg11162001 Made static to fix duplicate symbol resolution issue.
 static CDrawPort *_pdp = NULL;

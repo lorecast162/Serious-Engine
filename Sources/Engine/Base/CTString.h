@@ -76,7 +76,7 @@ public:
   INDEX TrimSpacesLeft(void);
   INDEX TrimSpacesRight(void);
   /* Calcuate hashing value for the string. */
-  ULONG GetHash(void) const;
+  unsigned long GetHash(void) const;
   // retain only first line of the string
   void OnlyFirstLine(void);
 

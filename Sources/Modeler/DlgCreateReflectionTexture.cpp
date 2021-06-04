@@ -604,7 +604,7 @@ static BOOL bWeStartedMouseDown = FALSE;
 
 BOOL CDlgCreateReflectionTexture::PreTranslateMessage(MSG* pMsg) 
 {
-  ULONG fwKeys = pMsg->wParam;
+  unsigned long fwKeys = pMsg->wParam;
   PIX xPos = LOWORD(pMsg->lParam);
   PIX yPos = HIWORD(pMsg->lParam);
   CPoint point = CPoint(xPos, yPos);

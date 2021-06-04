@@ -31,7 +31,7 @@ public:
   CTFileName cl_fnmTexture;
   PIXaabbox2D cl_boxIcon;
   CTString cl_strText;
-  ULONG cl_ulValue;
+  unsigned long cl_ulValue;
   COLOR cl_colText;
 };
 
@@ -61,7 +61,7 @@ public:
     PIX pixX, PIX pixY, BOOL bDown=FALSE);
   INDEX InsertItem( CTString strText, CTFileName fnIcons=CTString(""), 
     MEXaabbox2D boxIcon=MEXaabbox2D( MEX2D(0,0), MEX2D(0,0)));
-  void SetItemValue(INDEX iItem, ULONG ulValue);
+  void SetItemValue(INDEX iItem, unsigned long ulValue);
   void SetItemColor(INDEX iItem, COLOR col);
 
 // Overrides

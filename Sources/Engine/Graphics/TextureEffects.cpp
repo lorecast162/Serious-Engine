@@ -89,7 +89,7 @@ SBYTE asbMod3Sub1Table[256];
 static BOOL  bTableSet = FALSE;
 
 static CTextureData *_ptdEffect, *_ptdBase;
-static ULONG _ulBufferMask;
+static unsigned long _ulBufferMask;
 static INDEX _iWantedMipLevel;
 static UBYTE *_pubDrawBuffer;
 static SWORD *_pswDrawBuffer;
@@ -99,15 +99,15 @@ PIX _pixBufferWidth, _pixBufferHeight;
 
 
 // randomizer
-ULONG ulRNDSeed;
+unsigned long ulRNDSeed;
 
-inline void Randomize( ULONG ulSeed)
+inline void Randomize( unsigned long ulSeed)
 {
   if( ulSeed==0) ulSeed = 0x87654321;
   ulRNDSeed = ulSeed*262147;
 };
 
-inline ULONG Rnd(void)
+inline unsigned long Rnd(void)
 {
 	ulRNDSeed = ulRNDSeed*262147;
   return ulRNDSeed;
@@ -119,7 +119,7 @@ inline ULONG Rnd(void)
 
 // Initialize the texture effect source.
 void CTextureEffectSource::Initialize( class CTextureEffectGlobal *ptegGlobalEffect,
-                                       ULONG ulEffectSourceType, PIX pixU0, PIX pixV0,
+                                       unsigned long ulEffectSourceType, PIX pixU0, PIX pixV0,
                                        PIX pixU1, PIX pixV1)
 { // remember global effect for cross linking
   tes_ptegGlobalEffect = ptegGlobalEffect;
@@ -147,29 +147,29 @@ void CTextureEffectSource::Animate(void)
 
 
 // ----------------------------------------
-//            SLONG WATER
+//            long WATER
 // ----------------------------------------
-inline void PutPixelSLONG_WATER( PIX pixU, PIX pixV, INDEX iHeight)
+inline void PutPixellong_WATER( PIX pixU, PIX pixV, INDEX iHeight)
 {
   _pswDrawBuffer[(pixV*_pixBufferWidth+pixU)&_ulBufferMask] += iHeight;
 }
 
-inline void PutPixel9SLONG_WATER( PIX pixU, PIX pixV, INDEX iHeightMid)
+inline void PutPixel9long_WATER( PIX pixU, PIX pixV, INDEX iHeightMid)
 {
   INDEX iHeightSide = (iHeightMid*28053) >>16;  // iHeight /0.851120 *0.364326;
   INDEX iHeightDiag = (iHeightMid*12008) >>16;  // iHeight /0.851120 *0.155951;
 
-  PutPixelSLONG_WATER( pixU-1, pixV-1, iHeightDiag);
-  PutPixelSLONG_WATER( pixU,   pixV-1, iHeightSide);
-  PutPixelSLONG_WATER( pixU+1, pixV-1, iHeightDiag);
+  PutPixellong_WATER( pixU-1, pixV-1, iHeightDiag);
+  PutPixellong_WATER( pixU,   pixV-1, iHeightSide);
+  PutPixellong_WATER( pixU+1, pixV-1, iHeightDiag);
 
-  PutPixelSLONG_WATER( pixU-1, pixV,   iHeightSide);
-  PutPixelSLONG_WATER( pixU,   pixV,   iHeightMid);
-  PutPixelSLONG_WATER( pixU+1, pixV,   iHeightSide);
+  PutPixellong_WATER( pixU-1, pixV,   iHeightSide);
+  PutPixellong_WATER( pixU,   pixV,   iHeightMid);
+  PutPixellong_WATER( pixU+1, pixV,   iHeightSide);
 
-  PutPixelSLONG_WATER( pixU-1, pixV+1, iHeightDiag);
-  PutPixelSLONG_WATER( pixU,   pixV+1, iHeightSide);
-  PutPixelSLONG_WATER( pixU+1, pixV+1, iHeightDiag);
+  PutPixellong_WATER( pixU-1, pixV+1, iHeightDiag);
+  PutPixellong_WATER( pixU,   pixV+1, iHeightSide);
+  PutPixellong_WATER( pixU+1, pixV+1, iHeightDiag);
 }
 
 
@@ -269,10 +269,10 @@ void AnimateRandomSurfer(CTextureEffectSource *ptes)
   Surfer &sf =
     (*((Surfer *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
 
-  PutPixel9SLONG_WATER((long) sf.fU, (long) sf.fV, 125);
+  PutPixel9long_WATER((long) sf.fU, (long) sf.fV, 125);
   sf.fU += 2*sin(sf.fAngle);
   sf.fV += 2*cos(sf.fAngle);
-  PutPixel9SLONG_WATER((long) sf.fU, (long) sf.fV, 250);
+  PutPixel9long_WATER((long) sf.fU, (long) sf.fV, 250);
 
   if((RNDW&15)==0) {
     sf.fAngle += 3.14f/7.0f;
@@ -326,7 +326,7 @@ void AnimateRaindrops(CTextureEffectSource *ptes, int iHeight)
       rd.iIndex++;
 
       if (rd.iIndex < 8) {
-        PutPixel9SLONG_WATER(rd.pixU, rd.pixV, (long) sin(rd.iIndex/4.0f*(-3.14f))*rd.iHeight);
+        PutPixel9long_WATER(rd.pixU, rd.pixV, (long) sin(rd.iIndex/4.0f*(-3.14f))*rd.iHeight);
       }
     } else {
       rd.pixU = RNDW&(_pixBufferWidth -1);  
@@ -369,7 +369,7 @@ void AnimateOscilator(CTextureEffectSource *ptes)
 {
   Oscilator &os =
     (*((Oscilator *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
-  PutPixel9SLONG_WATER(os.pixU, os.pixV, (long) sin(os.fAngle)*150);
+  PutPixel9long_WATER(os.pixU, os.pixV, (long) sin(os.fAngle)*150);
   os.fAngle += (3.14f/6);
 }
 
@@ -403,7 +403,7 @@ void AnimateVertLine(CTextureEffectSource *ptes)
     (*((VertLine *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
   PIX pixV = vl.pixV;
   for (int iCnt=0; iCnt<vl.uwSize; iCnt++) {
-    PutPixelSLONG_WATER(vl.pixU, pixV, (long) (sin(vl.fAngle)*25));
+    PutPixellong_WATER(vl.pixU, pixV, (long) (sin(vl.fAngle)*25));
     pixV = (pixV+1)&(_pixBufferHeight-1);
   }
   vl.fAngle += (3.14f/6);
@@ -439,7 +439,7 @@ void AnimateHortLine(CTextureEffectSource *ptes)
     (*((HortLine *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
   PIX pixU = hl.pixU;
   for (int iCnt=0; iCnt<hl.uwSize; iCnt++) {
-    PutPixelSLONG_WATER(pixU, hl.pixV, (long) (sin(hl.fAngle)*25));
+    PutPixellong_WATER(pixU, hl.pixV, (long) (sin(hl.fAngle)*25));
     pixU = (pixU+1)&(_pixBufferWidth-1);
   }
   hl.fAngle += (3.14f/6);
@@ -540,10 +540,10 @@ void AnimateFirePlace(CTextureEffectSource *ptes)
   INDEX iIndex;
   FirePlace &fp =
     (*((FirePlace *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
-  ULONG ulRND = RNDW&255;
+  unsigned long ulRND = RNDW&255;
   // match
   if (ulRND>200) {
-    ULONG ulMatchIndex = ulRND%(fp.ubWidth-5);
+    unsigned long ulMatchIndex = ulRND%(fp.ubWidth-5);
     for (iIndex=0; iIndex<5; iIndex++) {
       fp.aubFire[ulMatchIndex+iIndex] = 255;
     }
@@ -640,8 +640,8 @@ void AnimateFireRoler(CTextureEffectSource *ptes)
 struct FireFall{
   UBYTE pixU;
   UBYTE pixV;
-  ULONG ulWidth;
-  ULONG ulPointToReinitialize;
+  unsigned long ulWidth;
+  unsigned long ulPointToReinitialize;
 };
 
 struct FireFallPixel{
@@ -712,9 +712,9 @@ void AnimateFireFall(CTextureEffectSource *ptes)
 struct FireFountain{
   UBYTE pixU;
   UBYTE pixV;
-  ULONG ulWidth;
-  ULONG ulBaseHeight;
-  ULONG ulRandomHeight;
+  unsigned long ulWidth;
+  unsigned long ulBaseHeight;
+  unsigned long ulRandomHeight;
 
 };
 
@@ -796,9 +796,9 @@ void AnimateFireFountain(CTextureEffectSource *ptes)
 struct FireSideFountain{
   UBYTE pixU;
   UBYTE pixV;
-  ULONG ulBaseWidth;
-  ULONG ulRandomWidth;
-  ULONG ulSide;
+  unsigned long ulBaseWidth;
+  unsigned long ulRandomWidth;
+  unsigned long ulSide;
 };
 
 struct FireSideFountainPixel{
@@ -883,7 +883,7 @@ struct FireLightning{
   FLOAT fvNormalU;
   FLOAT fvNormalV;
   FLOAT fDistance;
-  SLONG slCnt;
+  long slCnt;
 };
 
 void InitializeFireLightning(CTextureEffectSource *ptes,
@@ -916,8 +916,8 @@ void AnimateFireLightning(CTextureEffectSource *ptes)
 {
   FLOAT fU, fV, fLastU, fLastV;
   FLOAT fDU, fDV, fCnt;
-  SLONG slRND;
-  ULONG ulDist;
+  long slRND;
+  unsigned long ulDist;
 
   FireLightning &fl =
     (*((FireLightning *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
@@ -940,7 +940,7 @@ void AnimateFireLightning(CTextureEffectSource *ptes)
         fU = fl.fpixUFrom + fl.fvU*(FLOAT)ulDist;
         fV = fl.fpixVFrom + fl.fvV*(FLOAT)ulDist;
         // move point offset on normal line
-        slRND = (SLONG) (RNDW%11)-5;
+        slRND = (long) (RNDW%11)-5;
         fU += fl.fvNormalU*(FLOAT)slRND;
         fV += fl.fvNormalV*(FLOAT)slRND;
       }
@@ -997,8 +997,8 @@ void AnimateFireLightningBall(CTextureEffectSource *ptes)
   FLOAT fU, fV, fLastU, fLastV, fvU, fvV, fvNormalU, fvNormalV;
   FLOAT fDU, fDV, fCnt, fDistance;
   FLOAT fDestU, fDestV, fAngle;
-  SLONG slRND;
-  ULONG ulDist;
+  long slRND;
+  unsigned long ulDist;
 
   FireLightningBall &flb =
     (*((FireLightningBall *) ptes->tes_tespEffectSourceProperties.tesp_achDummy));
@@ -1031,7 +1031,7 @@ void AnimateFireLightningBall(CTextureEffectSource *ptes)
         fU = flb.fpixU + fvU*(FLOAT)ulDist;
         fV = flb.fpixV + fvV*(FLOAT)ulDist;
         // move point offset on normal line
-        slRND = (SLONG) (RNDW%11)-5;
+        slRND = (long) (RNDW%11)-5;
         fU += fvNormalU*(FLOAT)slRND;
         fV += fvNormalV*(FLOAT)slRND;
       }
@@ -1131,14 +1131,14 @@ void AnimateFireSmoke(CTextureEffectSource *ptes)
 
 void InitializeWater(void)
 {
-  Randomize( (ULONG)(_pTimer->GetHighPrecisionTimer().GetMilliseconds()));
+  Randomize( (unsigned long)(_pTimer->GetHighPrecisionTimer().GetMilliseconds()));
 }
 
 
 /*******************************
        Water Animation
 ********************************/
-static void AnimateWater( SLONG slDensity)
+static void AnimateWater( long slDensity)
 {
   _sfStats.StartTimer(CStatForm::STI_EFFECTRENDER);
 
@@ -1149,18 +1149,18 @@ static void AnimateWater( SLONG slDensity)
 
   PIX pixV, pixU;
   PIX pixOffset, iNew;
-  SLONG slLineAbove, slLineBelow, slLineLeft, slLineRight;
+  long slLineAbove, slLineBelow, slLineLeft, slLineRight;
 
   // inner rectangle (without 1 pixel top and bottom line)
   pixOffset = _pixBufferWidth + 1;
   for( pixV=_pixBufferHeight-2; pixV>0; pixV--) {
     for( pixU=_pixBufferWidth; pixU>0; pixU--) {
-      iNew = (( (SLONG)pOld[pixOffset - _pixBufferWidth]
-              + (SLONG)pOld[pixOffset + _pixBufferWidth]
-              + (SLONG)pOld[pixOffset - 1]
-              + (SLONG)pOld[pixOffset + 1]
+      iNew = (( (long)pOld[pixOffset - _pixBufferWidth]
+              + (long)pOld[pixOffset + _pixBufferWidth]
+              + (long)pOld[pixOffset - 1]
+              + (long)pOld[pixOffset + 1]
              ) >> 1)
-              - (SLONG)pNew[pixOffset];
+              - (long)pNew[pixOffset];
       pNew[pixOffset] =  iNew - (iNew >> slDensity);
       pixOffset++;
     }
@@ -1173,12 +1173,12 @@ static void AnimateWater( SLONG slDensity)
   slLineRight = 2;
   pixOffset = 1;
   for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-    iNew = (( (SLONG)pOld[slLineAbove]
-            + (SLONG)pOld[slLineBelow]
-            + (SLONG)pOld[slLineLeft]
-            + (SLONG)pOld[slLineRight]
+    iNew = (( (long)pOld[slLineAbove]
+            + (long)pOld[slLineBelow]
+            + (long)pOld[slLineLeft]
+            + (long)pOld[slLineRight]
            ) >> 1)
-            - (SLONG)pNew[pixOffset];
+            - (long)pNew[pixOffset];
     pNew[pixOffset] =  iNew - (iNew >> slDensity);
     slLineAbove++;
     slLineBelow++;
@@ -1193,12 +1193,12 @@ static void AnimateWater( SLONG slDensity)
   slLineRight = ((_pixBufferHeight-1)*_pixBufferWidth) + 2;
   pixOffset = ((_pixBufferHeight-1)*_pixBufferWidth) + 1;
   for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-    iNew = (( (SLONG)pOld[slLineAbove]
-            + (SLONG)pOld[slLineBelow]
-            + (SLONG)pOld[slLineLeft]
-            + (SLONG)pOld[slLineRight]
+    iNew = (( (long)pOld[slLineAbove]
+            + (long)pOld[slLineBelow]
+            + (long)pOld[slLineLeft]
+            + (long)pOld[slLineRight]
            ) >> 1)
-            - (SLONG)pNew[pixOffset];
+            - (long)pNew[pixOffset];
     pNew[pixOffset] =  iNew - (iNew >> slDensity);
     slLineAbove++;
     slLineBelow++;
@@ -1207,36 +1207,36 @@ static void AnimateWater( SLONG slDensity)
     pixOffset++;
   }
   // corner ( 0, 0)
-  iNew = (( (SLONG)pOld[_pixBufferWidth]
-          + (SLONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
-          + (SLONG)pOld[1]
-          + (SLONG)pOld[_pixBufferWidth-1]
+  iNew = (( (long)pOld[_pixBufferWidth]
+          + (long)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
+          + (long)pOld[1]
+          + (long)pOld[_pixBufferWidth-1]
          ) >> 1)
-          - (SLONG)pNew[0];
+          - (long)pNew[0];
   pNew[0] =  iNew - (iNew >> slDensity);
   // corner ( 0, _pixBufferWidth)
-  iNew = (( (SLONG)pOld[(2*_pixBufferWidth) - 1]
-          + (SLONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
-          + (SLONG)pOld[0]
-          + (SLONG)pOld[_pixBufferWidth-2]
+  iNew = (( (long)pOld[(2*_pixBufferWidth) - 1]
+          + (long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+          + (long)pOld[0]
+          + (long)pOld[_pixBufferWidth-2]
          ) >> 1)
-          - (SLONG)pNew[_pixBufferWidth-1];
+          - (long)pNew[_pixBufferWidth-1];
   pNew[_pixBufferWidth-1] =  iNew - (iNew >> slDensity);
   // corner ( _pixBufferHeight, 0)
-  iNew = (( (SLONG)pOld[0]
-          + (SLONG)pOld[(_pixBufferHeight-2)*_pixBufferWidth]
-          + (SLONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1]
-          + (SLONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+  iNew = (( (long)pOld[0]
+          + (long)pOld[(_pixBufferHeight-2)*_pixBufferWidth]
+          + (long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1]
+          + (long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
          ) >> 1)
-          - (SLONG)pNew[(_pixBufferHeight-1)*_pixBufferWidth];
+          - (long)pNew[(_pixBufferHeight-1)*_pixBufferWidth];
   pNew[(_pixBufferHeight-1)*_pixBufferWidth] =  iNew - (iNew >> slDensity);
   // corner ( _pixBufferHeight, _pixBufferWidth)
-  iNew = (( (SLONG)pOld[_pixBufferWidth-1]
-          + (SLONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1]
-          + (SLONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
-          + (SLONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
+  iNew = (( (long)pOld[_pixBufferWidth-1]
+          + (long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1]
+          + (long)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
+          + (long)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
          ) >> 1)
-          - (SLONG)pNew[(_pixBufferHeight*_pixBufferWidth) - 1];
+          - (long)pNew[(_pixBufferHeight*_pixBufferWidth) - 1];
   pNew[(_pixBufferHeight*_pixBufferWidth) - 1] =  iNew - (iNew >> slDensity);
 
   // swap buffers
@@ -1250,9 +1250,9 @@ static void AnimateWater( SLONG slDensity)
 //////////////////////////// displace texture
 
 
-#define PIXEL(u,v) pulTextureBase[ ((u)&(SLONG&)mmBaseWidthMask) + ((v)&(SLONG&)mmBaseHeightMask) *pixBaseWidth]
+#define PIXEL(u,v) pulTextureBase[ ((u)&(long&)mmBaseWidthMask) + ((v)&(long&)mmBaseHeightMask) *pixBaseWidth]
 
-ULONG _slHeightMapStep_renderWater = 0;
+unsigned long _slHeightMapStep_renderWater = 0;
 PIX _pixBaseWidth_renderWater = 0;
 
 #pragma warning(disable: 4731)
@@ -1261,10 +1261,10 @@ static void RenderWater(void)
   _sfStats.StartTimer(CStatForm::STI_EFFECTRENDER);
 
   // get textures' parameters
-  ULONG *pulTexture     = _ptdEffect->td_pulFrames;
+  unsigned long *pulTexture     = _ptdEffect->td_pulFrames;
   PIX pixBaseWidth      = _ptdBase->GetPixWidth();
   PIX pixBaseHeight     = _ptdBase->GetPixHeight();
-  ULONG *pulTextureBase = _ptdBase->td_pulFrames
+  unsigned long *pulTextureBase = _ptdBase->td_pulFrames
                         + GetMipmapOffset( _iWantedMipLevel, pixBaseWidth, pixBaseHeight);
   pixBaseWidth   >>= _iWantedMipLevel;
   pixBaseHeight  >>= _iWantedMipLevel;
@@ -1281,7 +1281,7 @@ static void RenderWater(void)
   // execute corresponding displace routine
   if( _pixBufferWidth >= _pixTexWidth)
   { // SUB-SAMPLING
-    SLONG slHeightMapStep, slHeightRowStep;
+    long slHeightMapStep, slHeightRowStep;
 
 #if (defined __MSVC_INLINE__)
     __asm {
@@ -1468,10 +1468,10 @@ pixLoop:
       for( PIX pixU=0; pixU<_pixTexWidth; pixU++)
       { // texel loop
         pixPos =  pswHeightMap[0];
-        pixDU  = (pswHeightMap[1]               - pixPos) >>(SLONG&)mmShift;
-        pixDV  = (pswHeightMap[_pixBufferWidth] - pixPos) >>(SLONG&)mmShift;
-        pixDU  = (pixU +pixDU) & (SLONG&)mmBaseWidthMask;
-        pixDV  = (pixV +pixDV) & (SLONG&)mmBaseHeightMask;
+        pixDU  = (pswHeightMap[1]               - pixPos) >>(long&)mmShift;
+        pixDV  = (pswHeightMap[_pixBufferWidth] - pixPos) >>(long&)mmShift;
+        pixDU  = (pixU +pixDU) & (long&)mmBaseWidthMask;
+        pixDV  = (pixV +pixDV) & (long&)mmBaseHeightMask;
         *pulTexture++ = pulTextureBase[pixDV*pixBaseWidth + pixDU];
         // advance to next texel in height map
         pswHeightMap += slHeightMapStep;
@@ -1770,8 +1770,8 @@ pixLoop2:
 
 #else
 
-    SLONG slU_00, slU_01, slU_10, slU_11;
-    SLONG slV_00, slV_01, slV_10, slV_11;
+    long slU_00, slU_01, slU_10, slU_11;
+    long slV_00, slV_01, slV_10, slV_11;
     for( PIX pixV=0; pixV<_pixBufferHeight; pixV++)
     { // row loop
       for( PIX pixU=0; pixU<_pixBufferWidth; pixU++)
@@ -2503,8 +2503,8 @@ pixLoop4:
 
 #else
 
-    SLONG slU_00, slU_01, slU_10, slU_11;
-    SLONG slV_00, slV_01, slV_10, slV_11;
+    long slU_00, slU_01, slU_10, slU_11;
+    long slV_00, slV_01, slV_10, slV_11;
     mmBaseWidthShift = FastLog2( pixBaseWidth);        // faster multiplying with shift
     for( PIX pixV=0; pixV<_pixBufferHeight; pixV++)
     { // row loop
@@ -2565,7 +2565,7 @@ pixLoop4:
 
 void InitializeFire(void)
 {
-  Randomize( (ULONG)(_pTimer->GetHighPrecisionTimer().GetMilliseconds()));
+  Randomize( (unsigned long)(_pTimer->GetHighPrecisionTimer().GetMilliseconds()));
 }
         
 enum PlasmaType {
@@ -2579,7 +2579,7 @@ enum PlasmaType {
 /*******************************
        Plasma Animation
 ********************************/
-static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
+static void AnimatePlasma( long slDensity, PlasmaType eType)
 {
   _sfStats.StartTimer(CStatForm::STI_EFFECTRENDER);
 
@@ -2590,8 +2590,8 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
 
   PIX pixV, pixU;
   PIX pixOffset;
-  SLONG slLineAbove, slLineBelow, slLineLeft, slLineRight;
-  ULONG ulNew;
+  long slLineAbove, slLineBelow, slLineLeft, slLineRight;
+  unsigned long ulNew;
 
   // --------------------------
   //        Normal plasma
@@ -2601,12 +2601,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
     pixOffset = _pixBufferWidth;
     for( pixV=1; pixV<_pixBufferHeight-1; pixV++) {
       for( pixU=0; pixU<_pixBufferWidth; pixU++) {
-        ulNew = ((((ULONG)pOld[pixOffset - _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset + _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset - 1] +
-                   (ULONG)pOld[pixOffset + 1]
+        ulNew = ((((unsigned long)pOld[pixOffset - _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset + _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset - 1] +
+                   (unsigned long)pOld[pixOffset + 1]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[pixOffset] = ulNew - (ulNew >> slDensity);
         pixOffset++;
@@ -2619,12 +2619,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
     slLineRight = 2;
     pixOffset = 1;
     for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-      ulNew = ((((ULONG)pOld[slLineAbove] +
-                 (ULONG)pOld[slLineBelow] +
-                 (ULONG)pOld[slLineLeft] +
-                 (ULONG)pOld[slLineRight]
+      ulNew = ((((unsigned long)pOld[slLineAbove] +
+                 (unsigned long)pOld[slLineBelow] +
+                 (unsigned long)pOld[slLineLeft] +
+                 (unsigned long)pOld[slLineRight]
                 )>>2) +
-                 (ULONG)pOld[pixOffset]
+                 (unsigned long)pOld[pixOffset]
               )>>1;
       pNew[pixOffset] = ulNew - (ulNew >> slDensity);
       slLineAbove++;
@@ -2640,12 +2640,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
     slLineRight = ((_pixBufferHeight-1)*_pixBufferWidth) + 2;
     pixOffset = ((_pixBufferHeight-1)*_pixBufferWidth) + 1;
     for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-      ulNew = ((((ULONG)pOld[slLineAbove] +
-                 (ULONG)pOld[slLineBelow] +
-                 (ULONG)pOld[slLineLeft] +
-                 (ULONG)pOld[slLineRight]
+      ulNew = ((((unsigned long)pOld[slLineAbove] +
+                 (unsigned long)pOld[slLineBelow] +
+                 (unsigned long)pOld[slLineLeft] +
+                 (unsigned long)pOld[slLineRight]
                 )>>2) +
-                 (ULONG)pOld[pixOffset]
+                 (unsigned long)pOld[pixOffset]
               )>>1;
       pNew[pixOffset] = ulNew - (ulNew >> slDensity);
       slLineAbove++;
@@ -2655,39 +2655,39 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
       pixOffset++;
     }
     // corner ( 0, 0)
-    ulNew = ((((ULONG)pOld[_pixBufferWidth] +
-               (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-               (ULONG)pOld[1] +
-               (ULONG)pOld[_pixBufferWidth-1]
+    ulNew = ((((unsigned long)pOld[_pixBufferWidth] +
+               (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+               (unsigned long)pOld[1] +
+               (unsigned long)pOld[_pixBufferWidth-1]
               )>>2) +
-               (ULONG)pOld[0]
+               (unsigned long)pOld[0]
             )>>1;
     pNew[0] = ulNew - (ulNew >> slDensity);
     // corner ( 0, _pixBufferWidth)
-    ulNew = ((((ULONG)pOld[(2*_pixBufferWidth) - 1] +
-               (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
-               (ULONG)pOld[0] +
-               (ULONG)pOld[_pixBufferWidth-2]
+    ulNew = ((((unsigned long)pOld[(2*_pixBufferWidth) - 1] +
+               (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
+               (unsigned long)pOld[0] +
+               (unsigned long)pOld[_pixBufferWidth-2]
               )>>2) +
-               (ULONG)pOld[_pixBufferWidth-1]
+               (unsigned long)pOld[_pixBufferWidth-1]
             )>>1;
     pNew[_pixBufferWidth-1] = ulNew - (ulNew >> slDensity);
     // corner ( _pixBufferHeight, 0)
-    ulNew = ((((ULONG)pOld[0] +
-               (ULONG)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
-               (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
-               (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+    ulNew = ((((unsigned long)pOld[0] +
+               (unsigned long)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
+               (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
+               (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
               )>>2) +
-               (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
+               (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
             )>>1;
     pNew[(_pixBufferHeight-1)*_pixBufferWidth] = ulNew - (ulNew >> slDensity);
     // corner ( _pixBufferHeight, _pixBufferWidth)
-    ulNew = ((((ULONG)pOld[_pixBufferWidth-1] +
-               (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
-               (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-               (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
+    ulNew = ((((unsigned long)pOld[_pixBufferWidth-1] +
+               (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
+               (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+               (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
               )>>2) +
-               (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+               (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
             )>>1;
     pNew[(_pixBufferHeight*_pixBufferWidth) - 1] = ulNew - (ulNew >> slDensity);
 
@@ -2700,12 +2700,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
     pixOffset = _pixBufferWidth;
     for( pixV=1; pixV<_pixBufferHeight-1; pixV++) {
       for( pixU=0; pixU<_pixBufferWidth; pixU++) {
-        ulNew = ((((ULONG)pOld[pixOffset - _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset + _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset - 1] +
-                   (ULONG)pOld[pixOffset + 1]
+        ulNew = ((((unsigned long)pOld[pixOffset - _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset + _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset - 1] +
+                   (unsigned long)pOld[pixOffset + 1]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[pixOffset-_pixBufferWidth] = ulNew - (ulNew >> slDensity);
         pixOffset++;
@@ -2720,12 +2720,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
       slLineRight = 2;
       pixOffset = 1;
       for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-        ulNew = ((((ULONG)pOld[slLineAbove] +
-                   (ULONG)pOld[slLineBelow] +
-                   (ULONG)pOld[slLineLeft] +
-                   (ULONG)pOld[slLineRight]
+        ulNew = ((((unsigned long)pOld[slLineAbove] +
+                   (unsigned long)pOld[slLineBelow] +
+                   (unsigned long)pOld[slLineLeft] +
+                   (unsigned long)pOld[slLineRight]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[slLineAbove] = ulNew - (ulNew >> slDensity);
         slLineAbove++;
@@ -2741,12 +2741,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
       slLineRight = ((_pixBufferHeight-1)*_pixBufferWidth) + 2;
       pixOffset = ((_pixBufferHeight-1)*_pixBufferWidth) + 1;
       for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-        ulNew = ((((ULONG)pOld[slLineAbove] +
-                   (ULONG)pOld[slLineBelow] +
-                   (ULONG)pOld[slLineLeft] +
-                   (ULONG)pOld[slLineRight]
+        ulNew = ((((unsigned long)pOld[slLineAbove] +
+                   (unsigned long)pOld[slLineBelow] +
+                   (unsigned long)pOld[slLineLeft] +
+                   (unsigned long)pOld[slLineRight]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[slLineAbove] = ulNew - (ulNew >> slDensity);
         slLineAbove++;
@@ -2756,39 +2756,39 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
         pixOffset++;
       }
       // corner ( 0, 0)
-      ulNew = ((((ULONG)pOld[_pixBufferWidth] +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-                 (ULONG)pOld[1] +
-                 (ULONG)pOld[_pixBufferWidth-1]
+      ulNew = ((((unsigned long)pOld[_pixBufferWidth] +
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+                 (unsigned long)pOld[1] +
+                 (unsigned long)pOld[_pixBufferWidth-1]
                 )>>2) +
-                 (ULONG)pOld[0]
+                 (unsigned long)pOld[0]
               )>>1;
       pNew[(_pixBufferHeight-1)*_pixBufferWidth] = ulNew - (ulNew >> slDensity);
       // corner ( 0, _pixBufferWidth)
-      ulNew = ((((ULONG)pOld[(2*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[0] +
-                 (ULONG)pOld[_pixBufferWidth-2]
+      ulNew = ((((unsigned long)pOld[(2*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[0] +
+                 (unsigned long)pOld[_pixBufferWidth-2]
                 )>>2) +
-                 (ULONG)pOld[_pixBufferWidth-1]
+                 (unsigned long)pOld[_pixBufferWidth-1]
               )>>1;
       pNew[(_pixBufferHeight*_pixBufferWidth) - 1] = ulNew - (ulNew >> slDensity);
       // corner ( _pixBufferHeight, 0)
-      ulNew = ((((ULONG)pOld[0] +
-                 (ULONG)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
-                 (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+      ulNew = ((((unsigned long)pOld[0] +
+                 (unsigned long)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
+                 (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
                 )>>2) +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
               )>>1;
       pNew[(_pixBufferHeight-2)*_pixBufferWidth] = ulNew - (ulNew >> slDensity);
       // corner ( _pixBufferHeight, _pixBufferWidth)
-      ulNew = ((((ULONG)pOld[_pixBufferWidth-1] +
-                 (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
+      ulNew = ((((unsigned long)pOld[_pixBufferWidth-1] +
+                 (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
                 )>>2) +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
               )>>1;
       pNew[((_pixBufferHeight-1)*_pixBufferWidth) - 1] = ulNew - (ulNew >> slDensity);
     }
@@ -2802,12 +2802,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
     pixOffset = _pixBufferWidth;
     for( pixV=1; pixV<_pixBufferHeight-1; pixV++) {
       for( pixU=0; pixU<_pixBufferWidth; pixU++) {
-        ulNew = ((((ULONG)pOld[pixOffset - _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset + _pixBufferWidth] +
-                   (ULONG)pOld[pixOffset - 1] +
-                   (ULONG)pOld[pixOffset + 1]
+        ulNew = ((((unsigned long)pOld[pixOffset - _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset + _pixBufferWidth] +
+                   (unsigned long)pOld[pixOffset - 1] +
+                   (unsigned long)pOld[pixOffset + 1]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[pixOffset+_pixBufferWidth] = ulNew - (ulNew >> slDensity);
         pixOffset++;
@@ -2822,12 +2822,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
       slLineRight = 2;
       pixOffset = 1;
       for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-        ulNew = ((((ULONG)pOld[slLineAbove] +
-                   (ULONG)pOld[slLineBelow] +
-                   (ULONG)pOld[slLineLeft] +
-                   (ULONG)pOld[slLineRight]
+        ulNew = ((((unsigned long)pOld[slLineAbove] +
+                   (unsigned long)pOld[slLineBelow] +
+                   (unsigned long)pOld[slLineLeft] +
+                   (unsigned long)pOld[slLineRight]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[slLineBelow] = ulNew - (ulNew >> slDensity);
         slLineAbove++;
@@ -2843,12 +2843,12 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
       slLineRight = ((_pixBufferHeight-1)*_pixBufferWidth) + 2;
       pixOffset = ((_pixBufferHeight-1)*_pixBufferWidth) + 1;
       for( pixU=_pixBufferWidth-2; pixU>0; pixU--) {
-        ulNew = ((((ULONG)pOld[slLineAbove] +
-                   (ULONG)pOld[slLineBelow] +
-                   (ULONG)pOld[slLineLeft] +
-                   (ULONG)pOld[slLineRight]
+        ulNew = ((((unsigned long)pOld[slLineAbove] +
+                   (unsigned long)pOld[slLineBelow] +
+                   (unsigned long)pOld[slLineLeft] +
+                   (unsigned long)pOld[slLineRight]
                   )>>2) +
-                   (ULONG)pOld[pixOffset]
+                   (unsigned long)pOld[pixOffset]
                 )>>1;
         pNew[slLineBelow] = ulNew - (ulNew >> slDensity);
         slLineAbove++;
@@ -2858,39 +2858,39 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
         pixOffset++;
       }
       // corner ( 0, 0)
-      ulNew = ((((ULONG)pOld[_pixBufferWidth] +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-                 (ULONG)pOld[1] +
-                 (ULONG)pOld[_pixBufferWidth-1]
+      ulNew = ((((unsigned long)pOld[_pixBufferWidth] +
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+                 (unsigned long)pOld[1] +
+                 (unsigned long)pOld[_pixBufferWidth-1]
                 )>>2) +
-                 (ULONG)pOld[0]
+                 (unsigned long)pOld[0]
               )>>1;
       pNew[_pixBufferWidth] = ulNew - (ulNew >> slDensity);
       // corner ( 0, _pixBufferWidth)
-      ulNew = ((((ULONG)pOld[(2*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[0] +
-                 (ULONG)pOld[_pixBufferWidth-2]
+      ulNew = ((((unsigned long)pOld[(2*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[0] +
+                 (unsigned long)pOld[_pixBufferWidth-2]
                 )>>2) +
-                 (ULONG)pOld[_pixBufferWidth-1]
+                 (unsigned long)pOld[_pixBufferWidth-1]
               )>>1;
       pNew[(2*_pixBufferWidth) - 1] = ulNew - (ulNew >> slDensity);
       // corner ( _pixBufferHeight, 0)
-      ulNew = ((((ULONG)pOld[0] +
-                 (ULONG)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
-                 (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+      ulNew = ((((unsigned long)pOld[0] +
+                 (unsigned long)pOld[(_pixBufferHeight-2)*_pixBufferWidth] +
+                 (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) + 1] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
                 )>>2) +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth]
               )>>1;
       pNew[0] = ulNew - (ulNew >> slDensity);
       // corner ( _pixBufferHeight, _pixBufferWidth)
-      ulNew = ((((ULONG)pOld[_pixBufferWidth-1] +
-                 (ULONG)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
-                 (ULONG)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
+      ulNew = ((((unsigned long)pOld[_pixBufferWidth-1] +
+                 (unsigned long)pOld[((_pixBufferHeight-1)*_pixBufferWidth) - 1] +
+                 (unsigned long)pOld[(_pixBufferHeight-1)*_pixBufferWidth] +
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 2]
                 )>>2) +
-                 (ULONG)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
+                 (unsigned long)pOld[(_pixBufferHeight*_pixBufferWidth) - 1]
               )>>1;
       pNew[_pixBufferWidth-1] = ulNew - (ulNew >> slDensity);
     }
@@ -2906,7 +2906,7 @@ static void AnimatePlasma( SLONG slDensity, PlasmaType eType)
 /*******************************
        Fire Animation
 ********************************/
-static void AnimateFire( SLONG slDensity)
+static void AnimateFire( long slDensity)
 {
 //  _sfStats.StartTimer(CStatForm::STI_EFFECTRENDER);
 
@@ -2914,10 +2914,10 @@ static void AnimateFire( SLONG slDensity)
 
   // use only one buffer (otherwise it's not working)
   UBYTE *pubNew = (UBYTE*)_ptdEffect->td_pubBuffer2;
-  SLONG slBufferMask   = _pixBufferWidth*_pixBufferHeight -1;
+  long slBufferMask   = _pixBufferWidth*_pixBufferHeight -1;
 
 #if ASMOPT == 1
-  SLONG slColumnModulo = _pixBufferWidth*(_pixBufferHeight-2) -1;
+  long slColumnModulo = _pixBufferWidth*(_pixBufferHeight-2) -1;
 
  #if (defined __MSVC_INLINE__)
   __asm {
@@ -3041,15 +3041,15 @@ pixDone:
   // inner rectangle (without 1 pixel border)
   for( PIX pixU=0; pixU<_pixBufferWidth; pixU++)
   {
-    SLONG slOffset = pixU;
+    long slOffset = pixU;
     for( PIX pixV=1; pixV<_pixBufferHeight-1; pixV++)
     {
-      ULONG ulNew = ((ULONG)pubNew[_pixBufferWidth+slOffset] + (ULONG)pubNew[_pixBufferWidth*2+slOffset]) >>1;
+      unsigned long ulNew = ((unsigned long)pubNew[_pixBufferWidth+slOffset] + (unsigned long)pubNew[_pixBufferWidth*2+slOffset]) >>1;
       if( ulNew>slDensity) {
-        ULONG ulNewDensity = RNDW&slDensity;
+        unsigned long ulNewDensity = RNDW&slDensity;
         ulNew -= ulNewDensity;
-        SLONG slDifusion = (SLONG)asbMod3Sub1Table[ulNewDensity]; // (SLONG)(ulNewDensity%3-1);
-        SLONG slPos = (slDifusion+slOffset) & slBufferMask;
+        long slDifusion = (long)asbMod3Sub1Table[ulNewDensity]; // (long)(ulNewDensity%3-1);
+        long slPos = (slDifusion+slOffset) & slBufferMask;
         pubNew[slPos] = ulNew;
       } else {
         pubNew[slOffset] = 0;
@@ -3073,14 +3073,14 @@ static void RenderPlasmaFire(void)
 
   // get and adjust textures' parameters
   PIX    pixBaseWidth   = _ptdBase->GetPixWidth();
-  ULONG *pulTextureBase = _ptdBase->td_pulFrames;
-  ULONG *pulTexture     = _ptdEffect->td_pulFrames;
+  unsigned long *pulTextureBase = _ptdBase->td_pulFrames;
+  unsigned long *pulTexture     = _ptdEffect->td_pulFrames;
 
   ASSERT( _ptdEffect->td_pulFrames!=NULL && _ptdBase->td_pulFrames!=NULL && pixBaseWidth<=256);
   UBYTE *pubHeat = (UBYTE*)_ptdEffect->td_pubBuffer2;  // heat map pointer
-  SLONG slHeatMapStep  = _pixBufferWidth/_pixTexWidth;
-  SLONG slHeatRowStep  = (slHeatMapStep-1)*_pixBufferWidth;
-  SLONG slBaseMipShift = 8 - FastLog2(pixBaseWidth);
+  long slHeatMapStep  = _pixBufferWidth/_pixTexWidth;
+  long slHeatRowStep  = (slHeatMapStep-1)*_pixBufferWidth;
+  long slBaseMipShift = 8 - FastLog2(pixBaseWidth);
 
 #if ASMOPT == 1
 
@@ -3387,7 +3387,7 @@ BOOL CTextureEffectGlobal::IsWater(void)
 }
 
 // default constructor
-CTextureEffectGlobal::CTextureEffectGlobal(CTextureData *ptdTexture, ULONG ulGlobalEffect)
+CTextureEffectGlobal::CTextureEffectGlobal(CTextureData *ptdTexture, unsigned long ulGlobalEffect)
 {
   // remember global effect's texture data for cross linking
   teg_ptdTexture = ptdTexture;
@@ -3399,7 +3399,7 @@ CTextureEffectGlobal::CTextureEffectGlobal(CTextureData *ptdTexture, ULONG ulGlo
 }
 
 // add new effect source.
-void CTextureEffectGlobal::AddEffectSource( ULONG ulEffectSourceType, PIX pixU0, PIX pixV0,
+void CTextureEffectGlobal::AddEffectSource( unsigned long ulEffectSourceType, PIX pixU0, PIX pixV0,
                                             PIX pixU1, PIX pixV1)
 {
   CTextureEffectSource* ptesNew = teg_atesEffectSources.New(1);

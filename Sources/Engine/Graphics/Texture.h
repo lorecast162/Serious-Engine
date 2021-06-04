@@ -54,22 +54,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class ENGINE_API CTextureData : public CAnimData {
 public:
 // implementation:
-  ULONG td_ulFlags;             // see defines
+  unsigned long td_ulFlags;             // see defines
   MEX   td_mexWidth, td_mexHeight; // texture dimensions
   INDEX td_iFirstMipLevel;      // the highest quality mip level
   INDEX td_ctFineMipLevels;     // number of bilineary created mip levels
-  SLONG td_slFrameSize;         // sum of sizes of all mip-maps for one frame
+  long td_slFrameSize;         // sum of sizes of all mip-maps for one frame
   INDEX td_ctFrames;            // number of different frames
 
   class CTexParams td_tpLocal;  // local texture parameters
-  ULONG td_ulInternalFormat;    // format in which texture will be uploaded
+  unsigned long td_ulInternalFormat;    // format in which texture will be uploaded
   CTimerValue td_tvLastDrawn;   // timer for probing
-  ULONG td_ulProbeObject;
+  unsigned long td_ulProbeObject;
   union {
-    ULONG  td_ulObject;
-    ULONG *td_pulObjects;
+    unsigned long  td_ulObject;
+    unsigned long *td_pulObjects;
   };
-  ULONG *td_pulFrames;          // all frames with their mip-maps and private palettes
+  unsigned long *td_pulFrames;          // all frames with their mip-maps and private palettes
   UBYTE *td_pubBuffer1, *td_pubBuffer2;       // buffers for effect textures
   PIX td_pixBufferWidth, td_pixBufferHeight;  // effect buffer dimensions
   class CTextureData *td_ptdBaseTexture;      // base texure for effects (if any)
@@ -92,9 +92,9 @@ public:
   inline MEX GetHeight(void)    const { return td_mexHeight; };
   inline PIX GetPixWidth(void)  const { return td_mexWidth >>td_iFirstMipLevel; };
   inline PIX GetPixHeight(void) const { return td_mexHeight>>td_iFirstMipLevel; };
-  inline ULONG GetFlags(void)   const { return td_ulFlags; };
-  inline ULONG GetNoOfMips(void)     const { return GetNoOfMipmaps( GetPixWidth(), GetPixHeight()); };
-  inline ULONG GetNoOfFineMips(void) const { return td_ctFineMipLevels; };
+  inline unsigned long GetFlags(void)   const { return td_ulFlags; };
+  inline unsigned long GetNoOfMips(void)     const { return GetNoOfMipmaps( GetPixWidth(), GetPixHeight()); };
+  inline unsigned long GetNoOfFineMips(void) const { return td_ctFineMipLevels; };
 
   // mark that texture has been used
   inline void MarkDrawn(void) { td_tvLastDrawn = _pTimer->GetLowPrecisionTimer(); };
@@ -121,7 +121,7 @@ public:
 
   // creates new effect texture with one frame
   void CreateEffectTexture( PIX pixWidth, PIX pixHeight, MEX mexWidth,
-                            CTextureData *ptdBaseTexture, ULONG ulGlobalEffect);
+                            CTextureData *ptdBaseTexture, unsigned long ulGlobalEffect);
   // creates new texture with one frame
   void Create_t( const CImageInfo *pII, MEX mexWanted, INDEX ctFineMips, BOOL bForce32bit);
   // adds one frame to created texture
@@ -137,21 +137,21 @@ public:
   // write texture to file
   void Write_t( CTStream *outFile);
   // force texture to be re-loaded (if needed) in corresponding manner
-  void Force( ULONG ulTexFlags);
+  void Force( unsigned long ulTexFlags);
 
   // get texel from texture's largest mip-map
   COLOR GetTexel( MEX mexU, MEX mexV);
   // copy (and eventually convert to floats) one row from texture to an array (iChannel is 1=R,2=G,3=B,4=A)
   void  FetchRow( PIX pixRow, void *pfDst, INDEX iChannel=4, BOOL bConvertToFloat=TRUE);
   // get pointer to one row of texture
-  ULONG *GetRowPointer( PIX pixRow);
+  unsigned long *GetRowPointer( PIX pixRow);
   
 // overridden from CSerial:
 
   // check if this kind of objects is auto-freed
   virtual BOOL IsAutoFreed(void);
   // get amount of memory used by this object
-  virtual SLONG GetUsedMemory(void);
+  virtual long GetUsedMemory(void);
 };
 
 
@@ -168,7 +168,7 @@ public:
   void Copy(CTextureObject &toOther);
   MEX GetWidth(void) const;
   MEX GetHeight(void) const;
-  ULONG GetFlags(void) const;
+  unsigned long GetFlags(void) const;
   void Read_t(  CTStream *istrFile); // throw char * //	read and
 	void Write_t( CTStream *ostrFile); // throw char * //	write functions
 
@@ -195,10 +195,10 @@ class ENGINE_API CRenderTexture
 // implementation:
 public:
   CListNode rt_lnInGfx          // for linking in list of all renderable textures
-  ULONG rt_ulFlags;             // see defines (only alpha and 32bit, for now)
+  unsigned long rt_ulFlags;             // see defines (only alpha and 32bit, for now)
   PIX   tt_pixWidth, rt_pixHeight; // texture dimensions
-  ULONG td_ulInternalFormat;    // format in which texture will be uploaded
-  ULONG *rt_pulImage;           // image in memory (no mipmaps for now!)
+  unsigned long td_ulInternalFormat;    // format in which texture will be uploaded
+  unsigned long *rt_pulImage;           // image in memory (no mipmaps for now!)
   class CTexParams td_tpLocal;  // local texture parameters
 
 // interface:

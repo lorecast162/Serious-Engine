@@ -47,7 +47,7 @@ class CExtractSurfaceVertex
 {
 public:
 	INDEX esv_Surface;
-	SLONG esv_TextureVertexRemap;
+	long esv_TextureVertexRemap;
 	INDEX esv_MipGlobalIndex;
 };
 
@@ -721,8 +721,8 @@ void CEditModel::Read_t( CTStream *pFile) // throw char *
   if( pFile->PeekID_t() == CChunkID("PATM"))
   {
     pFile->GetID_t();
-    ULONG ulDummySizeOfLong;
-    ULONG ulOldExistingPatches;
+    unsigned long ulDummySizeOfLong;
+    unsigned long ulOldExistingPatches;
 
     *pFile >> ulDummySizeOfLong;
     *pFile >> ulOldExistingPatches;
@@ -1348,7 +1348,7 @@ void CEditModel::AddMipModel(	CObject3D *pO3D)
 	BOOL same_found;
 
   // this is mask for vertices in current mip level
-  ULONG mip_vtx_mask = (1L) << edm_md.md_MipCt;
+  unsigned long mip_vtx_mask = (1L) << edm_md.md_MipCt;
 
 	struct ModelMipInfo *pmmpi = &edm_md.md_MipInfos[ edm_md.md_MipCt]; // point to mip model that we will create
 
@@ -1521,7 +1521,7 @@ void CEditModel::AddMipModel(	CObject3D *pO3D)
 			 * Here we really remap one mip models's vertex in a way that we set its transformed
 			 * vertex ptr after remapping it using link (tag) to its original mip-model's vertex
 			 */
-			ULONG trans_vtx_idx = pO3D->ob_aoscSectors[0].osc_aovxVertices[ aesv[ mpvct].esv_MipGlobalIndex].ovx_Tag;
+			unsigned long trans_vtx_idx = pO3D->ob_aoscSectors[0].osc_aovxVertices[ aesv[ mpvct].esv_MipGlobalIndex].ovx_Tag;
 
 			pmp->mp_PolygonVertices[ j].mpv_ptvTransformedVertex =
 				&edm_md.md_TransformedVertices[ (INDEX) trans_vtx_idx ]; // remapped ptr to transformed vertex
@@ -1956,7 +1956,7 @@ void CEditModel::DrawWireSurface( CDrawPort *pDP, INDEX iCurrentMip, INDEX iCurr
       // determine line visibility
       FLOAT3D f3dNormal = (f3dTr2-f3dTr1)*(f3dTr0-f3dTr1);
       COLOR clrWire;
-      ULONG ulLineType;
+      unsigned long ulLineType;
       if( f3dNormal(3) < 0) {
         clrWire = clrVisible;
         ulLineType = _FULL_;
@@ -2267,9 +2267,9 @@ INDEX CEditModel::CountPatches(void)
   return iResult;
 }
 
-ULONG CEditModel::GetExistingPatchesMask(void)
+unsigned long CEditModel::GetExistingPatchesMask(void)
 {
-  ULONG ulResult = 0;
+  unsigned long ulResult = 0;
   for(INDEX iPatch=0; iPatch<MAX_TEXTUREPATCHES; iPatch++)
   {
     if( edm_md.md_mpPatches[ iPatch].mp_toTexture.GetName() != "")

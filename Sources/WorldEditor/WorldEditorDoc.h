@@ -82,7 +82,7 @@ public:
   CDynamicContainer<CTerrainUndo> m_dcTerrainUndo;
   INDEX m_iCurrentTerrainUndo;
   BOOL m_bAskedToCheckOut;
-  SLONG m_slDisplaceTexTime;
+  long m_slDisplaceTexTime;
   INDEX m_iMirror;
   INDEX m_iTexture;
   CTerrain *m_ptrSelectedTerrain;

@@ -2755,7 +2755,7 @@ void CCustomToolTip::ManualUpdate(void)
   pMainFrame->ManualToolTipUpdate();
 }
 
-void CCustomToolTip::MouseMoveNotify( HWND hwndCaller, ULONG ulTime, TTCFunction_type *pCallBack, void *pThis)
+void CCustomToolTip::MouseMoveNotify( HWND hwndCaller, unsigned long ulTime, TTCFunction_type *pCallBack, void *pThis)
 {
   cct_hwndCaller = hwndCaller;
   cct_pCallback = pCallBack;

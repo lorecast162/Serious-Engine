@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Math/Quaternion.h>
 
 
-void AngleToUL(ANGLE3D &Angle,ULONG &ulResult) 
+void AngleToUL(ANGLE3D &Angle,unsigned long &ulResult) 
 {
 	Quaternion<float> qQuat;
 	FLOAT3D	Axis;
@@ -47,7 +47,7 @@ void AngleToUL(ANGLE3D &Angle,ULONG &ulResult)
 };
 
 
-void ULToAngle(ULONG &ulResult,ANGLE3D &Angle) 
+void ULToAngle(unsigned long &ulResult,ANGLE3D &Angle) 
 {
 	Quaternion<float> qQuat;
 	FLOAT3D	Axis;
@@ -77,37 +77,37 @@ void ULToAngle(ULONG &ulResult,ANGLE3D &Angle)
 
 
 
-void CEntityMessage::WritePlacement(ULONG &ulEntityID,CPlacement3D &plPlacement)
+void CEntityMessage::WritePlacement(unsigned long &ulEntityID,CPlacement3D &plPlacement)
 {
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
 
 	em_ulType = EMT_SETPLACEMENT;
-	em_ubSize = sizeof(FLOAT3D) + sizeof(ULONG);
+	em_ubSize = sizeof(FLOAT3D) + sizeof(unsigned long);
 	em_ulEntityID = ulEntityID;	
 
   swH = (SWORD) ((plPlacement.pl_OrientationAngle(1)+180)*5);
   swP = (SWORD) ((plPlacement.pl_OrientationAngle(2)+90)*5);
   swB = (SWORD) ((plPlacement.pl_OrientationAngle(3)+180)*5);
 
-  ulShrunkAngle  = ((((ULONG) swH) & 0x000007FF) << 21);
-  ulShrunkAngle |= ((((ULONG) swP) & 0x000003FF) << 11);
-  ulShrunkAngle |= (((ULONG) swB) & 0x000007FF);
+  ulShrunkAngle  = ((((unsigned long) swH) & 0x000007FF) << 21);
+  ulShrunkAngle |= ((((unsigned long) swP) & 0x000003FF) << 11);
+  ulShrunkAngle |= (((unsigned long) swB) & 0x000007FF);
 
 	pubMarker = em_aubMessage;
 	memcpy(pubMarker,&(plPlacement.pl_PositionVector(1)),sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(pubMarker,&ulShrunkAngle,sizeof(ULONG));
+	memcpy(pubMarker,&ulShrunkAngle,sizeof(unsigned long));
 };
 
 
-void CEntityMessage::ReadPlacement(ULONG &ulEntityID,CPlacement3D &plPlacement)
+void CEntityMessage::ReadPlacement(unsigned long &ulEntityID,CPlacement3D &plPlacement)
 {
 	ASSERT (em_ulType == EMT_SETPLACEMENT);
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
 
@@ -116,7 +116,7 @@ void CEntityMessage::ReadPlacement(ULONG &ulEntityID,CPlacement3D &plPlacement)
 	pubMarker = em_aubMessage;
 	memcpy(&(plPlacement.pl_PositionVector(1)),pubMarker,sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(&ulShrunkAngle,pubMarker,sizeof(ULONG));
+	memcpy(&ulShrunkAngle,pubMarker,sizeof(unsigned long));
   
   swB = (SWORD) ulShrunkAngle & 0x000007FF;
   swP = (SWORD) (ulShrunkAngle >> 11) & 0x000003FF;
@@ -129,7 +129,7 @@ void CEntityMessage::ReadPlacement(ULONG &ulEntityID,CPlacement3D &plPlacement)
 };
 
 
-void CEntityMessage::WriteEntityEvent(ULONG &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::WriteEntityEvent(unsigned long &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	UBYTE *pubMarker;
 
@@ -138,51 +138,51 @@ void CEntityMessage::WriteEntityEvent(ULONG &ulEntityID,UWORD &uwEventCode,void*
 	em_ulEntityID = ulEntityID;
 
 	pubMarker = em_aubMessage;
-	memcpy(pubMarker,&uwEventCode,sizeof(SLONG));
+	memcpy(pubMarker,&uwEventCode,sizeof(long));
 	pubMarker += sizeof(UWORD);
 	memcpy(pubMarker,pvEventData,uwDataSize);
 
 };
 
 
-void CEntityMessage::ReadEntityEvent(ULONG &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::ReadEntityEvent(unsigned long &ulEntityID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	ASSERT (em_ulType == EMT_EVENT);
 	UBYTE *pubMarker;
 
 	pubMarker = em_aubMessage;
-	memcpy(&uwEventCode,pubMarker,sizeof(SLONG));
+	memcpy(&uwEventCode,pubMarker,sizeof(long));
 	pubMarker += sizeof(UWORD);
-	uwDataSize =  em_ubSize - sizeof(ULONG) - sizeof(UWORD);
+	uwDataSize =  em_ubSize - sizeof(unsigned long) - sizeof(UWORD);
 	memcpy(pvEventData,pubMarker,uwDataSize);
 
 };
 
 
-void CEntityMessage::WriteEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::WriteEntityCreate(unsigned long &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
 	em_ulType = EMT_CREATE;
-	em_ubSize = sizeof(FLOAT3D) + sizeof(ULONG) + sizeof(UWORD) + sizeof(UWORD) + uwDataSize;
+	em_ubSize = sizeof(FLOAT3D) + sizeof(unsigned long) + sizeof(UWORD) + sizeof(UWORD) + uwDataSize;
 	em_ulEntityID = ulEntityID;
 
   swH = (SWORD) ((plPlacement.pl_OrientationAngle(1)+180)*5);
   swP = (SWORD) ((plPlacement.pl_OrientationAngle(2)+90)*5);
   swB = (SWORD) ((plPlacement.pl_OrientationAngle(3)+180)*5);
 
-  ulShrunkAngle  = ((((ULONG) swH) & 0x000007FF) << 21);
-  ulShrunkAngle |= ((((ULONG) swP) & 0x000003FF) << 11);
-  ulShrunkAngle |= (((ULONG) swB) & 0x000007FF);
+  ulShrunkAngle  = ((((unsigned long) swH) & 0x000007FF) << 21);
+  ulShrunkAngle |= ((((unsigned long) swP) & 0x000003FF) << 11);
+  ulShrunkAngle |= (((unsigned long) swB) & 0x000007FF);
 
 
 	pubMarker = em_aubMessage;
 	memcpy(pubMarker,&(plPlacement.pl_PositionVector(1)),sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(pubMarker,&ulShrunkAngle,sizeof(ULONG));
-	pubMarker += sizeof(ULONG);
+	memcpy(pubMarker,&ulShrunkAngle,sizeof(unsigned long));
+	pubMarker += sizeof(unsigned long);
 	memcpy(pubMarker,&uwEntityClassID,sizeof(UWORD));
 	pubMarker += sizeof(UWORD);
 	memcpy(pubMarker,&uwEventCode,sizeof(UWORD));	
@@ -191,11 +191,11 @@ void CEntityMessage::WriteEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlaceme
 
 };
 
-void CEntityMessage::ReadEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::ReadEntityCreate(unsigned long &ulEntityID,CPlacement3D &plPlacement,UWORD &uwEntityClassID,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	ASSERT (em_ulType == EMT_CREATE);
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
   ulEntityID = em_ulEntityID;
@@ -203,7 +203,7 @@ void CEntityMessage::ReadEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacemen
 	pubMarker = em_aubMessage;
 	memcpy(&(plPlacement.pl_PositionVector(1)),pubMarker,sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(&ulShrunkAngle,pubMarker,sizeof(ULONG));
+	memcpy(&ulShrunkAngle,pubMarker,sizeof(unsigned long));
   
   swB = (SWORD) ulShrunkAngle & 0x000007FF;
   swP = (SWORD) (ulShrunkAngle >> 11) & 0x000003FF;
@@ -213,18 +213,18 @@ void CEntityMessage::ReadEntityCreate(ULONG &ulEntityID,CPlacement3D &plPlacemen
   plPlacement.pl_OrientationAngle(2) = ((float)swP) / 5 - 90;
   plPlacement.pl_OrientationAngle(3) = ((float)swB) / 5 - 180;
 
-	pubMarker += sizeof(ULONG);
+	pubMarker += sizeof(unsigned long);
 	memcpy(&uwEntityClassID,pubMarker,sizeof(UWORD));
 	pubMarker += sizeof(UWORD);
 	memcpy(&uwEventCode,pubMarker,sizeof(UWORD));	
 	pubMarker += sizeof(UWORD);
-	uwDataSize = em_ubSize - sizeof(FLOAT3D) - sizeof(ULONG) - sizeof(UWORD) - sizeof(UWORD);
+	uwDataSize = em_ubSize - sizeof(FLOAT3D) - sizeof(unsigned long) - sizeof(UWORD) - sizeof(UWORD);
 	memcpy(pubMarker,pvEventData,uwDataSize);
 
 };
 
 
-void CEntityMessage::WriteEntityDestroy(ULONG &ulEntityID)
+void CEntityMessage::WriteEntityDestroy(unsigned long &ulEntityID)
 {
 	
 	em_ulType = EMT_DESTROY;
@@ -234,7 +234,7 @@ void CEntityMessage::WriteEntityDestroy(ULONG &ulEntityID)
 };
 
 
-void CEntityMessage::ReadEntityDestroy(ULONG &ulEntityID)
+void CEntityMessage::ReadEntityDestroy(unsigned long &ulEntityID)
 {
 	ASSERT (em_ulType == EMT_DESTROY);
 
@@ -244,54 +244,54 @@ void CEntityMessage::ReadEntityDestroy(ULONG &ulEntityID)
 
 
 
-void CEntityMessage::WriteEntityCopy(ULONG &ulSourceEntityID,ULONG &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::WriteEntityCopy(unsigned long &ulSourceEntityID,unsigned long &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
 	em_ulType = EMT_COPY;
-	em_ubSize = sizeof(ULONG) + sizeof(FLOAT3D) + sizeof(ULONG) + sizeof(UWORD) + uwDataSize;
+	em_ubSize = sizeof(unsigned long) + sizeof(FLOAT3D) + sizeof(unsigned long) + sizeof(UWORD) + uwDataSize;
 	em_ulEntityID = ulSourceEntityID;
 
   swH = (SWORD) ((plPlacement.pl_OrientationAngle(1)+180)*5);
   swP = (SWORD) ((plPlacement.pl_OrientationAngle(2)+90)*5);
   swB = (SWORD) ((plPlacement.pl_OrientationAngle(3)+180)*5);
 
-  ulShrunkAngle  = ((((ULONG) swH) & 0x000007FF) << 21);
-  ulShrunkAngle |= ((((ULONG) swP) & 0x000003FF) << 11);
-  ulShrunkAngle |= (((ULONG) swB) & 0x000007FF);
+  ulShrunkAngle  = ((((unsigned long) swH) & 0x000007FF) << 21);
+  ulShrunkAngle |= ((((unsigned long) swP) & 0x000003FF) << 11);
+  ulShrunkAngle |= (((unsigned long) swB) & 0x000007FF);
 
 
 
 	pubMarker = em_aubMessage;
-	memcpy(pubMarker,&ulTargetEntityID,sizeof(ULONG));
-	pubMarker += sizeof(ULONG);
+	memcpy(pubMarker,&ulTargetEntityID,sizeof(unsigned long));
+	pubMarker += sizeof(unsigned long);
 	memcpy(pubMarker,&(plPlacement.pl_PositionVector(1)),sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(pubMarker,&ulShrunkAngle,sizeof(ULONG));
-	pubMarker += sizeof(ULONG);
-	memcpy(pubMarker,&uwEventCode,sizeof(SLONG));	
+	memcpy(pubMarker,&ulShrunkAngle,sizeof(unsigned long));
+	pubMarker += sizeof(unsigned long);
+	memcpy(pubMarker,&uwEventCode,sizeof(long));	
 	pubMarker += sizeof(UWORD);
 	memcpy(pubMarker,pvEventData,uwDataSize);
 
 };
 
-void CEntityMessage::ReadEntityCopy(ULONG &ulSourceEntityID,ULONG &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
+void CEntityMessage::ReadEntityCopy(unsigned long &ulSourceEntityID,unsigned long &ulTargetEntityID,CPlacement3D &plPlacement,UWORD &uwEventCode,void* pvEventData,UWORD &uwDataSize)
 {
 	ASSERT (em_ulType == EMT_COPY);
 	UBYTE *pubMarker;
-  ULONG ulShrunkAngle;
+  unsigned long ulShrunkAngle;
   SWORD swH,swP,swB;
 
 	ulSourceEntityID = em_ulEntityID;
 
 	pubMarker = em_aubMessage;
-	memcpy(&ulTargetEntityID,pubMarker,sizeof(ULONG));
-	pubMarker += sizeof(ULONG);
+	memcpy(&ulTargetEntityID,pubMarker,sizeof(unsigned long));
+	pubMarker += sizeof(unsigned long);
 	memcpy(&(plPlacement.pl_PositionVector(1)),pubMarker,sizeof(FLOAT3D));
 	pubMarker += sizeof(FLOAT3D);
-	memcpy(&ulShrunkAngle,pubMarker,sizeof(ULONG));
+	memcpy(&ulShrunkAngle,pubMarker,sizeof(unsigned long));
   
   swB = (SWORD) ulShrunkAngle & 0x000007FF;
   swP = (SWORD) (ulShrunkAngle >> 11) & 0x000003FF;
@@ -301,10 +301,10 @@ void CEntityMessage::ReadEntityCopy(ULONG &ulSourceEntityID,ULONG &ulTargetEntit
   plPlacement.pl_OrientationAngle(2) = ((float)swP) / 5 - 90;
   plPlacement.pl_OrientationAngle(3) = ((float)swB) / 5 - 180;
 
-	pubMarker += sizeof(ULONG);
-	memcpy(&uwEventCode,pubMarker,sizeof(SLONG));	
+	pubMarker += sizeof(unsigned long);
+	memcpy(&uwEventCode,pubMarker,sizeof(long));	
 	pubMarker += sizeof(UWORD);
-	uwDataSize = em_ubSize - sizeof(ULONG) - sizeof(FLOAT3D) - sizeof(ULONG) - sizeof(UWORD);
+	uwDataSize = em_ubSize - sizeof(unsigned long) - sizeof(FLOAT3D) - sizeof(unsigned long) - sizeof(UWORD);
 	memcpy(pubMarker,pvEventData,uwDataSize);
 
 };
@@ -358,11 +358,11 @@ void CEMsgBuffer::WriteMessage(CEntityMessage  &emEntityMessage)
 {
   // a tick must have started before any messages are generated
   ASSERT (emb_uwNumTickMarkers > 0);
-	ULONG ulTemp;
+	unsigned long ulTemp;
   int iTickMarker;
 
 	ulTemp = emEntityMessage.em_ulEntityID | (emEntityMessage.em_ulType << 24);
-	WriteBytes(&(ulTemp),sizeof(ULONG));	
+	WriteBytes(&(ulTemp),sizeof(unsigned long));	
 	WriteBytes(&(emEntityMessage.em_ubSize),sizeof(emEntityMessage.em_ubSize));
 	if (emEntityMessage.em_ubSize > 0) {
 		WriteBytes(emEntityMessage.em_aubMessage,emEntityMessage.em_ubSize);
@@ -376,13 +376,13 @@ void CEMsgBuffer::WriteMessage(CEntityMessage  &emEntityMessage)
 
 int CEMsgBuffer::ReadMessage(CEntityMessage  &emEntityMessage)
 {
-	ULONG ulTemp;
+	unsigned long ulTemp;
 
   if (bu_slReadOffset == bu_slWriteOffset) {
     return EMB_ERR_BUFFER_EMPTY;
   }
 
-	ReadBytes(&(ulTemp),sizeof(ULONG));
+	ReadBytes(&(ulTemp),sizeof(unsigned long));
 	emEntityMessage.em_ulType = ulTemp >> 24;
 	emEntityMessage.em_ulEntityID = ulTemp & 0x007FFFFF;
 	ReadBytes(&(emEntityMessage.em_ubSize),sizeof(emEntityMessage.em_ubSize));
@@ -394,12 +394,12 @@ int CEMsgBuffer::ReadMessage(CEntityMessage  &emEntityMessage)
 };
 
 
-int CEMsgBuffer::PeekMessageAtOffset(CEntityMessage &emEntityMessage,SLONG &slTickOffset)
+int CEMsgBuffer::PeekMessageAtOffset(CEntityMessage &emEntityMessage,long &slTickOffset)
 {
   ASSERT(slTickOffset >= 0 && slTickOffset <= bu_slSize);
-  ULONG ulTemp;
+  unsigned long ulTemp;
 
-  PeekBytesAtOffset(&(ulTemp),sizeof(ULONG),slTickOffset);
+  PeekBytesAtOffset(&(ulTemp),sizeof(unsigned long),slTickOffset);
 	emEntityMessage.em_ulType = ulTemp >> 24;
 	emEntityMessage.em_ulEntityID = ulTemp & 0x007FFFFF;
 	PeekBytesAtOffset(&(emEntityMessage.em_ubSize),sizeof(emEntityMessage.em_ubSize),slTickOffset);
@@ -466,7 +466,7 @@ int CEMsgBuffer::GetTickIndex(float fTickTime,INDEX &iTickIndex)
 };
 
 
-int CEMsgBuffer::GetTickOffset(float fTickTime,SLONG &slTickOffset)
+int CEMsgBuffer::GetTickOffset(float fTickTime,long &slTickOffset)
 {
   INDEX iTickMarker;
   // 0.025 should be _pTimer->TickQuantum/2
@@ -571,7 +571,7 @@ int CEMsgBuffer::ReceiveTickAcknowledge(float fTickTime)
 
 
 // does not advance the read offset - access is random, not sequential
-int  CEMsgBuffer::ReadTick(float fTickTime,const void *pv, SLONG &slSize)
+int  CEMsgBuffer::ReadTick(float fTickTime,const void *pv, long &slSize)
 {
   ASSERT (slSize>0);
   ASSERT (pv != NULL);
@@ -591,7 +591,7 @@ int  CEMsgBuffer::ReadTick(float fTickTime,const void *pv, SLONG &slSize)
   }
 
   iNextTickIndex = (iTickIndex + 1) % MAX_TICKS_KEPT;
-  SLONG slTickSize = emb_atmTickMarkers[iNextTickIndex].tm_slTickOffset - emb_atmTickMarkers[iTickIndex].tm_slTickOffset;
+  long slTickSize = emb_atmTickMarkers[iNextTickIndex].tm_slTickOffset - emb_atmTickMarkers[iTickIndex].tm_slTickOffset;
   // if not wrapping 
   if ( slTickSize > 0) {
     if (slSize < slTickSize) {
@@ -615,7 +615,7 @@ int  CEMsgBuffer::ReadTick(float fTickTime,const void *pv, SLONG &slSize)
 };
 
 
-void CEMsgBuffer::WriteTick(float tm_fTickTime,const void *pv, SLONG slSize)
+void CEMsgBuffer::WriteTick(float tm_fTickTime,const void *pv, long slSize)
 {
   ASSERT(slSize>=0 && pv!=NULL);
 
@@ -662,7 +662,7 @@ int CEMsgBuffer::MoveToStartOfTick(float fTickTime)
 
 
 // expand buffer to be given number of bytes in size
-void CEMsgBuffer::Expand(SLONG slNewSize)
+void CEMsgBuffer::Expand(long slNewSize)
 {
   ASSERT(slNewSize>0);
   ASSERT(bu_slSize>=0);
@@ -679,7 +679,7 @@ void CEMsgBuffer::Expand(SLONG slNewSize)
     // if already allocated
   } else {
     ASSERT(slNewSize>bu_slSize);
-    SLONG slSizeDiff = slNewSize-bu_slSize;
+    long slSizeDiff = slNewSize-bu_slSize;
     ASSERT(bu_pubBuffer!=NULL);
     // grow buffer
     GrowMemory((void**)&bu_pubBuffer, slNewSize);
@@ -709,10 +709,10 @@ void CEMsgBuffer::Expand(SLONG slNewSize)
 
 
 // write bytes to buffer
-void CEMsgBuffer::WriteBytes(const void *pv, SLONG slSize)
+void CEMsgBuffer::WriteBytes(const void *pv, long slSize)
 {
 	BOOL bWraping = FALSE;
-	SLONG slOldReadOffset = bu_slReadOffset;
+	long slOldReadOffset = bu_slReadOffset;
 
 	// if buffer is currently wrapping
 
@@ -731,8 +731,8 @@ void CEMsgBuffer::WriteBytes(const void *pv, SLONG slSize)
 
   // if there is not enough free space
   if (bu_slFree<slSize) {
-		SLONG slSizeDiff;
-		SLONG slNewSize;
+		long slSizeDiff;
+		long slNewSize;
 		slNewSize = bu_slSize + ((slSize-bu_slFree + bu_slAllocationStep - 1) / bu_slAllocationStep) * bu_slAllocationStep;
 		slSizeDiff =  slNewSize - bu_slSize;
 
@@ -750,7 +750,7 @@ void CEMsgBuffer::WriteBytes(const void *pv, SLONG slSize)
   UBYTE *pub = (UBYTE*)pv;
 
   // write part of block at the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-bu_slWriteOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-bu_slWriteOffset, slSize);
   memcpy(bu_pubBuffer+bu_slWriteOffset, pub, slSizeEnd);
   pub+=slSizeEnd;
   memcpy(bu_pubBuffer, pub, slSize-slSizeEnd);
@@ -766,13 +766,13 @@ void CEMsgBuffer::WriteBytes(const void *pv, SLONG slSize)
 
 
 
-SLONG CEMsgBuffer::PeekBytes(const void *pv, SLONG slSize)
+long CEMsgBuffer::PeekBytes(const void *pv, long slSize)
 {
   ASSERT(slSize>0 && pv!=NULL);
   UBYTE *pub = (UBYTE*)pv;
 
   // clamp size to amount of bytes actually in the buffer
-  SLONG slUsed = bu_slSize-bu_slFree;
+  long slUsed = bu_slSize-bu_slFree;
   if (slUsed<slSize) {
     slSize = slUsed;
   }
@@ -783,7 +783,7 @@ SLONG CEMsgBuffer::PeekBytes(const void *pv, SLONG slSize)
   }
 
   // read part of block after read pointer to the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-bu_slReadOffset, slSize);
   memcpy(pub, bu_pubBuffer+bu_slReadOffset, slSizeEnd);
   pub+=slSizeEnd;
   // if that is not all
@@ -799,13 +799,13 @@ SLONG CEMsgBuffer::PeekBytes(const void *pv, SLONG slSize)
 }
 
 
-SLONG CEMsgBuffer::PeekBytesAtOffset(const void *pv, SLONG slSize,SLONG &slTickOffset)
+long CEMsgBuffer::PeekBytesAtOffset(const void *pv, long slSize,long &slTickOffset)
 {
   ASSERT(slSize>0 && pv!=NULL);
   UBYTE *pub = (UBYTE*)pv;
 
   // clamp size to amount of bytes actually in the buffer
-  SLONG slUsed = bu_slSize-bu_slFree;
+  long slUsed = bu_slSize-bu_slFree;
   if (slUsed<slSize) {
     slSize = slUsed;
   }
@@ -816,7 +816,7 @@ SLONG CEMsgBuffer::PeekBytesAtOffset(const void *pv, SLONG slSize,SLONG &slTickO
   }
 
   // read part of block after read pointer to the end of buffer
-  SLONG slSizeEnd = __min(bu_slSize-slTickOffset, slSize);
+  long slSizeEnd = __min(bu_slSize-slTickOffset, slSize);
   memcpy(pub, bu_pubBuffer+slTickOffset, slSizeEnd);
   pub+=slSizeEnd;
   slTickOffset += slSizeEnd;

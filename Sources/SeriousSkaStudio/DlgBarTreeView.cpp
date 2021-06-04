@@ -411,7 +411,7 @@ void CDlgBarTreeView::ChangeFloatOnSelectedSurfaces(CTString strControlID,FLOAT 
 
 void CDlgBarTreeView::ChangeFlagOnSelectedSurfaces(CTString strControlID, BOOL bChecked, INDEX iFlagIndex)
 {
-  ULONG ulNewFlag = (1UL<<iFlagIndex);
+  unsigned long ulNewFlag = (1UL<<iFlagIndex);
   // get selected surfaces count
   INDEX ctsms = _aiSelectedMeshSurfaces.Count();
   // for each selected mesh surfaces
@@ -809,7 +809,7 @@ void CDlgBarTreeView::SelItemChanged(HTREEITEM hSelected)
     {
       Animation *pan = (Animation*)ni.ni_pPtr;
       // start playing selected animation
-      ULONG ulAnimFlags = 0;// | AN_NORESTART;
+      unsigned long ulAnimFlags = 0;// | AN_NORESTART;
       
       // if looping animations
       if(pDoc->bAnimLoop) {

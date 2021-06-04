@@ -32,10 +32,10 @@ public:
   CTString m_astrBitDescription[32];
 	CCtrlEditFlags();
   CWnd *m_pDialog;
-  ULONG m_ulValue;
-  ULONG m_ulDefined;
-  ULONG m_ulEditable;
-  ULONG m_ulDefault;
+  unsigned long m_ulValue;
+  unsigned long m_ulDefined;
+  unsigned long m_ulEditable;
+  unsigned long m_ulDefault;
   INDEX m_iCurrentBank;
   RECT m_rectButton;
   PIX m_dx;
@@ -44,15 +44,15 @@ public:
 
   void SetBitDescription(INDEX iBit, CTString strBitName);
   void SetDialogPtr( CWnd *pDialog);
-  void SetDefaultValue(ULONG ulDefault);
-  void SetEditableMask(ULONG ulEditable);
-  void SetFlags(ULONG ulFlags);
-  void MergeFlags(ULONG ulFlags);
+  void SetDefaultValue(unsigned long ulDefault);
+  void SetEditableMask(unsigned long ulEditable);
+  void SetFlags(unsigned long ulFlags);
+  void MergeFlags(unsigned long ulFlags);
   void SetPrevEditableBank( void);
   void SetNextEditableBank( void);
   void SetFirstEditableBank( void);
   CTString GetTipForArea(INDEX iArea) const;
-  void ApplyChange(ULONG &ulOldFlags);
+  void ApplyChange(unsigned long &ulOldFlags);
   RECT GetRectForArea(INDEX iArea) const;
   INDEX GetAreaUnderMouse( CPoint point) const;
   int OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;

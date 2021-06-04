@@ -24,7 +24,7 @@ void CRenderer::DrawBrushPolygonVerticesAndEdges(CBrushPolygon &bpo)
   //INDEX iMaxVx = bsc.bsc_ivvx0+bsc.bsc_awvxVertices.Count();
 
   // set line type and color for edges and vertices
-  ULONG ulEdgesLineType = EdgeLineType(wplPolygonPlane.wpl_bVisible);
+  unsigned long ulEdgesLineType = EdgeLineType(wplPolygonPlane.wpl_bVisible);
   COLOR colorEdges = ColorForEdges(bpo.bpo_colColor, bpo.bpo_pbscSector->bsc_colColor);
   COLOR colorVertices = ColorForVertices(bpo.bpo_colColor, bpo.bpo_pbscSector->bsc_colColor);
   
@@ -47,7 +47,7 @@ void CRenderer::DrawBrushPolygonVerticesAndEdges(CBrushPolygon &bpo)
       // clip the edge line
       FLOAT3D vClipped0 = tv0;
       FLOAT3D vClipped1 = tv1;
-      ULONG ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
+      unsigned long ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
       // if the edge remains after clipping to front plane
       if (ulClipFlags != LCF_EDGEREMOVED) {
         // project the vertices
@@ -83,7 +83,7 @@ void CRenderer::DrawBrushPolygonVerticesAndEdges(CBrushPolygon &bpo)
     // clip the edge line
     FLOAT3D vClipped0 = tv0;
     FLOAT3D vClipped1 = tv1;
-    ULONG ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
+    unsigned long ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
     // if the edge remains after clipping to front plane
     if (ulClipFlags != LCF_EDGEREMOVED) {
       // project the vertices
@@ -195,7 +195,7 @@ void CRenderer::DrawFieldBrushSectorEdges(CBrushSector &bscSector)
     CWorkingPlane &wplPolygonPlane = *bpo.bpo_pbplPlane->bpl_pwplWorking;
     
     // set line type and color for edges and vertices
-    ULONG ulEdgesLineType = EdgeLineType(wplPolygonPlane.wpl_bVisible);
+    unsigned long ulEdgesLineType = EdgeLineType(wplPolygonPlane.wpl_bVisible);
     COLOR colorEdges = _wrpWorldRenderPrefs.wrp_colEdges;
     
     // for all edges in the polygon
@@ -210,7 +210,7 @@ void CRenderer::DrawFieldBrushSectorEdges(CBrushSector &bscSector)
       // clip the edge line
       FLOAT3D vClipped0 = tv0;
       FLOAT3D vClipped1 = tv1;
-      ULONG ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
+      unsigned long ulClipFlags = br.br_prProjection->ClipLine(vClipped0, vClipped1);
       // if the edge remains after clipping to front plane
       if (ulClipFlags != LCF_EDGEREMOVED) {
         // project the vertices

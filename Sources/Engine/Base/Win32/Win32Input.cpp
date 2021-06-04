@@ -729,8 +729,8 @@ void CInput::GetInput(BOOL bPreScan)
   POINT pntMouse;
   if( GetCursorPos( &pntMouse))
   {
-    FLOAT fDX = FLOAT( SLONG(pntMouse.x) - inp_slScreenCenterX);
-    FLOAT fDY = FLOAT( SLONG(pntMouse.y) - inp_slScreenCenterY);
+    FLOAT fDX = FLOAT( long(pntMouse.x) - inp_slScreenCenterX);
+    FLOAT fDY = FLOAT( long(pntMouse.y) - inp_slScreenCenterY);
 
     FLOAT fSensitivity = inp_fMouseSensitivity;
     if( inp_bAllowMouseAcceleration) fSensitivity *= 0.25f;
@@ -909,7 +909,7 @@ BOOL CInput::ScanJoystick(INDEX iJoy, BOOL bPreScan)
       continue;
     }
     // read its state
-    SLONG slAxisReading;
+    long slAxisReading;
     switch( iAxis) {
     case 0: slAxisReading = ji.dwXpos; break;
     case 1: slAxisReading = ji.dwYpos; break;

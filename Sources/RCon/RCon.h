@@ -39,9 +39,9 @@ class CRConApp : public CWinApp
 public:
 	CRConApp();
 
-  ULONG m_ulHost;
+  unsigned long m_ulHost;
   UWORD m_uwPort;
-  ULONG m_ulCode;
+  unsigned long m_ulCode;
   CTString m_strPass;
 
 // Overrides

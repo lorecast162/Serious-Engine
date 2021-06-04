@@ -55,7 +55,7 @@ struct ShaderParams
   CStaticArray<INDEX> sp_aiTexCoordsIndex;
   CStaticArray<COLOR> sp_acolColors;
   CStaticArray<FLOAT> sp_afFloats;
-  ULONG               sp_ulFlags;
+  unsigned long               sp_ulFlags;
 };
 
 class ENGINE_API CShader : public CSerial
@@ -71,7 +71,7 @@ public:
   void Read_t( CTStream *istrFile); // throw char *
   void Write_t( CTStream *ostrFile); // throw char *
   void Clear(void);
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 // Begin shader using
@@ -107,7 +107,7 @@ ENGINE_API void shaSetColorArray(COLOR *paColors, INDEX ctColors);
 // Set array of floats for shader
 ENGINE_API void shaSetFloatArray(FLOAT *paFloats, INDEX ctFloats);
 // Set shading flags
-ENGINE_API void shaSetFlags(ULONG ulFlags);
+ENGINE_API void shaSetFlags(unsigned long ulFlags);
 // Set base color of model 
 ENGINE_API void shaSetModelColor(COLOR &colModel);
 // Set light direction
@@ -145,7 +145,7 @@ ENGINE_API CTextureObject *shaGetTexture( INDEX iTextureIndex);
 // Get base color from array of colors
 ENGINE_API COLOR &shaGetColor(INDEX iColorIndex);
 // Get shading flags
-ENGINE_API ULONG &shaGetFlags();
+ENGINE_API unsigned long &shaGetFlags();
 // Get base color of model
 ENGINE_API COLOR &shaGetModelColor(void);
 // Get light direction

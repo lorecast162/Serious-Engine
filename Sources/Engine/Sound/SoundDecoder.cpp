@@ -109,8 +109,8 @@ static CDynamicLoader *_hOV = NULL;
 class CDecodeData_OGG {
 public:
   FILE *ogg_fFile;      // the stdio file that ogg is in
-  SLONG ogg_slOffset;   // offset where the ogg starts in the file (!=0 for oggs in zip)
-  SLONG ogg_slSize;     // size of ogg in the file (!=filesize for oggs in zip)
+  long ogg_slOffset;   // offset where the ogg starts in the file (!=0 for oggs in zip)
+  long ogg_slSize;     // size of ogg in the file (!=filesize for oggs in zip)
   OggVorbis_File *ogg_vfVorbisFile;  // the decoder file
   WAVEFORMATEX ogg_wfeFormat; // format of sound
 };
@@ -146,9 +146,9 @@ static size_t ogg_read_func  (void *ptr, size_t size, size_t nmemb, void *dataso
 {
   CDecodeData_OGG *pogg = (CDecodeData_OGG *)datasource;
   // calculate how much can be read at most
-  SLONG slToRead = size*nmemb;
-  SLONG slCurrentPos = ftell(pogg->ogg_fFile)-pogg->ogg_slOffset;
-  SLONG slSizeLeft = ClampDn(pogg->ogg_slSize-slCurrentPos, 0);
+  long slToRead = size*nmemb;
+  long slCurrentPos = ftell(pogg->ogg_fFile)-pogg->ogg_slOffset;
+  long slSizeLeft = ClampDn(pogg->ogg_slSize-slCurrentPos, 0);
   slToRead = ClampUp(slToRead, slSizeLeft);
 
   // rounded down to the block size
@@ -166,7 +166,7 @@ static int ogg_seek_func  (void *datasource, ogg_int64_t offset, int whence)
   return -1;
 /*  !!!! seeking is evil with vorbisfile 1.0RC2
   CDecodeData_OGG *pogg = (CDecodeData_OGG *)datasource;
-  SLONG slCurrentPos = ftell(pogg->ogg_fFile)-pogg->ogg_slOffset;
+  long slCurrentPos = ftell(pogg->ogg_fFile)-pogg->ogg_slOffset;
   if (whence==SEEK_CUR) {
     return fseek(pogg->ogg_fFile, offset, SEEK_CUR);
   } else if (whence==SEEK_END) {
@@ -307,9 +307,9 @@ CSoundDecoder::CSoundDecoder(const CTFileName &fnm)
         iZipHandle = UNZIPOpen_t(fnmExpanded);
 
         CTFileName fnmZip;
-        SLONG slOffset;
-        SLONG slSizeCompressed;
-        SLONG slSizeUncompressed;
+        long slOffset;
+        long slSizeCompressed;
+        long slSizeUncompressed;
         BOOL bCompressed;
         UNZIPGetFileInfo(iZipHandle, fnmZip, slOffset, slSizeCompressed, slSizeUncompressed, bCompressed);
 
@@ -416,9 +416,9 @@ CSoundDecoder::CSoundDecoder(const CTFileName &fnm)
         iZipHandle = UNZIPOpen_t(fnmExpanded);
 
         CTFileName fnmZip;
-        SLONG slOffset;
-        SLONG slSizeCompressed;
-        SLONG slSizeUncompressed;
+        long slOffset;
+        long slSizeCompressed;
+        long slSizeUncompressed;
         BOOL bCompressed;
         UNZIPGetFileInfo(iZipHandle, fnmZip, slOffset, slSizeCompressed, slSizeUncompressed, bCompressed);
 

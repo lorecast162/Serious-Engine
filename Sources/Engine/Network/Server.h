@@ -83,7 +83,7 @@ public:
   // add a block to streams for all sessions
   void AddBlockToAllSessions(CNetworkStreamBlock &nsb);
   // find a mask of all players on a certain client
-  ULONG MaskOfPlayersOnClient(INDEX iClient);
+  unsigned long MaskOfPlayersOnClient(INDEX iClient);
 public:
   /* Constructor. */
   CServer(void);

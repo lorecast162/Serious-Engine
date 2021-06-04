@@ -635,7 +635,7 @@ void CMesh::Write_t(CTStream *ostrFile)
           (*ostrFile)<<fFloat;
         }
         // write shader flags
-        ULONG ulFlags = msrf.msrf_ShadingParams.sp_ulFlags;
+        unsigned long ulFlags = msrf.msrf_ShadingParams.sp_ulFlags;
         (*ostrFile)<<ulFlags;
       }
     }
@@ -853,7 +853,7 @@ void CMesh::Read_t(CTStream *istrFile)
         }
         // there were no flags in shader before ver 12
         if(iFileVersion>11) {
-          ULONG ulFlags;
+          unsigned long ulFlags;
           (*istrFile)>>ulFlags;
           pshpShaderParams->sp_ulFlags = ulFlags;
         } else {
@@ -946,9 +946,9 @@ void CMesh::Clear(void)
 }
 
 // Count used memory
-SLONG CMesh::GetUsedMemory(void)
+long CMesh::GetUsedMemory(void)
 {
-  SLONG slMemoryUsed = sizeof(*this);
+  long slMemoryUsed = sizeof(*this);
   INDEX ctmlods = msh_aMeshLODs.Count();
   for(INDEX imlod=0;imlod<ctmlods;imlod++) {
     MeshLOD &mlod = msh_aMeshLODs[imlod];

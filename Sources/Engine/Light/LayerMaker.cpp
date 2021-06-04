@@ -92,8 +92,8 @@ public:
   void MakePolygonMask(void);
 
   // make shadow mask for the light
-  ULONG MakeShadowMask(CBrushShadowLayer *pbsl);
-  ULONG MakeOneShadowMaskMip(INDEX iMip);
+  unsigned long MakeShadowMask(CBrushShadowLayer *pbsl);
+  unsigned long MakeOneShadowMaskMip(INDEX iMip);
   // flip shadow mask around V axis (for parallel lights)
   void FlipShadowMask(INDEX iMip);
 
@@ -111,7 +111,7 @@ public:
 };
 
 /* Make mip-maps of the shadow mask. */
-static void MakeMipmapsForMask(UBYTE *pubMask, PIX pixSizeU, PIX pixSizeV, SLONG slTotalSize)
+static void MakeMipmapsForMask(UBYTE *pubMask, PIX pixSizeU, PIX pixSizeV, long slTotalSize)
 {
   // remember pointer after first mip map
   UBYTE *pubSecond = pubMask+pixSizeU*pixSizeV;
@@ -144,7 +144,7 @@ static void MakeMipmapsForMask(UBYTE *pubMask, PIX pixSizeU, PIX pixSizeV, SLONG
         UBYTE *pubDL = pubUL+pixThisSizeU;
         UBYTE *pubDR = pubDL+1;
         ASSERT(pubDR<pubNext);
-        ULONG ulTotal = ULONG(*pubUL)+ULONG(*pubUR)+ULONG(*pubDL)+ULONG(*pubDR);
+        unsigned long ulTotal = unsigned long(*pubUL)+unsigned long(*pubUR)+unsigned long(*pubDL)+unsigned long(*pubDR);
         *pub++ = ulTotal/4;
       }
     }
@@ -335,7 +335,7 @@ void CLayerMaker::SpreadShadowMaskOutwards(void)
     UBYTE *pubLayer = lm_pubLayer+lm_mmtLayer.mmt_aslOffsets[iMipmap];
     UBYTE *pubPolygonMask = lm_pubPolygonMask+lm_mmtPolygonMask.mmt_aslOffsets[iMipmap];
 
-    SLONG slOffsetLayer = 0;
+    long slOffsetLayer = 0;
     // for each pixel in the layer shadow mask
     for (PIX pixLayerV=0; pixLayerV<pixLayerSizeV; pixLayerV++) {
       for (PIX pixLayerU=0; pixLayerU<pixLayerSizeU; pixLayerU++) {
@@ -425,7 +425,7 @@ void CLayerMaker::SpreadShadowMaskInwards(void)
     UBYTE *pubLayer = lm_pubLayer+lm_mmtLayer.mmt_aslOffsets[iMipmap];
     UBYTE *pubPolygonMask = lm_pubPolygonMask+lm_mmtPolygonMask.mmt_aslOffsets[iMipmap];
 
-    SLONG slOffsetLayer = 0;
+    long slOffsetLayer = 0;
     // for each pixel in the layer shadow mask
     for (PIX pixLayerV=0; pixLayerV<pixLayerSizeV; pixLayerV++) {
       for (PIX pixLayerU=0; pixLayerU<pixLayerSizeU; pixLayerU++) {
@@ -587,7 +587,7 @@ void CLayerMaker::FlipShadowMask(INDEX iMip)
 }
 
 // make shadow mask for the light
-ULONG CLayerMaker::MakeShadowMask(CBrushShadowLayer *pbsl)
+unsigned long CLayerMaker::MakeShadowMask(CBrushShadowLayer *pbsl)
 {
   // if the light doesn't cast shadows, or the polygon does not receive them
   if (!(pbsl->bsl_plsLightSource->ls_ulFlags&LSF_CASTSHADOWS) ||
@@ -634,7 +634,7 @@ ULONG CLayerMaker::MakeShadowMask(CBrushShadowLayer *pbsl)
   lm_pubLayer = (UBYTE *)AllocMemory(lm_mmtLayer.mmt_slTotalSize+8);
   //const FLOAT fEpsilon = (1<<lm_iMipLevel)/1024.0f;
 
-  ULONG ulLighted=BSLF_ALLLIGHT|BSLF_ALLDARK;
+  unsigned long ulLighted=BSLF_ALLLIGHT|BSLF_ALLDARK;
   // if this polygon requires exact shadows
   if (lm_pbpoPolygon->bpo_ulFlags & BPOF_ACCURATESHADOWS) {
     // make each mip-map of mask for itself
@@ -669,9 +669,9 @@ ULONG CLayerMaker::MakeShadowMask(CBrushShadowLayer *pbsl)
   return ulLighted;
 }
 
-ULONG CLayerMaker::MakeOneShadowMaskMip(INDEX iMip)
+unsigned long CLayerMaker::MakeOneShadowMaskMip(INDEX iMip)
 {
-  ULONG ulLighted=BSLF_ALLLIGHT|BSLF_ALLDARK;
+  unsigned long ulLighted=BSLF_ALLLIGHT|BSLF_ALLDARK;
 
   PIX pixLayerMinU  = lm_pixLayerMinU>>iMip;
   PIX pixLayerMinV  = lm_pixLayerMinV>>iMip;
@@ -729,7 +729,7 @@ ULONG CLayerMaker::MakeOneShadowMaskMip(INDEX iMip)
     // render the view to the shadow layer (but ignore the target polygon)
     CAnyProjection3D apr;
     apr = prProjection;
-    ULONG ulFlagsBefore = lm_pbpoPolygon->bpo_ulFlags;
+    unsigned long ulFlagsBefore = lm_pbpoPolygon->bpo_ulFlags;
     lm_pbpoPolygon->bpo_ulFlags |= BPOF_INVISIBLE;
     ulLighted&=RenderShadows(*lm_pwoWorld, *(CEntity*)NULL, apr,
       lm_pbpoPolygon->bpo_boxBoundingBox, pubLayer, pixLayerSizeU, pixLayerSizeV,
@@ -775,7 +775,7 @@ ULONG CLayerMaker::MakeOneShadowMaskMip(INDEX iMip)
     apr = prProjection;
 
     // ignore the target polygon during rendering
-    ULONG ulFlagsBefore = lm_pbpoPolygon->bpo_ulFlags;
+    unsigned long ulFlagsBefore = lm_pbpoPolygon->bpo_ulFlags;
     lm_pbpoPolygon->bpo_ulFlags |= BPOF_INVISIBLE;
     // if light is not illumination light
     if (lm_plsLight->ls_ubPolygonalMask==0) {
@@ -845,7 +845,7 @@ BOOL CLayerMaker::CreateLayers(CBrushPolygon &bpo, CWorld &woWorld, BOOL bDoDire
     // mark the layer is calculated
     bsl.bsl_ulFlags |= BSLF_CALCULATED;
     // make shadow mask for the light
-    ULONG ulLighted=MakeShadowMask(itbsl);
+    unsigned long ulLighted=MakeShadowMask(itbsl);
     ASSERT((ulLighted==0) || (ulLighted==BSLF_ALLLIGHT) || (ulLighted==BSLF_ALLDARK));
     bsl.bsl_ulFlags &= ~(BSLF_ALLLIGHT|BSLF_ALLDARK);
     bsl.bsl_ulFlags |= ulLighted;

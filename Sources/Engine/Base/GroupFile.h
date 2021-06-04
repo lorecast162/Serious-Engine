@@ -27,8 +27,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class ENGINE_API CGroupFileFileInfo {
 public:
   CTFileName gffi_fnFileName; // full name of the file (relative to application path)
-  ULONG gffi_ulFileDataOffset; // file data block offset from beginning of the file
-  ULONG gffi_ulFileSize; // size of sub group file
+  unsigned long gffi_ulFileDataOffset; // file data block offset from beginning of the file
+  unsigned long gffi_ulFileSize; // size of sub group file
   /* Read one file info from stream. */
   void Read_t(CTStream *istr); // throw char *
   /* Write one file info into stream. */

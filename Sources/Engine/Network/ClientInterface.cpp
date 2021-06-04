@@ -29,7 +29,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/ListIterator.inl>
 
 // how many acknowledges can fit into one UDP packet
-#define MAX_ACKS_PER_PACKET (MAX_UDP_BLOCK_SIZE/sizeof(ULONG))
+#define MAX_ACKS_PER_PACKET (MAX_UDP_BLOCK_SIZE/sizeof(unsigned long))
 
 extern FLOAT net_fDropPackets;
 extern INDEX net_bReportPackets;
@@ -80,7 +80,7 @@ void CClientInterface::SetLocal(CClientInterface *pciOther)
 };
 
 // send a message through this client interface - reliable messages are not limited in size
-void CClientInterface::Send(const void *pvSend, SLONG slSize,BOOL bReliable)
+void CClientInterface::Send(const void *pvSend, long slSize,BOOL bReliable)
 {
 	ASSERT (ci_bUsed == TRUE);
 	ASSERT(pvSend != NULL && slSize>0);
@@ -89,9 +89,9 @@ void CClientInterface::Send(const void *pvSend, SLONG slSize,BOOL bReliable)
 
 	UBYTE ubPacketReliable;
 	UBYTE* pubData;
-	SLONG slSizeToSend;
-  SLONG slTransferSize;
-	ULONG ulSequence;
+	long slSizeToSend;
+  long slTransferSize;
+	unsigned long ulSequence;
 	CPacket* ppaNewPacket;
 
 	//if the message is reliable, make sure the first packet is marked as a head of the message
@@ -148,7 +148,7 @@ void CClientInterface::Send(const void *pvSend, SLONG slSize,BOOL bReliable)
 };
 
 // send a message through this client interface, to the provided address
-void CClientInterface::SendTo(const void *pvSend, SLONG slSize,const CAddress adrAdress,BOOL bReliable)
+void CClientInterface::SendTo(const void *pvSend, long slSize,const CAddress adrAdress,BOOL bReliable)
 {
 	ASSERT (ci_bUsed);
 	ASSERT(pvSend != NULL && slSize>0);
@@ -157,9 +157,9 @@ void CClientInterface::SendTo(const void *pvSend, SLONG slSize,const CAddress ad
 
 	UBYTE ubPacketReliable;
 	UBYTE* pubData;
-	SLONG slSizeToSend;
-  SLONG slTransferSize;
-	ULONG ulSequence;
+	long slSizeToSend;
+  long slTransferSize;
+	unsigned long ulSequence;
 	CPacket* ppaNewPacket;
 
 	//if the message is reliable, make sure the first packet is marked as a head of the message
@@ -214,7 +214,7 @@ void CClientInterface::SendTo(const void *pvSend, SLONG slSize,const CAddress ad
 
 
 // receive a message through the interface, discard originating address
-BOOL CClientInterface::Receive(void *pvReceive, SLONG &slSize,BOOL bReliable)
+BOOL CClientInterface::Receive(void *pvReceive, long &slSize,BOOL bReliable)
 {
 	ASSERT (slSize>0);
 	ASSERT (pvReceive != NULL);
@@ -224,11 +224,11 @@ BOOL CClientInterface::Receive(void *pvReceive, SLONG &slSize,BOOL bReliable)
 };
 
 // receive a message through the interface, and fill in the originating address
-BOOL CClientInterface::ReceiveFrom(void *pvReceive, SLONG &slSize, CAddress *padrAdress,BOOL bReliable)
+BOOL CClientInterface::ReceiveFrom(void *pvReceive, long &slSize, CAddress *padrAdress,BOOL bReliable)
 {
 	CPacket* ppaPacket;
 	UBYTE* pubData = (UBYTE*) pvReceive;
-	SLONG slDummySize;
+	long slDummySize;
 	UBYTE ubReliable;
 
 	// if a reliable message is requested
@@ -304,7 +304,7 @@ BOOL CClientInterface::Receive(CTStream &strmReceive,UBYTE bReliable)
 {
 	CPacket* ppaPacket;
 	UBYTE ubReliable;
-  SLONG slDummySize;
+  long slDummySize;
 
 	// if a reliable message is requested
 	if (bReliable) {
@@ -396,8 +396,8 @@ void CClientInterface::ExchangeBuffers(void)
 BOOL CClientInterface::UpdateInputBuffers(void)
 {
 	//BOOL bSomethingDone;
-	ULONG pulGenAck[MAX_ACKS_PER_PACKET];
-	ULONG ulAckCount=0;
+	unsigned long pulGenAck[MAX_ACKS_PER_PACKET];
+	unsigned long ulAckCount=0;
 	CTimerValue tvNow;
 		
 	// if there are packets in the input buffer, process them
@@ -406,16 +406,16 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 		
 			// if it's an acknowledge packet, remove the acknowledged packets from the wait acknowledge buffer
 			if (ppaPacket->pa_ubReliable & UDP_PACKET_ACKNOWLEDGE) {
-				ULONG *pulAck;
-				SLONG slSize;
-				ULONG ulSequence;
+				unsigned long *pulAck;
+				long slSize;
+				unsigned long ulSequence;
 
 				slSize = ppaPacket->pa_slSize - MAX_HEADER_SIZE;
 				// if slSize isn't rounded to the size of ulSequence, abort 
-				ASSERT (slSize % sizeof(ULONG) == 0);
+				ASSERT (slSize % sizeof(unsigned long) == 0);
 
 				// get the pointer to the start of acknowledged sequences
-				pulAck = (ULONG*) (ppaPacket->pa_pubPacketData + MAX_HEADER_SIZE);
+				pulAck = (unsigned long*) (ppaPacket->pa_pubPacketData + MAX_HEADER_SIZE);
 				// for each acknowledged sequence number
 				while (slSize>0) {
 					ulSequence = *pulAck;
@@ -423,7 +423,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 					// report the packet info to the console
 					if (net_bReportPackets == TRUE) {
 						tvNow = _pTimer->GetHighPrecisionTimer();
-						CPrintF("%lu: Received acknowledge for packet sequence %d\n",(ULONG) tvNow.GetMilliseconds(),ulSequence);
+						CPrintF("%lu: Received acknowledge for packet sequence %d\n",(unsigned long) tvNow.GetMilliseconds(),ulSequence);
 					}
 					
 					// remove the matching packet from the wait acknowledge buffer
@@ -431,7 +431,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 					// if the packet is waiting to be resent it's in the outgoing buffer, so remove it
 					ci_pbOutputBuffer.RemovePacket(ulSequence,TRUE);
 					pulAck++;
-					slSize -= sizeof(ULONG);
+					slSize -= sizeof(unsigned long);
 				}
 
 				// take this packet out of the input buffer and kill it
@@ -448,7 +448,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 					CPacket *ppaAckPacket = new CPacket;
 					ppaAckPacket->pa_adrAddress.adr_ulAddress = ppaPacket->pa_adrAddress.adr_ulAddress;
 					ppaAckPacket->pa_adrAddress.adr_uwPort = ppaPacket->pa_adrAddress.adr_uwPort;
-					ppaAckPacket->WriteToPacket(&(ppaPacket->pa_ulSequence),sizeof(ULONG),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,SLASHSLASH,sizeof(ULONG));
+					ppaAckPacket->WriteToPacket(&(ppaPacket->pa_ulSequence),sizeof(unsigned long),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,SLASHSLASH,sizeof(unsigned long));
 					ci_pbOutputBuffer.AppendPacket(*ppaAckPacket,TRUE);
 					if (net_bReportPackets == TRUE) {
 						CPrintF("Acknowledging broadcast packet sequence %d\n",ppaPacket->pa_ulSequence);
@@ -461,7 +461,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 						CPacket *ppaAckPacket = new CPacket;
 						ppaAckPacket->pa_adrAddress.adr_ulAddress = ci_adrAddress.adr_ulAddress;
 						ppaAckPacket->pa_adrAddress.adr_uwPort = ci_adrAddress.adr_uwPort;
-						ppaAckPacket->WriteToPacket(pulGenAck,ulAckCount*sizeof(ULONG),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,ci_adrAddress.adr_uwID,ulAckCount*sizeof(ULONG));
+						ppaAckPacket->WriteToPacket(pulGenAck,ulAckCount*sizeof(unsigned long),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,ci_adrAddress.adr_uwID,ulAckCount*sizeof(unsigned long));
 						ci_pbOutputBuffer.AppendPacket(*ppaAckPacket,TRUE);
 						ulAckCount = 0;
 					}	
@@ -471,7 +471,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 					// report the packet info to the console
 					if (net_bReportPackets == TRUE) {
 						tvNow = _pTimer->GetHighPrecisionTimer();
-						CPrintF("%lu: Acknowledging packet sequence %d\n",(ULONG) tvNow.GetMilliseconds(),ppaPacket->pa_ulSequence);
+						CPrintF("%lu: Acknowledging packet sequence %d\n",(unsigned long) tvNow.GetMilliseconds(),ppaPacket->pa_ulSequence);
 					}
 
 					ulAckCount++;
@@ -532,7 +532,7 @@ BOOL CClientInterface::UpdateInputBuffers(void)
 		CPacket *ppaAckPacket = new CPacket;
 		ppaAckPacket->pa_adrAddress.adr_ulAddress = ci_adrAddress.adr_ulAddress;
 		ppaAckPacket->pa_adrAddress.adr_uwPort = ci_adrAddress.adr_uwPort;
-		ppaAckPacket->WriteToPacket(pulGenAck,ulAckCount*sizeof(ULONG),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,ci_adrAddress.adr_uwID,ulAckCount*sizeof(ULONG));
+		ppaAckPacket->WriteToPacket(pulGenAck,ulAckCount*sizeof(unsigned long),UDP_PACKET_ACKNOWLEDGE,++ci_ulSequence,ci_adrAddress.adr_uwID,ulAckCount*sizeof(unsigned long));
 		ci_pbOutputBuffer.AppendPacket(*ppaAckPacket,TRUE);
 	}	
 	return TRUE;
@@ -556,16 +556,16 @@ BOOL CClientInterface::UpdateInputBuffersBroadcast(void)
 
 			// if it's an acknowledge packet, remove the acknowledged packets from the wait acknowledge buffer
 			if (ppaPacket->pa_ubReliable & UDP_PACKET_ACKNOWLEDGE) {
-				ULONG *pulAck;
-				SLONG slSize;
-				ULONG ulSequence;
+				unsigned long *pulAck;
+				long slSize;
+				unsigned long ulSequence;
 
 				slSize = ppaPacket->pa_slSize - MAX_HEADER_SIZE;
 				// if slSize isn't rounded to the size of ulSequence, abort 
-				ASSERT (slSize % sizeof(ULONG) == 0);
+				ASSERT (slSize % sizeof(unsigned long) == 0);
 
 				// get the pointer to the start of acknowledged sequences
-				pulAck = (ULONG*) (ppaPacket->pa_pubPacketData + MAX_HEADER_SIZE);
+				pulAck = (unsigned long*) (ppaPacket->pa_pubPacketData + MAX_HEADER_SIZE);
 				// for each acknowledged sequence number
 				while (slSize>0) {
 					ulSequence = *pulAck;
@@ -573,7 +573,7 @@ BOOL CClientInterface::UpdateInputBuffersBroadcast(void)
 					// report the packet info to the console
 					if (net_bReportPackets == TRUE) {
 						tvNow = _pTimer->GetHighPrecisionTimer();
-						CPrintF("%lu: Received acknowledge for broadcast packet sequence %d\n",(ULONG) tvNow.GetMilliseconds(),ulSequence);
+						CPrintF("%lu: Received acknowledge for broadcast packet sequence %d\n",(unsigned long) tvNow.GetMilliseconds(),ulSequence);
 					}
 
 					// remove the matching packet from the wait acknowledge buffer
@@ -581,7 +581,7 @@ BOOL CClientInterface::UpdateInputBuffersBroadcast(void)
 					// if the packet is waiting to be resent it's in the outgoing buffer, so remove it
 					ci_pbOutputBuffer.RemovePacket(ulSequence,TRUE);
 					pulAck++;
-					slSize -= sizeof(ULONG);
+					slSize -= sizeof(unsigned long);
 				}
 
 				ci_pbInputBuffer.RemovePacket(ppaPacket->pa_ulSequence,FALSE);
@@ -595,13 +595,13 @@ BOOL CClientInterface::UpdateInputBuffersBroadcast(void)
 				CPacket *ppaAckPacket = new CPacket;
 				ppaAckPacket->pa_adrAddress.adr_ulAddress = ppaPacket->pa_adrAddress.adr_ulAddress;
 				ppaAckPacket->pa_adrAddress.adr_uwPort = ppaPacket->pa_adrAddress.adr_uwPort;
-				ppaAckPacket->WriteToPacket(&(ppaPacket->pa_ulSequence),sizeof(ULONG),UDP_PACKET_ACKNOWLEDGE,ci_ulSequence++,ppaPacket->pa_adrAddress.adr_uwID,sizeof(ULONG));
+				ppaAckPacket->WriteToPacket(&(ppaPacket->pa_ulSequence),sizeof(unsigned long),UDP_PACKET_ACKNOWLEDGE,ci_ulSequence++,ppaPacket->pa_adrAddress.adr_uwID,sizeof(unsigned long));
 				ci_pbOutputBuffer.AppendPacket(*ppaAckPacket,TRUE);
 
 				// report the packet info to the console
 				if (net_bReportPackets == TRUE) {
 					tvNow = _pTimer->GetHighPrecisionTimer();
-					CPrintF("%lu: Acknowledging broadcast packet sequence %d\n",(ULONG) tvNow.GetMilliseconds(),ppaPacket->pa_ulSequence);
+					CPrintF("%lu: Acknowledging broadcast packet sequence %d\n",(unsigned long) tvNow.GetMilliseconds(),ppaPacket->pa_ulSequence);
 				}
 
 				ci_pbInputBuffer.RemovePacket(ppaPacket->pa_ulSequence,FALSE);
@@ -687,7 +687,7 @@ CPacket* CClientInterface::GetPendingPacket(void)
 
 
 // reads the expected size of current realiable message in the reliable input buffer
-SLONG CClientInterface::GetExpectedReliableSize(void)
+long CClientInterface::GetExpectedReliableSize(void)
 {
   if (ci_pbReliableInputBuffer.pb_ulNumOfPackets == 0) {
     return 0;
@@ -697,9 +697,9 @@ SLONG CClientInterface::GetExpectedReliableSize(void)
 };
 
 // reads the expected size of current realiable message in the reliable input buffer
-SLONG CClientInterface::GetCurrentReliableSize(void)
+long CClientInterface::GetCurrentReliableSize(void)
 {
-  SLONG slSize;
+  long slSize;
   ci_pbReliableInputBuffer.CheckSequence(slSize);
 	return slSize;
 };

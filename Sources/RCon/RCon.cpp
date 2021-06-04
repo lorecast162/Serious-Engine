@@ -66,7 +66,7 @@ BOOL CRConApp::SubInitInstance()
   strHost[0] = 0;
   strPass[0] = 0;
 
-  ULONG ulPort;
+  unsigned long ulPort;
   strCmdLine.ScanF("%80s %u \"%80[^\"]\"", strHost, &ulPort, strPass); 
   
   

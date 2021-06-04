@@ -42,7 +42,7 @@ public:
   enum GameMode sp_gmGameMode;    // general game rules
 
   enum GameDifficulty sp_gdGameDifficulty;
-  ULONG sp_ulSpawnFlags;
+  unsigned long sp_ulSpawnFlags;
   BOOL sp_bMental;            // set if mental mode engaged
 
   INDEX sp_iScoreLimit;       // stop game after a player/team reaches given score
@@ -78,7 +78,7 @@ public:
 
   BOOL  sp_bEndOfGame;     // marked when dm game is finished (any of the limits reached)
 
-  ULONG sp_ulLevelsMask;    // mask of visited levels so far
+  unsigned long sp_ulLevelsMask;    // mask of visited levels so far
 
   BOOL  sp_bUseExtraEnemies;  // spawn extra multiplayer enemies
 };

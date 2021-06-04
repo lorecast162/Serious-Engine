@@ -56,8 +56,8 @@ struct ENGINE_API ControlAxisInfo
   CTString cai_strAxisName;           // name of this axis
   FLOAT cai_fReading;                 // current reading of this axis
   BOOL  cai_bExisting; // set if the axis exists (for joystick axes)
-  SLONG cai_slMax;    // max/min info for joysticks
-  SLONG cai_slMin;
+  long cai_slMax;    // max/min info for joysticks
+  long cai_slMin;
 };
 
 /*
@@ -77,8 +77,8 @@ public:
   BOOL inp_abJoystickOn[MAX_JOYSTICKS];  // set if a joystick is valid for reading
   BOOL inp_abJoystickHasPOV[MAX_JOYSTICKS];  // set if a joystick has a POV hat
 
-  SLONG inp_slScreenCenterX;                        // screen center X in pixels
-  SLONG inp_slScreenCenterY;                        // screen center Y in pixels
+  long inp_slScreenCenterX;                        // screen center X in pixels
+  long inp_slScreenCenterY;                        // screen center Y in pixels
   RECT inp_rectOldClip;                             // old cursor clip rectangle in pixels
   POINT inp_ptOldMousePos;                          // old mouse position
   struct MouseSpeedControl inp_mscMouseSettings;    // system mouse settings

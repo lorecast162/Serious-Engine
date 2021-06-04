@@ -53,8 +53,8 @@ void SubMain( int argc, char *argv[])
   // first input parameter is texture name
   CTFileName fnTextureFileName = CTString(argv[1]);
   // parameters 2 and 3 give us character dimensions
-  ULONG ulCharWidth = strtoul( argv[2], NULL, 10);
-  ULONG ulCharHeight= strtoul( argv[3], NULL, 10);
+  unsigned long ulCharWidth = strtoul( argv[2], NULL, 10);
+  unsigned long ulCharHeight= strtoul( argv[3], NULL, 10);
   // parameter 4 specifies text file for character arrangements
   CTFileName fnOrderFile = CTString(argv[4]);
 

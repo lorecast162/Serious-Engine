@@ -109,7 +109,7 @@ UBYTE aubGouraudConv[16384];
 // flag for scene rendering in progress (i.e. between 1st lock in frame & swap-buffers)
 static BOOL GFX_bRenderingScene = FALSE;
 // ID of the last drawport that has been locked
-static ULONG GFX_ulLastDrawPortID = 0;  
+static unsigned long GFX_ulLastDrawPortID = 0;  
 
 // last size of vertex buffers
 INDEX _iLastVertexBufferSize = 0;
@@ -118,7 +118,7 @@ extern BOOL _bNeedPretouch;
 
 // flat texture
 CTextureData *_ptdFlat = NULL;
-static ULONG _ulWhite = 0xFFFFFFFF;
+static unsigned long _ulWhite = 0xFFFFFFFF;
 
 // fast sin/cos table
 static FLOAT afSinTable[256+256+64];
@@ -297,10 +297,10 @@ INDEX gfx_iStereoOffset = 10;           // view offset (or something:)
 FLOAT gfx_fStereoSeparation =  0.25f;   // distance between eyes
 
 // cached integers for faster calculation
-SLONG _slTexSaturation = 256;  // 0 = min, 256 = default
-SLONG _slTexHueShift   = 0;
-SLONG _slShdSaturation = 256; 
-SLONG _slShdHueShift   = 0;
+long _slTexSaturation = 256;  // 0 = min, 256 = default
+long _slTexHueShift   = 0;
+long _slShdSaturation = 256; 
+long _slShdHueShift   = 0;
 
 // 'supported' console variable flags
 static INDEX sys_bHasTextureCompression = 0;
@@ -422,10 +422,10 @@ static void TexturesInfo(void)
   UpdateTextureSettings();
   INDEX ctNo04O=0, ctNo64O=0, ctNoMXO=0;
   PIX   pixK04O=0, pixK64O=0, pixKMXO=0;
-  SLONG slKB04O=0, slKB64O=0, slKBMXO=0;
+  long slKB04O=0, slKB64O=0, slKBMXO=0;
   INDEX ctNo04A=0, ctNo64A=0, ctNoMXA=0;
   PIX   pixK04A=0, pixK64A=0, pixKMXA=0;
-  SLONG slKB04A=0, slKB64A=0, slKBMXA=0;
+  long slKB04A=0, slKB64A=0, slKBMXA=0;
 
   // walk thru all textures on stock
   {FOREACHINDYNAMICCONTAINER( _pTextureStock->st_ctObjects, CTextureData, ittd)
@@ -433,7 +433,7 @@ static void TexturesInfo(void)
     CTextureData &td = *ittd;
     BOOL  bAlpha   = td.td_ulFlags&TEX_ALPHACHANNEL;
     INDEX ctFrames = td.td_ctFrames;
-    SLONG slBytes  = td.GetUsedMemory();
+    long slBytes  = td.GetUsedMemory();
     ASSERT( slBytes>=0);
     // get texture size
     PIX pixTextureSize = td.GetPixWidth() * td.GetPixHeight();
@@ -666,7 +666,7 @@ static void GAPInfo(void)
     /* if exist, report vertex array range extension usage
     if( ulExt & GOEXT_VERTEXARRAYRANGE) {
       extern BOOL  VB_bSetupFailed;
-      extern SLONG VB_slVertexBufferSize;
+      extern long VB_slVertexBufferSize;
       extern INDEX VB_iVertexBufferType;
       extern INDEX ogl_iVertexBuffers;
       if( VB_bSetupFailed) { // didn't manage to setup vertex buffers
@@ -676,7 +676,7 @@ static void GAPInfo(void)
       } else {  // works! :)
         CTString strBufferType("AGP");
         if( VB_iVertexBufferType==2) strBufferType = "video";
-        const SLONG slMemSize = VB_slVertexBufferSize/1024;
+        const long slMemSize = VB_slVertexBufferSize/1024;
         CPrintF( "- Enhanced hardware T&L: %d buffers in %d KB of %s memory",
                  ogl_iVertexBuffers, slMemSize, strBufferType);
       }
@@ -701,8 +701,8 @@ static void GAPInfo(void)
     } else CPrintF( "not present\n");
 
     // report vtx/idx buffers size
-    extern SLONG SizeFromVertices_D3D( INDEX ctVertices);
-    const SLONG slMemoryUsed = SizeFromVertices_D3D(_pGfx->gl_ctVertices);
+    extern long SizeFromVertices_D3D( INDEX ctVertices);
+    const long slMemoryUsed = SizeFromVertices_D3D(_pGfx->gl_ctVertices);
     CPrintF( "- Vertex buffer size: %.1f KB (%d vertices)\n", slMemoryUsed/1024.0f, _pGfx->gl_ctVertices);
 
     // N-Patches tessellation (Truform)
@@ -813,7 +813,7 @@ extern void UncacheShadows(void)
   shd_fSaturation  = ClampDn( shd_fSaturation, 0.0f); 
   gfx_iHueShift    = Clamp(   gfx_iHueShift, 0, 359);
   shd_iHueShift    = Clamp(   shd_iHueShift, 0, 359);
-  _slShdSaturation = (SLONG)( gfx_fSaturation*shd_fSaturation*256.0f);
+  _slShdSaturation = (long)( gfx_fSaturation*shd_fSaturation*256.0f);
   _slShdHueShift   = Clamp(  (gfx_iHueShift+shd_iHueShift)*255/359, 0, 255);
           
   CListHead &lhOriginal = _pGfx->gl_lhCachedShadows;
@@ -851,7 +851,7 @@ extern void ReloadTextures(void)
   tex_fSaturation  = ClampDn( tex_fSaturation, 0.0f); 
   gfx_iHueShift    = Clamp( gfx_iHueShift, 0, 359);
   tex_iHueShift    = Clamp( tex_iHueShift, 0, 359);
-  _slTexSaturation = (SLONG)( gfx_fSaturation*tex_fSaturation*256.0f);
+  _slTexSaturation = (long)( gfx_fSaturation*tex_fSaturation*256.0f);
   _slTexHueShift   = Clamp(  (gfx_iHueShift+tex_iHueShift)*255/359, 0, 255);
 
   // update texture settings
@@ -1117,7 +1117,7 @@ void CGfxLibrary::Init(void)
   CPrintF(TRANSV("Desktop settings...\n"));
 
   HDC hdc = GetDC(NULL); 
-  SLONG slBPP = GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL); 
+  long slBPP = GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL); 
   ReleaseDC(NULL, hdc);  
 
   gfx_ctMonitors = GetSystemMetrics(SM_CMONITORS);
@@ -1551,7 +1551,7 @@ BOOL CGfxLibrary::LockDrawPort( CDrawPort *pdpToLock)
   if( pdpToLock->dp_Width<1 || pdpToLock->dp_Height<1) return FALSE;
 
   // don't set if same as last
-  const ULONG ulThisDrawPortID = pdpToLock->GetID();
+  const unsigned long ulThisDrawPortID = pdpToLock->GetID();
   if( GFX_ulLastDrawPortID==ulThisDrawPortID && gap_bOptimizeStateChanges) {
     // just set projection
     pdpToLock->SetOrtho();
@@ -1707,7 +1707,7 @@ void CGfxLibrary::DestroyWorkCanvas(CDrawPort *pdpOld)
 // optimize memory used by cached shadow maps
 
 #define SHADOWMAXBYTES (256*256*4*4/3)
-static SLONG slCachedShadowMemory=0, slDynamicShadowMemory=0;
+static long slCachedShadowMemory=0, slDynamicShadowMemory=0;
 static INDEX ctCachedShadows=0, ctFlatShadows=0, ctDynamicShadows=0;
 BOOL _bShadowsUpdated = TRUE;
 
@@ -1764,8 +1764,8 @@ void CGfxLibrary::ReduceShadows(void)
   }
 
   // optimize only if low on memory                                
-  ULONG ulShadowCacheSize  = (ULONG)(shd_fCacheSize*1024*1024); // in bytes
-  ULONG ulUsedShadowMemory = slCachedShadowMemory + slDynamicShadowMemory;
+  unsigned long ulShadowCacheSize  = (unsigned long)(shd_fCacheSize*1024*1024); // in bytes
+  unsigned long ulUsedShadowMemory = slCachedShadowMemory + slDynamicShadowMemory;
   if( ulUsedShadowMemory  <= ulShadowCacheSize) {
     _sfStats.StopTimer( CStatForm::STI_SHADOWUPDATE);
     return;
@@ -1803,7 +1803,7 @@ INDEX _ctProbeTexs = 0;
 INDEX _ctProbeShdU = 0;
 INDEX _ctProbeShdB = 0;
 INDEX _ctFullShdU  = 0;
-SLONG _slFullShdUBytes = 0;
+long _slFullShdUBytes = 0;
 #ifdef PLATFORM_WIN32 // only used there
 static BOOL GenerateGammaTable(void);
 #endif
@@ -1912,11 +1912,11 @@ void CGfxLibrary::SwapBuffers(CViewPort *pvp)
     || (gl_iTessellationLevel>0 && gap_iTruformLevel<1)) {
       extern void SetupVertexArrays_D3D( INDEX ctVertices);
       extern void SetupIndexArray_D3D( INDEX ctVertices);
-      extern DWORD SetupShader_D3D( ULONG ulStreamsMask);
+      extern DWORD SetupShader_D3D( unsigned long ulStreamsMask);
       SetupShader_D3D(NONE); 
       SetupVertexArrays_D3D(0); 
       SetupIndexArray_D3D(0);
-      extern INDEX VerticesFromSize_D3D( SLONG &slSize);
+      extern INDEX VerticesFromSize_D3D( long &slSize);
       const INDEX ctVertices = VerticesFromSize_D3D(d3d_iVertexBuffersSize);
       SetupVertexArrays_D3D(ctVertices); 
       SetupIndexArray_D3D(2*ctVertices);

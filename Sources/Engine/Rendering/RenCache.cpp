@@ -315,12 +315,12 @@ void CRenderer::AddEdgeToAddAndRemoveLists(CScreenEdge &sed)
   INDEX iTopLine = sed.sed_pixTopJ-re_pixTopScanLineJ;
   CListNode *plnInList = re_alhAddLists[iTopLine].lh_Head;
   re_actAddCounts[iTopLine]++;
-  SLONG slIThis = sed.sed_xI.slHolder;
+  long slIThis = sed.sed_xI.slHolder;
 
   ASSERT(sed.sed_xI > FIX16_16(re_fbbClipBox.Min()(1)-SENTINELEDGE_EPSILON));
   ASSERT(sed.sed_xI < FIX16_16(re_fbbClipBox.Max()(1)+SENTINELEDGE_EPSILON));
 
-  SLONG slIInList;
+  long slIInList;
   while(plnInList->ln_Succ!=NULL) {
     slIInList = 
       ((CAddEdge*)((UBYTE*)plnInList-_offsetof(CAddEdge, ade_lnInAdd))) -> ade_xI.slHolder;
@@ -391,7 +391,7 @@ inline void CRenderer::MakeScreenEdge(
   ldtDirection = LDT_DESCENDING;
 
   // if vertex 0 is below vertex 1
-  if ((SLONG&)fDJ<0 ) { // fJ0>fJ1
+  if ((long&)fDJ<0 ) { // fJ0>fJ1
     // mark edge as ascending
     ldtDirection = LDT_ASCENDING;
     Swap(fI0, fI1);
@@ -419,7 +419,7 @@ inline void CRenderer::MakeScreenEdge(
   // if bottom vertex is above screen top or top vertex is below screen bottom
   FLOAT fDJ1Up = fJ1-re_fbbClipBox.Min()(2);
   FLOAT fDJ0Dn = re_fbbClipBox.Max()(2)-fJ0;
-  if ((SLONG&)(fDJ1Up)<0 || (SLONG&)(fDJ0Dn)<0) {
+  if ((long&)(fDJ1Up)<0 || (long&)(fDJ0Dn)<0) {
     // generate dummy horizontal screen edge
     sed.sed_pixTopJ    = (PIX) 0;
     sed.sed_pixBottomJ = (PIX) 0;
@@ -699,7 +699,7 @@ CScreenPolygon *CRenderer::MakeScreenPolygon(CBrushPolygon &bpo)
   const FLOAT fOpacity = br.br_penEntity->GetOpacity();
   if( fOpacity<1)
   { // better to hold opacity in integer
-    const SLONG slOpacity = NormFloatToByte(fOpacity);
+    const long slOpacity = NormFloatToByte(fOpacity);
     // for all texture layers (not shadowmap!)
     for( INDEX i=0; i<3; i++) {
       // if texture is opaque 
@@ -711,7 +711,7 @@ CScreenPolygon *CRenderer::MakeScreenPolygon(CBrushPolygon &bpo)
       // if texture is blended
       if( sppo.spo_aubTextureFlags[i] & STXF_BLEND_ALPHA) {
         // adjust it's alpha factor
-        SLONG slAlpha = (sppo.spo_acolColors[i] & CT_AMASK) >>CT_ASHIFT;
+        long slAlpha = (sppo.spo_acolColors[i] & CT_AMASK) >>CT_ASHIFT;
         slAlpha = (slAlpha*slOpacity)>>8;
         sppo.spo_acolColors[i] &= ~CT_AMASK;
         sppo.spo_acolColors[i] |= slAlpha;

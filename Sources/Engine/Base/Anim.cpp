@@ -152,9 +152,9 @@ void CAnimData::Clear()
 }
 
 // get amount of memory used by this object
-SLONG CAnimData::GetUsedMemory(void)
+long CAnimData::GetUsedMemory(void)
 {
-  SLONG slUsed = sizeof(*this)+sizeof(COneAnim)*ad_NumberOfAnims;
+  long slUsed = sizeof(*this)+sizeof(COneAnim)*ad_NumberOfAnims;
   slUsed += strlen(GetName())+1;
 
   for(INDEX iAnim=0; iAnim<ad_NumberOfAnims; iAnim++) {
@@ -293,7 +293,7 @@ void CAnimData::LoadFromScript_t( CTStream *File, CListHead *pFrameFileList) // 
 	char full_path[ PATH_MAX];
 	char ld_line[ 128];
 	CTmpListHead TempAnimationList;
-	SLONG lc;
+	long lc;
 	//BOOL ret_val;
 
 	//ASSERT( ad_Anims == NULL);
@@ -352,7 +352,7 @@ void CAnimData::LoadFromScript_t( CTStream *File, CListHead *pFrameFileList) // 
 			sscanf( ld_line, "SPEED %f", &poaOneAnim->oa_SecsPerFrame);
 
       CDynamicArray<CTString> astrFrames;
-      SLONG slLastPos;
+      long slLastPos;
       FOREVER
       {
         slLastPos = File->GetPos_t();
@@ -454,7 +454,7 @@ void CAnimData::LoadFromScript_t( CTStream *File, CListHead *pFrameFileList) // 
 
 void CAnimData::Write_t( CTStream *ostrFile)  // throw char *
 {
-	SLONG i;
+	long i;
 	// First we save main ID
 	ostrFile->WriteID_t( CChunkID( "ADAT"));
 	// Then we save number of how many animations do we have and then save them all
@@ -580,7 +580,7 @@ void CAnimData::DeleteAnimation(INDEX iAnim)
 void CAnimData::Read_t( CTStream *istrFile) // throw char *
 {
 	ASSERT( ad_Anims == NULL);
-	SLONG i;
+	long i;
 	// First we recognize main ID
 	istrFile->ExpectID_t( CChunkID( "ADAT"));
 	// Then we load and create number of animations
@@ -594,7 +594,7 @@ void CAnimData::Read_t( CTStream *istrFile) // throw char *
 		(*istrFile)>>ad_Anims[i].oa_NumberOfFrames;
 		ad_Anims[i].oa_FrameIndices = (INDEX *)
 								AllocMemory( ad_Anims[i].oa_NumberOfFrames * sizeof( INDEX));
-        for (SLONG j = 0; j < ad_Anims[i].oa_NumberOfFrames; j++)
+        for (long j = 0; j < ad_Anims[i].oa_NumberOfFrames; j++)
             (*istrFile)>>ad_Anims[i].oa_FrameIndices[j];
 	}
 }
@@ -702,7 +702,7 @@ void CAnimObject::ContinueAnim(void)
   if (pCOA->oa_NumberOfFrames<=0) {
     return;
   }
-  INDEX iStoppedFrame = (pCOA->oa_NumberOfFrames + (SLONG)(ao_tmAnimStart/pCOA->oa_SecsPerFrame)
+  INDEX iStoppedFrame = (pCOA->oa_NumberOfFrames + (long)(ao_tmAnimStart/pCOA->oa_SecsPerFrame)
                          % pCOA->oa_NumberOfFrames) % pCOA->oa_NumberOfFrames;
   // using current frame index calculate time so animation continues from same frame
   ao_tmAnimStart = _pTimer->CurrentTick() - pCOA->oa_SecsPerFrame * iStoppedFrame;
@@ -885,7 +885,7 @@ void CAnimObject::StartAnim(INDEX iNew)
 }
 
 /* Start playing an animation. */
-void CAnimObject::PlayAnim(INDEX iNew, ULONG ulFlags)
+void CAnimObject::PlayAnim(INDEX iNew, unsigned long ulFlags)
 {
   if(ao_AnimData == NULL) return;
   // clamp animation
@@ -985,7 +985,7 @@ INDEX CAnimObject::ClipFrame(INDEX iFrame) const
     if (pCOA->oa_NumberOfFrames<=0) {
       return 0;
     }
-    return ULONG(iFrame)%pCOA->oa_NumberOfFrames;
+    return unsigned long(iFrame)%pCOA->oa_NumberOfFrames;
   // if not looping
   } else {
     // clamp
@@ -1080,7 +1080,7 @@ void CAnimObject::GetFrame( INDEX &iFrame0, INDEX &iFrame1, FLOAT &fRatio) const
   {
     // return index of paused frame inside global frame array
 	  class COneAnim *pCOA = &ao_AnimData->ad_Anims[ao_iCurrentAnim];
-    INDEX iStoppedFrame = ClipFrame((SLONG)(ao_tmAnimStart/pCOA->oa_SecsPerFrame));
+    INDEX iStoppedFrame = ClipFrame((long)(ao_tmAnimStart/pCOA->oa_SecsPerFrame));
 	  iFrame0 = iFrame1 = pCOA->oa_FrameIndices[ iStoppedFrame];
     fRatio = 0.0f;
   }
@@ -1091,8 +1091,8 @@ void CAnimObject::GetFrame( INDEX &iFrame0, INDEX &iFrame1, FLOAT &fRatio) const
     if (tmCurrentRelative>=0) {
   	  class COneAnim *pOA0 = &ao_AnimData->ad_Anims[ao_iCurrentAnim];
       float fFrameNow = (tmCurrentRelative)/pOA0->oa_SecsPerFrame;
-	    iFrame0 = pOA0->oa_FrameIndices[ ClipFrame(ULONG(fFrameNow))];
-	    iFrame1 = pOA0->oa_FrameIndices[ ClipFrame(ULONG(fFrameNow+1))];
+	    iFrame0 = pOA0->oa_FrameIndices[ ClipFrame(unsigned long(fFrameNow))];
+	    iFrame1 = pOA0->oa_FrameIndices[ ClipFrame(unsigned long(fFrameNow+1))];
       fRatio = fFrameNow - (float)floor(fFrameNow);
     } else {
   	  class COneAnim *pOA0 = &ao_AnimData->ad_Anims[ao_iLastAnim];
@@ -1100,8 +1100,8 @@ void CAnimObject::GetFrame( INDEX &iFrame0, INDEX &iFrame1, FLOAT &fRatio) const
       INDEX iAnim = ao_iCurrentAnim;
       ((CAnimObject*)this)->ao_iCurrentAnim = ao_iLastAnim;
       float fFrameNow = tmCurrentRelative/pOA0->oa_SecsPerFrame+pOA0->oa_NumberOfFrames;
-	    iFrame0 = pOA0->oa_FrameIndices[ Clamp(SLONG(fFrameNow),  0, pOA0->oa_NumberOfFrames-1)];
-      INDEX iFrameNext = SLONG(fFrameNow+1);
+	    iFrame0 = pOA0->oa_FrameIndices[ Clamp(long(fFrameNow),  0, pOA0->oa_NumberOfFrames-1)];
+      INDEX iFrameNext = long(fFrameNow+1);
       if (iFrameNext>=pOA0->oa_NumberOfFrames) {
 	      iFrame1 = pOA1->oa_FrameIndices[0];
       } else {

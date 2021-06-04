@@ -1083,7 +1083,7 @@ void CWorldEditorDoc::OnIdle(void)
   {
     try
     {
-      SLONG slFileTime=GetFileTimeStamp_t(vfp.vfp_fnDisplacement);
+      long slFileTime=GetFileTimeStamp_t(vfp.vfp_fnDisplacement);
       if(slFileTime>m_slDisplaceTexTime)
       {
         CreatePrimitive();
@@ -1206,7 +1206,7 @@ void DisplaceVertex( DOUBLE3D &vVtx, CImageInfo *pII,
   PIX pixY = (PIX)((pII->ii_Height-1)/(fMaxZ-fMinZ) * (vVtx(3) + fPix/2.0f -fMinZ) );
   if( pixX >= pII->ii_Width)  pixX = pII->ii_Width -1;
   if( pixY >= pII->ii_Height) pixY = pII->ii_Height-1;
-  SLONG slPicPosition = (pII->ii_Width*pixY +pixX) * (pII->ii_BitsPerPixel/8);
+  long slPicPosition = (pII->ii_Width*pixY +pixX) * (pII->ii_BitsPerPixel/8);
   vVtx(2) += fAmplitude/256.0f * pII->ii_Picture[slPicPosition];
 }
 
@@ -2056,7 +2056,7 @@ void CWorldEditorDoc::CreateTerrainObject3D( CImageInfo *piiDisplace, INDEX iSli
 
   FLOAT fAmplitude = theApp.m_vfpCurrent.vfp_fAmplitude;
 
-  ULONG ulNonFllorPolygonFlags = BPOF_FULLBRIGHT|BPOF_DETAILPOLYGON|BPOF_PORTAL;
+  unsigned long ulNonFllorPolygonFlags = BPOF_FULLBRIGHT|BPOF_DETAILPOLYGON|BPOF_PORTAL;
   if( !_bClosed)
   {
     // swap min and max y coordinates
@@ -3755,7 +3755,7 @@ void CWorldEditorDoc::SaveThumbnail()
   CImageInfo II;
   CTextureData TD;
   CAnimData AD;
-  ULONG flags = NONE;
+  unsigned long flags = NONE;
 
   // if document isn't saved, call save as
   if( GetPathName() == "")
@@ -5485,7 +5485,7 @@ void CWorldEditorDoc::OnExportEntities()
       if(strName=="") {
         strName="<unnamed>";
       }
-      SLONG idParent=-1;
+      long idParent=-1;
       CEntity *penParent = en.GetParent();
       if(penParent!=NULL) {
         idParent = penParent->en_ulID;
@@ -5549,7 +5549,7 @@ void CWorldEditorDoc::OnExportEntities()
           if( pepProperty->ep_eptType == CEntityProperty::EPT_ENTITYPTR) {
             // get the pointer
             CEntityPointer &penPointed = ENTITYPROPERTY( &en, pepProperty->ep_slOffset, CEntityPointer);
-            SLONG ulID = penPointed==NULL ? -1 : penPointed->en_ulID;
+            long ulID = penPointed==NULL ? -1 : penPointed->en_ulID;
             strLine.PrintF("    \"%s\" = long(%d);", pepProperty->ep_strName, ulID);
             strmFile.PutLine_t(strLine);
           }          
@@ -5604,7 +5604,7 @@ void CWorldEditorDoc::OnExportEntities()
           }          
           // flags
           if( pepProperty->ep_eptType == CEntityProperty::EPT_FLAGS) {
-            ULONG ulValue = ENTITYPROPERTY( &en, pepProperty->ep_slOffset, ULONG);
+            unsigned long ulValue = ENTITYPROPERTY( &en, pepProperty->ep_slOffset, unsigned long);
             strLine.PrintF("    \"%s\" = long(%d);", pepProperty->ep_strName, ulValue);
             strmFile.PutLine_t(strLine);
           }

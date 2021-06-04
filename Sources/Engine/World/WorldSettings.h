@@ -56,7 +56,7 @@ public:
   FLOAT st_fWalkDamageAmount;       // how much to damage when inside
   FLOAT st_tmWalkDamageDelay;       // how much to delay before first damage
   FLOAT st_tmWalkDamageFrequency;   // how much to delay between two damages
-  ULONG st_ulFlags;
+  unsigned long st_ulFlags;
   CTString st_strName;      // name of surface type
   /* Default constructor. */
   CSurfaceType(void) :
@@ -82,7 +82,7 @@ public:
 class ENGINE_API CContentType {
 public:
   CTString ct_strName;  // name of surface type
-  ULONG ct_ulFlags;     // various flags
+  unsigned long ct_ulFlags;     // various flags
   FLOAT ct_fDensity;    // density of the fluid inside content kg/m3 - defines buoyancy
 
   FLOAT ct_fFluidFriction;      // friction inside the fluid (stopping movements)
@@ -145,7 +145,7 @@ public:
 #define MPF_WARP  (1UL<<0)    // warp portal
 class CMirrorParameters {
 public:
-  ULONG mp_ulFlags;
+  unsigned long mp_ulFlags;
   // for warps
   CPlacement3D mp_plWarpIn;   // warp entry
   CPlacement3D mp_plWarpOut;  // warp exit

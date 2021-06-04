@@ -58,9 +58,9 @@ static void RenderHazeLayer(INDEX itt);
 
 FLOATaabbox3D _bboxDrawNextFrame; // TEMP
 
-SLONG GetUsedMemoryForTileBatching(void)
+long GetUsedMemoryForTileBatching(void)
 {
-  SLONG slUsedMemory = 0;
+  long slUsedMemory = 0;
   slUsedMemory += _avDelayedVertices.sa_Count * sizeof(GFXVertex4);
   slUsedMemory += _aiDelayedIndices.sa_Count * sizeof(INDEX);
   slUsedMemory += _auvDelayedTexCoords.sa_Count * sizeof(GFXTexCoord);

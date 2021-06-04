@@ -182,7 +182,7 @@ BOOL YesNoMessage(const char *strFormat, ...)
  */
 void ThrowF_t(const char *strFormat, ...)  // throws char *
 {
-  const SLONG slBufferSize = 256;
+  const long slBufferSize = 256;
   //char strBuffer[slBufferSize+1];  // Can't throw from the stack like this!
   static char *strBuffer = NULL;
 
@@ -201,7 +201,7 @@ void ThrowF_t(const char *strFormat, ...)  // throws char *
 /*
  * Get the name string for error code.
  */
- const char *ErrorName(const struct ErrorTable *pet, SLONG ulErrCode)
+ const char *ErrorName(const struct ErrorTable *pet, long ulErrCode)
 {
   for (INDEX i=0; i<pet->et_Count; i++) {
     if (pet->et_Errors[i].ec_Code == ulErrCode) {
@@ -214,7 +214,7 @@ void ThrowF_t(const char *strFormat, ...)  // throws char *
 /*
  * Get the description string for error code.
  */
- const char *ErrorDescription(const struct ErrorTable *pet, SLONG ulErrCode)
+ const char *ErrorDescription(const struct ErrorTable *pet, long ulErrCode)
 {
   for (INDEX i=0; i<pet->et_Count; i++) {
     if (pet->et_Errors[i].ec_Code == ulErrCode) {

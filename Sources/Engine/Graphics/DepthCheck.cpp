@@ -27,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern INDEX gap_iOptimizeDepthReads;
 #ifdef SE1_D3D
-extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, SLONG &slColorSize);
+extern COLOR UnpackColor_D3D( UBYTE *pd3dColor, D3DFORMAT d3dFormat, long &slColorSize);
 #endif // SE1_D3D
 
 static INDEX _iCheckIteration = 0;
@@ -91,7 +91,7 @@ static void UpdateDepthPointsVisibility( const CDrawPort *pdp, const INDEX iMirr
     // P.S. To avoid lock-modify-lock, we need to batch all the locks in one. Uhhhh ... :(
     COLOR col;
     INDEX idi;
-    SLONG slColSize;
+    long slColSize;
     HRESULT hr;
     D3DLOCKED_RECT rectLocked;
     D3DSURFACE_DESC surfDesc;
@@ -149,7 +149,7 @@ static void UpdateDepthPointsVisibility( const CDrawPort *pdp, const INDEX iMirr
       col = _acolDelayed[idi];
       // skip if not in required mirror level or was already checked in this iteration, or wasn't fetched at all
       if( iMirrorLevel!=di.di_iMirrorLevel || _iCheckIteration!=di.di_iSwapLastRequest || col==0) continue;
-      const ULONG d3dCol = rgba2argb(col^0x20103000);
+      const unsigned long d3dCol = rgba2argb(col^0x20103000);
       const PIX pixI = di.di_pixI - pdp->dp_MinI; // convert raster loc to drawport loc
       const PIX pixJ = di.di_pixJ - pdp->dp_MinJ;
       // batch it and advance to next triangle

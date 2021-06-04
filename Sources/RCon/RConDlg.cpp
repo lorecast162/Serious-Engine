@@ -173,7 +173,7 @@ void CRConDlg::OnTimer(UINT nIDEvent)
     CNetworkMessage nmReceived;
 
     _cmiComm.Client_Update();
-    ULONG ulFrom;
+    unsigned long ulFrom;
     UWORD uwPort;
     BOOL bHasMsg = _pNetwork->ReceiveBroadcast(nmReceived, ulFrom, uwPort);
     // if there are no more messages
@@ -195,7 +195,7 @@ void CRConDlg::OnTimer(UINT nIDEvent)
     if (!strMsg.RemovePrefix("log ")) {
       continue;
     }
-    ULONG ulCode;
+    unsigned long ulCode;
     INDEX iLine;
     char strLine[256];
     strMsg.ScanF("%u %d %256[^\n]", &ulCode, &iLine, strLine);

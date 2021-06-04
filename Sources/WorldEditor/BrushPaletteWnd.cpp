@@ -133,8 +133,8 @@ void CBrushPaletteWnd::OnPaint()
       {
         if(m_pDrawPort->Lock())
         {
-          INDEX iRot=((ULONG)(tm*25.0f))&7;
-          ULONG ulLineType=0x0f0f0f0f<<iRot;
+          INDEX iRot=((unsigned long)(tm*25.0f))&7;
+          unsigned long ulLineType=0x0f0f0f0f<<iRot;
           m_pDrawPort->DrawBorder(boxBrush.Min()(1)-1, boxBrush.Min()(2)-1, 
                                   boxBrush.Max()(1)-boxBrush.Min()(1)+2, boxBrush.Max()(2)-boxBrush.Min()(2)+2,
                                   C_BLUE|CT_OPAQUE, ulLineType);

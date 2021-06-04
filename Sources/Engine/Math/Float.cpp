@@ -30,7 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #elif (defined __GNU_INLINE_X86_32__)
 
-inline ULONG _control87(WORD newcw, WORD mask)
+inline unsigned long _control87(WORD newcw, WORD mask)
 {
     WORD fpw = 0;
 
@@ -49,7 +49,7 @@ inline ULONG _control87(WORD newcw, WORD mask)
 // (for intel compiler...)
 #elif ((defined __MSVC_INLINE__) && (!defined _MSC_VER))
 
-inline ULONG _control87(WORD newcw, WORD mask)
+inline unsigned long _control87(WORD newcw, WORD mask)
 {
     WORD fpw = 0;
 
@@ -68,7 +68,7 @@ inline ULONG _control87(WORD newcw, WORD mask)
 #else
 
 // Fake control87 for USE_PORTABLE_C version
-inline ULONG _control87(WORD newcw, WORD mask)
+inline unsigned long _control87(WORD newcw, WORD mask)
 {
     static WORD fpw=_PC_64;
     if (mask != 0)
@@ -85,7 +85,7 @@ inline ULONG _control87(WORD newcw, WORD mask)
 enum FPUPrecisionType GetFPUPrecision(void)
 {
   // get control flags from FPU
-  ULONG fpcw = _control87( 0, 0);
+  unsigned long fpcw = _control87( 0, 0);
 
   // extract the precision from the flags
   switch(fpcw&_MCW_PC) {
@@ -107,7 +107,7 @@ enum FPUPrecisionType GetFPUPrecision(void)
 /* Set current precision setting of FPU. */
 void SetFPUPrecision(enum FPUPrecisionType fptNew)
 {
-  ULONG fpcw;
+  unsigned long fpcw;
   // create FPU flags from the precision
   switch(fptNew) {
   case FPT_24BIT:
@@ -158,7 +158,7 @@ CSetFPUPrecision::~CSetFPUPrecision(void)
 
 BOOL IsValidFloat(float f)
 {
-  return _finite(f) && (*(ULONG*)&f)!=0xcdcdcdcdUL;
+  return _finite(f) && (*(unsigned long*)&f)!=0xcdcdcdcdUL;
 /*  int iClass = _fpclass(f);
   return
     iClass==_FPCLASS_NN ||

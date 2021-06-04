@@ -67,7 +67,7 @@ INDEX ctMax = sizeof(avfStats)/sizeof(avfStats[0]);
 #endif // DEBUG_LERPING
 
 // get a pseudo-random number (safe for network gaming)
-ULONG CSessionState::Rnd(void) {
+unsigned long CSessionState::Rnd(void) {
   ASSERTMSG(ses_bAllowRandom, "Use RND only in entity AI!");
   // NOTE: 
   // using multiplicative congruent method with Greanberger's lambda = 2^18+3
@@ -231,7 +231,7 @@ void CSessionState::Start_t(INDEX ctLocalPlayers)
   // if this computer is server
   if (_pNetwork->IsServer()) {
     // initialize local client
-    _cmiComm.Client_Init_t((ULONG) 0);
+    _cmiComm.Client_Init_t((unsigned long) 0);
     // connect as main session state
     try {
       Start_AtServer_t();
@@ -350,7 +350,7 @@ void CSessionState::Start_AtClient_t(INDEX ctLocalPlayers)     // throw char *
     // get info for creating default state
     CTFileName fnmWorld;
     strmMessage>>fnmWorld;
-    ULONG ulSpawnFlags;
+    unsigned long ulSpawnFlags;
     strmMessage>>ulSpawnFlags;
     UBYTE aubProperties[NET_MAXSESSIONPROPERTIES];
     strmMessage.Read_t(aubProperties, NET_MAXSESSIONPROPERTIES);
@@ -431,7 +431,7 @@ void CSessionState::WaitStream_t(CTMemoryStream &strmMessage, const CTString &st
   // start waiting for server's response
   SetProgressDescription(TRANS("waiting for ")+strName);
   CallProgressHook_t(0.0f);
-  SLONG slReceivedLast = 0;
+  long slReceivedLast = 0;
 
   // yes, we need the client/server updates in the progres hook
   _bRunNetUpdates = TRUE;
@@ -444,8 +444,8 @@ void CSessionState::WaitStream_t(CTMemoryStream &strmMessage, const CTString &st
 		}
 
     // check how much is received so far
-    SLONG slExpectedSize; // slReceivedSoFar;
-    SLONG slReceivedSize;
+    long slExpectedSize; // slReceivedSoFar;
+    long slReceivedSize;
     _cmiComm.Client_PeekSize_Reliable(slExpectedSize,slReceivedSize);
     // if nothing received yet
     if (slExpectedSize==0) {
@@ -527,7 +527,7 @@ BOOL CSessionState::IsDisconnected(void)
 }
 
 // print an incoming chat message to console
-void CSessionState::PrintChatMessage(ULONG ulFrom, const CTString &strFrom, const CTString &strMessage)
+void CSessionState::PrintChatMessage(unsigned long ulFrom, const CTString &strFrom, const CTString &strMessage)
 {
   CTString strSender;
   // if no sender players
@@ -764,7 +764,7 @@ void CSessionState::WarmUpWorld(void)
 }
 
 // create a checksum value for sync-check
-void CSessionState::ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck)
+void CSessionState::ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck)
 {
   CRC_AddLONG(ulCRC, ses_iLastProcessedSequence);
   CRC_AddLONG(ulCRC, ses_iLevel);
@@ -1291,8 +1291,8 @@ void CSessionState::ProcessPrediction(void)
   ses_tmLastPredictionProcessed = tmNow;
 
   // remember random seed and entity ID
-  ULONG ulOldRandom = ses_ulRandomSeed;
-  ULONG ulEntityID = _pNetwork->ga_World.wo_ulNextEntityID;
+  unsigned long ulOldRandom = ses_ulRandomSeed;
+  unsigned long ulEntityID = _pNetwork->ga_World.wo_ulNextEntityID;
 
   // delete all predictors (if any left from last time)
   _pNetwork->ga_World.DeletePredictors();
@@ -1888,7 +1888,7 @@ void CSessionState::MakeSynchronisationCheck(void)
   }
 
   // make local checksum
-  ULONG ulLocalCRC;
+  unsigned long ulLocalCRC;
   CRC_Start(ulLocalCRC);
   ChecksumForSync(ulLocalCRC, ses_iExtensiveSyncCheck);
   CRC_Finish(ulLocalCRC);
@@ -1931,7 +1931,7 @@ extern INDEX cli_bDumpSync;
 extern INDEX cli_bDumpSyncEachTick;
 void CSessionState::DumpSyncToFile_t(CTStream &strm, INDEX iExtensiveSyncCheck) // throw char *
 {
-  ULONG ulLocalCRC;
+  unsigned long ulLocalCRC;
   CRC_Start(ulLocalCRC);
   ChecksumForSync(ulLocalCRC, iExtensiveSyncCheck);
   CRC_Finish(ulLocalCRC);
@@ -2014,7 +2014,7 @@ void CSessionState::SessionStateLoop(void)
       // if it is chat message
       } else if (nmMessage.GetType() == MSG_CHAT_OUT) {
         // read the message
-        ULONG ulFrom;
+        unsigned long ulFrom;
         CTString strFrom;
         nmMessage>>ulFrom;
         if (ulFrom==0) {
@@ -2095,7 +2095,7 @@ void CSessionState::SessionStateLoop(void)
       {
         // get size and buffer from the stream
         void *pvBuffer;
-        SLONG slSize;
+        long slSize;
         ses_pstrm->LockBuffer(&pvBuffer, &slSize);
         strmFile.Write_t(pvBuffer, slSize);
         ses_pstrm->UnlockBuffer();
@@ -2167,7 +2167,7 @@ CPredictedEvent::CPredictedEvent(void)
 }
 
 // check an event for prediction, returns true if already predicted
-BOOL CSessionState::CheckEventPrediction(CEntity *pen, ULONG ulTypeID, ULONG ulEventID)
+BOOL CSessionState::CheckEventPrediction(CEntity *pen, unsigned long ulTypeID, unsigned long ulEventID)
 {
   // if prediction is not involved
   if ( !( pen->GetFlags() & (ENF_PREDICTOR|ENF_PREDICTED|ENF_WILLBEPREDICTED) ) ){
@@ -2181,7 +2181,7 @@ BOOL CSessionState::CheckEventPrediction(CEntity *pen, ULONG ulTypeID, ULONG ulE
   }
 
   // gather all event relevant data
-  ULONG ulEntityID = pen->en_ulID;
+  unsigned long ulEntityID = pen->en_ulID;
   TIME tmNow = _pTimer->CurrentTick();
 
   BOOL bPredicted = FALSE;

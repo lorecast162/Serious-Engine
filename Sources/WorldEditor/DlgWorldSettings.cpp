@@ -106,7 +106,7 @@ void CDlgWorldSettings::DoDataExchange(CDataExchange* pDX)
     m_strLevelName = pDoc->m_woWorld.GetName();
 
     // get spawn flags
-    ULONG ulSpawnFlags = pDoc->m_woWorld.GetSpawnFlags();
+    unsigned long ulSpawnFlags = pDoc->m_woWorld.GetSpawnFlags();
     DDX_SPAWN_FLAG_GET( SPF_EASY, IDC_EASY);
     DDX_SPAWN_FLAG_GET( SPF_NORMAL, IDC_NORMAL);
     DDX_SPAWN_FLAG_GET( SPF_HARD, IDC_HARD);
@@ -209,7 +209,7 @@ void CDlgWorldSettings::DoDataExchange(CDataExchange* pDX)
     pDoc->m_woWorld.SetName( CTString(CStringA(m_strLevelName)));
 
     // apply new spawn flags
-    ULONG ulSpawnFlags = 0;
+    unsigned long ulSpawnFlags = 0;
     DDX_SPAWN_FLAG_SET( SPF_EASY, IDC_EASY);
     DDX_SPAWN_FLAG_SET( SPF_NORMAL, IDC_NORMAL);
     DDX_SPAWN_FLAG_SET( SPF_HARD, IDC_HARD);

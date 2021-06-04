@@ -105,7 +105,7 @@ void FillDirList_internal(const CTFileName &fnmBasePath,
 
 // make a list of all files in a directory
 ENGINE_API void MakeDirList(
-  CDynamicStackArray<CTFileName> &afnmDir, const CTFileName &fnmDir, const CTFileName &fnmPattern, ULONG ulFlags)
+  CDynamicStackArray<CTFileName> &afnmDir, const CTFileName &fnmDir, const CTFileName &fnmPattern, unsigned long ulFlags)
 {
   afnmDir.PopAll();
   BOOL bRecursive = ulFlags&DLI_RECURSIVE;

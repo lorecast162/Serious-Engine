@@ -341,7 +341,7 @@ void CRenderer::AddLensFlare( CEntity *penLight, CLightSource *pls, CProjection3
   pprProjection->PostClip(vRotated, vScreen);
 
   ASSERT( re_pdpDrawPort!=NULL);
-  const ULONG ulDrawPortID = re_pdpDrawPort->GetID();
+  const unsigned long ulDrawPortID = re_pdpDrawPort->GetID();
 
   // for each existing lens flare
   CLensFlareInfo *plfi = NULL;
@@ -412,7 +412,7 @@ void CRenderer::AddNonZoningBrush( CEntity *penBrush, CBrushSector *pbscThatAdds
   if( !bDisableVisTweaks)
   {
     // if vistweaks exclude this brush from rendering in this position
-    ULONG ulVisTweaks = penBrush->GetVisTweaks();
+    unsigned long ulVisTweaks = penBrush->GetVisTweaks();
     if ((pbscThatAdds!=NULL && (VISM_DONTCLASSIFY&pbscThatAdds->bsc_ulVisFlags&ulVisTweaks))
       ||(ulVisTweaks&re_ulVisExclude&VISM_INCLUDEEXCLUDE)
       ||(re_ulVisInclude!=0 && !(ulVisTweaks&re_ulVisInclude&VISM_INCLUDEEXCLUDE) ) ) {

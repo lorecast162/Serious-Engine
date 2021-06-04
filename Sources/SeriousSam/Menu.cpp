@@ -52,7 +52,7 @@ void OnPlayerSelect(void);
 
 
 
-ULONG SpawnFlagsForGameType(INDEX iGameType)
+unsigned long SpawnFlagsForGameType(INDEX iGameType)
 {
   if (iGameType==-1) return SPF_SINGLEPLAYER;
 
@@ -65,7 +65,7 @@ ULONG SpawnFlagsForGameType(INDEX iGameType)
     return 0;
   }
 
-  ULONG (*pFunc)(INDEX) = (ULONG (*)(INDEX))pss->ss_pvValue;
+  unsigned long (*pFunc)(INDEX) = (unsigned long (*)(INDEX))pss->ss_pvValue;
   return pFunc(iGameType);
 }
 

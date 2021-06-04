@@ -38,8 +38,8 @@ BOOL Stereo_IsEnabled(void)
 void Stereo_SetBuffer(INDEX iEye)
 {
   if( gfx_bStereoInvert) gfx_bStereoInvert = 1; 
-  const ULONG ulLeftMask  = gfx_bStereoInvert ? CT_BMASK|CT_GMASK : CT_RMASK;
-  const ULONG ulRightMask = gfx_bStereoInvert ? CT_RMASK : CT_BMASK|CT_GMASK;
+  const unsigned long ulLeftMask  = gfx_bStereoInvert ? CT_BMASK|CT_GMASK : CT_RMASK;
+  const unsigned long ulRightMask = gfx_bStereoInvert ? CT_RMASK : CT_BMASK|CT_GMASK;
 
   if( iEye==STEREO_BOTH || gfx_iStereo==0) {
     gfxSetColorMask(CT_RMASK|CT_GMASK|CT_BMASK|CT_AMASK);

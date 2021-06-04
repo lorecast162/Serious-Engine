@@ -88,12 +88,12 @@ public:
 
   /* Stream operations */
   friend __forceinline CTStream &operator>>(CTStream &strm, Vector<Type, iDimensions> &vector) {
-    for (SLONG i = 0; i < iDimensions; i++)
+    for (long i = 0; i < iDimensions; i++)
         strm>>vector.vector[i];
     return strm;
   }
   friend __forceinline CTStream &operator<<(CTStream &strm, const Vector<Type, iDimensions> &vector) {
-    for (SLONG i = 0; i < iDimensions; i++)
+    for (long i = 0; i < iDimensions; i++)
         strm<<vector.vector[i];
     return strm;
   }

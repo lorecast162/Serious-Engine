@@ -432,8 +432,8 @@ void CWorldEditorView::RenderBackdropTexture(CDrawPort *pDP,
   {
     // create rectangle for backdrop picture
     PIXaabbox2D rectPict;
-    rectPict = PIXaabbox2D( PIX2D((SLONG)box.Min()(1), (SLONG)box.Min()(2)),
-                            PIX2D((SLONG)box.Max()(1), (SLONG)box.Max()(2)) );
+    rectPict = PIXaabbox2D( PIX2D((long)box.Min()(1), (long)box.Min()(2)),
+                            PIX2D((long)box.Max()(1), (long)box.Max()(2)) );
     pDP->PutTexture( &to, rectPict);
   }
 }
@@ -784,7 +784,7 @@ void CWorldEditorView::RenderView( CDrawPort *pDP)
     m_fGridX = fGridX;
     m_fGridY = fGridY;
     // style of grid line
-    ULONG ulLineStyle;
+    unsigned long ulLineStyle;
     // loop all vertical grid lines
 #define LINE_EPSILON 0.05f
     FOREVER
@@ -1220,7 +1220,7 @@ void CWorldEditorView::RenderView( CDrawPort *pDP)
           prProjectionSecondLayer->ProjectCoordinate( DOUBLEtoFLOAT(aVtx[ iVtx]), vProjected);
           // convert y coordinate from mathemathical representation into screen one
           vProjected(2) = pDP->GetHeight() - vProjected(2);
-          pDP->Fill( (SLONG)vProjected(1)-3, (SLONG)vProjected(2)-3, 6, 6, C_BLACK|CT_OPAQUE);
+          pDP->Fill( (long)vProjected(1)-3, (long)vProjected(2)-3, 6, 6, C_BLACK|CT_OPAQUE);
         }
       }
       aVtx.Unlock();
@@ -8193,7 +8193,7 @@ void CWorldEditorView::GetToolTipText( char *pToolTipText)
     if( bCountSelection)
     {
       INDEX ctEdges = 0;
-      ULONG ulShadowMemory = 0;
+      unsigned long ulShadowMemory = 0;
       FOREACHINDYNAMICCONTAINER(pDoc->m_selPolygonSelection, CBrushPolygon, itbpo)
       {
         ctEdges += itbpo->bpo_abpePolygonEdges.Count();
@@ -8495,8 +8495,8 @@ else {\
     }
 
     CTString strSpawn = "";
-    ULONG ulSpawn = penEntity->GetSpawnFlags();
-    ULONG ulAllways = SPF_EASY|SPF_NORMAL|SPF_HARD|SPF_EXTREME|SPF_SINGLEPLAYER|SPF_COOPERATIVE|SPF_DEATHMATCH;
+    unsigned long ulSpawn = penEntity->GetSpawnFlags();
+    unsigned long ulAllways = SPF_EASY|SPF_NORMAL|SPF_HARD|SPF_EXTREME|SPF_SINGLEPLAYER|SPF_COOPERATIVE|SPF_DEATHMATCH;
     if( (ulSpawn & ulAllways) == ulAllways)
     {
       pchrCursor += sprintf(pchrCursor, "%s", "Entity exists allways");
@@ -9745,7 +9745,7 @@ void CWorldEditorView::OnSavePicturesForEnvironment()
   CImageInfo II;
   CTextureData TD;
   CAnimData AD;
-  ULONG flags = NONE;
+  unsigned long flags = NONE;
 
   CChildFrame *pChild = GetChildFrame();
   // create canvas to render picture
@@ -10437,7 +10437,7 @@ void CWorldEditorView::OnEditCopyAlternative()
  * Draw a line for arrow drawing.
  */
 static inline void DrawArrowLine(CDrawPort &dp, const FLOAT2D &vPoint0,
-                                 const FLOAT2D &vPoint1, COLOR color, ULONG ulLineType)
+                                 const FLOAT2D &vPoint1, COLOR color, unsigned long ulLineType)
 {
   PIX x0 = (PIX)vPoint0(1);
   PIX x1 = (PIX)vPoint1(1);
@@ -10451,7 +10451,7 @@ static inline void DrawArrowLine(CDrawPort &dp, const FLOAT2D &vPoint0,
  * Draw an arrow for debugging edge directions.
  */
 static inline void DrawArrow(CDrawPort &dp, PIX i0, PIX j0, PIX i1, PIX j1, COLOR color,
-                             ULONG ulLineType)
+                             unsigned long ulLineType)
 {
   FLOAT2D vPoint0 = FLOAT2D((FLOAT)i0, (FLOAT)j0);
   FLOAT2D vPoint1 = FLOAT2D((FLOAT)i1, (FLOAT)j1);
@@ -10501,7 +10501,7 @@ void CWorldEditorView::DrawArrowAndTypeText( CProjection3D &prProjection,
   // clip the edge line
   FLOAT3D vClipped0 = tv0;
   FLOAT3D vClipped1 = tv1;
-  ULONG ulClipFlags = prProjection.ClipLine(vClipped0, vClipped1);
+  unsigned long ulClipFlags = prProjection.ClipLine(vClipped0, vClipped1);
   // if the edge remains after clipping to front plane
   if (ulClipFlags != LCF_EDGEREMOVED) {
     // project the vertices
@@ -11224,7 +11224,7 @@ void CWorldEditorView::OnExportDisplaceMap()
 
   if( fnDisplaceMap == "") return;
 
-  ULONG ulSize = pixWidth*pixHeight*3;
+  unsigned long ulSize = pixWidth*pixHeight*3;
   UBYTE *pubPicture = (UBYTE *) AllocMemory( ulSize);
   
   // initializes structure members and attaches pointer to image
@@ -12760,7 +12760,7 @@ BOOL CWorldEditorView::SaveAutoTexture(FLOATaabbox3D boxBrush, CTFileName &fnTex
   CImageInfo II;
   CTextureData TD;
   CAnimData AD;
-  ULONG flags = NONE;
+  unsigned long flags = NONE;
 
   CChildFrame *pChild = GetChildFrame();
   // create canvas to render picture

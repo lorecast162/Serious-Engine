@@ -43,7 +43,7 @@ void CHashTable_TYPE::Clear(void)
 
 
 // internal finding, returns pointer to the the item
-CHashTableSlot_TYPE *CHashTable_TYPE::FindSlot(ULONG ulKey, VALUE_TYPE &Value) 
+CHashTableSlot_TYPE *CHashTable_TYPE::FindSlot(unsigned long ulKey, VALUE_TYPE &Value) 
 {
   ASSERT(ht_ctCompartments>0 && ht_ctSlotsPerComp>0);
 
@@ -75,7 +75,7 @@ CHashTableSlot_TYPE *CHashTable_TYPE::FindSlot(ULONG ulKey, VALUE_TYPE &Value)
 
 
 // internal finding, returns the index of the item in the nametable
-INDEX CHashTable_TYPE::FindSlotIndex(ULONG ulKey, VALUE_TYPE &Value)
+INDEX CHashTable_TYPE::FindSlotIndex(unsigned long ulKey, VALUE_TYPE &Value)
 {
   ASSERT(ht_ctCompartments>0 && ht_ctSlotsPerComp>0);
 
@@ -135,7 +135,7 @@ void CHashTable_TYPE::SetAllocationParameters(INDEX ctCompartments, INDEX ctSlot
 }
 
 
-void CHashTable_TYPE::SetCallbacks(ULONG (*GetItemKey)(VALUE_TYPE &Item), ULONG (*GetItemValue)(TYPE* Item))
+void CHashTable_TYPE::SetCallbacks(unsigned long (*GetItemKey)(VALUE_TYPE &Item), unsigned long (*GetItemValue)(TYPE* Item))
 {
   ASSERT(GetItemKey!=NULL);
   ASSERT(GetItemValue!=NULL);
@@ -204,7 +204,7 @@ void CHashTable_TYPE::Add(TYPE *ptNew)
   ASSERT(ht_ctCompartments>0 && ht_ctSlotsPerComp>0);
 
   VALUE_TYPE Value = ht_GetItemValue(ptNew);
-  ULONG ulKey = ht_GetItemKey(Value);
+  unsigned long ulKey = ht_GetItemKey(Value);
 
   // find compartment number
   INDEX iComp = ulKey%ht_ctCompartments;
@@ -285,7 +285,7 @@ void CHashTable_TYPE::ReportEfficiency()
 {
   DOUBLE dSum  = 0;
   DOUBLE dSum2 = 0;
-  ULONG  ulCount = 0;
+  unsigned long  ulCount = 0;
 
   for (INDEX iComp=0;iComp<ht_ctCompartments;iComp++) {
     INDEX iCount = 0;

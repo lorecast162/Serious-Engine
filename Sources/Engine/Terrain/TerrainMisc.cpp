@@ -40,8 +40,8 @@ CStaticStackArray<INDEX_T>    _aiExtIndices;
 CStaticStackArray<GFXColor>   _aiExtColors;
 CStaticStackArray<INDEX>      _aiHitTiles;
 
-static ULONG *_pulSharedTopMap = NULL; // Shared memory used for topmap regeneration
-SLONG  _slSharedTopMapSize = 0; // Size of shared memory allocated for topmap regeneration
+static unsigned long *_pulSharedTopMap = NULL; // Shared memory used for topmap regeneration
+long  _slSharedTopMapSize = 0; // Size of shared memory allocated for topmap regeneration
 extern INDEX  _ctShadowMapUpdates;
 #pragma message(">> Create class with destructor to clear shared topmap memory")
 
@@ -540,7 +540,7 @@ void FindTilesInBox(CTerrain *ptrTerrain, FLOATaabbox3D &bbox)
 }
 
 // Add these flags to all tiles that have been extracted
-void AddFlagsToExtractedTiles(ULONG ulFlags)
+void AddFlagsToExtractedTiles(unsigned long ulFlags)
 {
   ASSERT(_ptrTerrain!=NULL);
   // for each tile that has contact with extraction box
@@ -577,7 +577,7 @@ UBYTE GetValueFromMask(CTerrain *ptrTerrain, INDEX iLayer, FLOAT3D vHitPoint)
 }
 
 // Allocate memory of one top map
-void CreateTexture(CTextureData &tdTopMap, PIX pixWidth, PIX pixHeight,ULONG ulFlags)
+void CreateTexture(CTextureData &tdTopMap, PIX pixWidth, PIX pixHeight,unsigned long ulFlags)
 {
   // clear current top map
   if(tdTopMap.td_pulFrames!=NULL) {
@@ -591,8 +591,8 @@ void CreateTexture(CTextureData &tdTopMap, PIX pixWidth, PIX pixHeight,ULONG ulF
   tdTopMap.td_ulFlags   = ulFlags;
   // Allocate memory for top map
   INDEX ctMipMaps = GetNoOfMipmaps(pixWidth,pixHeight);
-  SLONG slSize = GetMipmapOffset(ctMipMaps,pixWidth,pixHeight)*BYTES_PER_TEXEL;
-  tdTopMap.td_pulFrames = (ULONG*)AllocMemory(slSize);
+  long slSize = GetMipmapOffset(ctMipMaps,pixWidth,pixHeight)*BYTES_PER_TEXEL;
+  tdTopMap.td_pulFrames = (unsigned long*)AllocMemory(slSize);
   tdTopMap.td_slFrameSize = slSize;
   tdTopMap.td_ctFrames = 1;
   tdTopMap.td_iFirstMipLevel = 0;
@@ -607,7 +607,7 @@ void CreateTopMap(CTextureData &tdTopMap, PIX pixWidth , PIX pixHeight)
   ASSERT(tdTopMap.td_pulFrames==NULL);
   // Prepare new top map
   INDEX ctMipMaps = GetNoOfMipmaps(pixWidth,pixHeight);
-  SLONG slSize = GetMipmapOffset(ctMipMaps,pixWidth,pixHeight)*BYTES_PER_TEXEL;
+  long slSize = GetMipmapOffset(ctMipMaps,pixWidth,pixHeight)*BYTES_PER_TEXEL;
 
   tdTopMap.td_mexWidth  = pixWidth;
   tdTopMap.td_mexHeight = pixHeight;
@@ -623,7 +623,7 @@ void CreateTopMap(CTextureData &tdTopMap, PIX pixWidth , PIX pixHeight)
 // Set topmap frames pointer to shared memory
 void PrepareSharedTopMapMemory(CTextureData *ptdTopMap, INDEX iTileIndex)
 {
-  SLONG slSize = ptdTopMap->td_slFrameSize;
+  long slSize = ptdTopMap->td_slFrameSize;
   // if this is global top map
   if(iTileIndex==(-1)) {
     // if shared memory is larger then global top map
@@ -634,7 +634,7 @@ void PrepareSharedTopMapMemory(CTextureData *ptdTopMap, INDEX iTileIndex)
     // else
     } else {
       // Allocate new memory for global top map
-      ptdTopMap->td_pulFrames = (ULONG*)AllocMemory(slSize);
+      ptdTopMap->td_pulFrames = (unsigned long*)AllocMemory(slSize);
     }
   // else this is normal top map
   } else {
@@ -647,7 +647,7 @@ void PrepareSharedTopMapMemory(CTextureData *ptdTopMap, INDEX iTileIndex)
         _pulSharedTopMap = NULL;
       }
       // allocate new shared memory for top maps
-      _pulSharedTopMap = (ULONG*)AllocMemory(slSize);
+      _pulSharedTopMap = (unsigned long*)AllocMemory(slSize);
       // remember new memory size
       _slSharedTopMapSize = slSize;
     }
@@ -767,14 +767,14 @@ static void CalcPointLight(CPlacement3D &plLight, CLightSource *plsLight, Rect &
       } else if(fDistance>fHotSpot) {
         fIntensity = CalculateRatio(fDistance, fHotSpot, fFallOff, 0.0f, 1.0f);
       }
-      ULONG ulIntensity = NormFloatToByte(fIntensity);
+      unsigned long ulIntensity = NormFloatToByte(fIntensity);
       ulIntensity = (ulIntensity<<CT_RSHIFT)|(ulIntensity<<CT_GSHIFT)|(ulIntensity<<CT_BSHIFT);
       colLight = MulColors(ByteSwap(colLight.ul.abgr), ulIntensity);
 
 
       FLOAT fDot = vNormal%vLightNormal;
       fDot = Clamp(fDot,0.0f,1.0f);
-      SLONG slDot = NormFloatToByte(fDot);
+      long slDot = NormFloatToByte(fDot);
 
       pacolData->ub.r = ClampUp(pacolData->ub.r + ((colLight.ub.r*slDot)>>8),255);
       pacolData->ub.g = ClampUp(pacolData->ub.g + ((colLight.ub.g*slDot)>>8),255);
@@ -807,9 +807,9 @@ static void CalcDirectionalLight(CPlacement3D &plLight, CLightSource *plsLight, 
   GFXColor colAmbient = plsLight->GetLightAmbient();
 
   UBYTE ubColShift = 8;
-  SLONG slar = colAmbient.ub.r;
-  SLONG slag = colAmbient.ub.g;
-  SLONG slab = colAmbient.ub.b;
+  long slar = colAmbient.ub.r;
+  long slag = colAmbient.ub.g;
+  long slab = colAmbient.ub.b;
 
   extern INDEX mdl_bAllowOverbright;
   BOOL bOverBrightning = mdl_bAllowOverbright && _pGfx->gl_ctTextureUnits>1;
@@ -842,7 +842,7 @@ static void CalcDirectionalLight(CPlacement3D &plLight, CLightSource *plsLight, 
 
       FLOAT fDot = vNormal%vLightNormal;
       fDot = Clamp(fDot,0.0f,1.0f);
-      SLONG slDot = NormFloatToByte(fDot);
+      long slDot = NormFloatToByte(fDot);
 
       pacolData->ub.r = ClampUp(pacolData->ub.r + slar + ((colLight.ub.r*slDot)>>ubColShift),255);
       pacolData->ub.g = ClampUp(pacolData->ub.g + slag + ((colLight.ub.g*slDot)>>ubColShift),255);
@@ -909,7 +909,7 @@ static FLOATaabbox3D AbsoluteToRelative(const CTerrain *ptrTerrain, const FLOATa
   return bboxRelative;
 }
 
-//static ULONG ulTemp = 0xFFFFFFFF;
+//static unsigned long ulTemp = 0xFFFFFFFF;
 
 void UpdateTerrainShadowMap(CTerrain *ptrTerrain, FLOATaabbox3D *pboxUpdate/*=NULL*/, BOOL bAbsoluteSpace/*=FALSE*/)
 {
@@ -1017,12 +1017,12 @@ void UpdateTerrainShadowMap(CTerrain *ptrTerrain, FLOATaabbox3D *pboxUpdate/*=NU
   // Update shading map from one mip of shadow map
   INDEX iMipOffset = GetMipmapOffset(ptrTerrain->tr_iShadingMapSizeAspect,ptrTerrain->GetShadowMapWidth(),ptrTerrain->GetShadowMapHeight());
   UWORD *puwShade = &ptrTerrain->tr_auwShadingMap[0];
-  ULONG *ppixShadowMip = &ptrTerrain->tr_tdShadowMap.td_pulFrames[iMipOffset];
+  unsigned long *ppixShadowMip = &ptrTerrain->tr_tdShadowMap.td_pulFrames[iMipOffset];
 
   INDEX ctpixs = ptrTerrain->GetShadingMapWidth()*ptrTerrain->GetShadingMapHeight();
   for(PIX ipix=0;ipix<ctpixs;ipix++) {
-    ULONG ulPixel = ByteSwap(*ppixShadowMip);
-    // ULONG ulPixel = ulTemp;
+    unsigned long ulPixel = ByteSwap(*ppixShadowMip);
+    // unsigned long ulPixel = ulTemp;
     *puwShade = (((ulPixel>>27)&0x001F)<<10) | 
                 (((ulPixel>>19)&0x001F)<< 5) | 
                 (((ulPixel>>11)&0x001F)<< 0);

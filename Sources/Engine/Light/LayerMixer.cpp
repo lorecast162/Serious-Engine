@@ -67,8 +67,8 @@ public:
   PIX   lm_pixCanvasSizeV;
   PIX   lm_pixPolygonSizeU;    // polygon (used part of shadowmap size in pixels
   PIX   lm_pixPolygonSizeV;
-  ULONG*lm_pulShadowMap;       // buffer for final shadow map
-  ULONG*lm_pulStaticShadowMap; // precached static shadow map
+  unsigned long*lm_pulShadowMap;       // buffer for final shadow map
+  unsigned long*lm_pulStaticShadowMap; // precached static shadow map
 
   // gradients for shadow map walking
   FLOAT3D lm_vO;     // upper left corner of shadow map in 3D
@@ -112,7 +112,7 @@ public:
   // add the intensity to the pixel
   inline void AddToCluster( UBYTE *pub);
   inline void AddAmbientToCluster( UBYTE *pub);
-  inline void AddToCluster( UBYTE *pub, SLONG slIntensity);
+  inline void AddToCluster( UBYTE *pub, long slIntensity);
 
   // additional functions
   __forceinline void CopyShadowLayer(void);
@@ -123,16 +123,16 @@ public:
 
 
 // increment a byte without overflowing it
-static inline void IncrementByteWithClip( UBYTE &ub, SLONG slAdd)
+static inline void IncrementByteWithClip( UBYTE &ub, long slAdd)
 {
-  SLONG t = (SLONG)ub+slAdd;
+  long t = (long)ub+slAdd;
   ub = (t<0)?0:pubClipByte[t];
 }
 
 #if 0 // DG: unused.
 // increment a color without overflowing it
 static inline void IncrementColorWithClip( UBYTE &ubR, UBYTE &ubG, UBYTE &ubB,
-                                           SLONG  slR, SLONG  slG, SLONG  slB)
+                                           long  slR, long  slG, long  slB)
 {
   IncrementByteWithClip( ubR, slR);
   IncrementByteWithClip( ubG, slG);
@@ -153,7 +153,7 @@ inline void CLayerMixer::AddAmbientToCluster( UBYTE *pub)
   IncrementByteWithClip(pub[1], ((UBYTE*)&lm_colAmbient)[2]);
   IncrementByteWithClip(pub[2], ((UBYTE*)&lm_colAmbient)[1]);
 }
-inline void CLayerMixer::AddToCluster( UBYTE *pub, SLONG slIntensity)
+inline void CLayerMixer::AddToCluster( UBYTE *pub, long slIntensity)
 {
   IncrementByteWithClip(pub[0], (long) (((UBYTE*)&lm_colLight)[3] *slIntensity)>>16);
   IncrementByteWithClip(pub[1], (long) (((UBYTE*)&lm_colLight)[2] *slIntensity)>>16);
@@ -235,7 +235,7 @@ void CLayerMixer::FindLayerMipmap( CBrushShadowLayer *pbsl, UBYTE *&pub, UBYTE &
   // find mip-mapping information for the layer
   MakeMipmapTable(pbsl->bsl_pixSizeU, pbsl->bsl_pixSizeV, mmtLayer);
   // get pixel offset of the mipmap
-  SLONG slPixOffset = mmtLayer.mmt_aslOffsets[lm_iMipLevel-lm_iFirstLevel];
+  long slPixOffset = mmtLayer.mmt_aslOffsets[lm_iMipLevel-lm_iFirstLevel];
   // convert offset to bits
   pub = pbsl->bsl_pubLayer + (slPixOffset>>3);
   ubMask = 1<<(slPixOffset&7);
@@ -252,19 +252,19 @@ FLOAT _fMinLightDistance;
 FLOAT _f1oFallOff;
 INDEX _iPixCt;
 INDEX _iRowCt;
-SLONG _slModulo;
-ULONG _ulLightFlags;
-ULONG _ulPolyFlags;
-SLONG _slL2Row;
-SLONG _slDDL2oDU;
-SLONG _slDDL2oDV;
-SLONG _slDDL2oDUoDV;
-SLONG _slDL2oDURow;
-SLONG _slDL2oDV;
-SLONG _slLightMax;
-SLONG _slHotSpot;
-SLONG _slLightStep;
-ULONG *_pulLayer;
+long _slModulo;
+unsigned long _ulLightFlags;
+unsigned long _ulPolyFlags;
+long _slL2Row;
+long _slDDL2oDU;
+long _slDDL2oDV;
+long _slDDL2oDUoDV;
+long _slDL2oDURow;
+long _slDL2oDV;
+long _slLightMax;
+long _slHotSpot;
+long _slLightStep;
+unsigned long *_pulLayer;
 
 
 // !!! FIXME : rcg01072001 These statics are a pain in the ass.
@@ -279,7 +279,7 @@ void CLayerMixer::AddAmbientPoint(void)
   // prepare some local variables
   mmDDL2oDU_AddAmbientPoint = _slDDL2oDU;
   mmDDL2oDV_AddAmbientPoint = _slDDL2oDV;
-  ULONG ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
+  unsigned long ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
   _slLightMax<<=7;
   _slLightStep>>=1;
 
@@ -357,7 +357,7 @@ skipPixel:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG tmp1, tmp2;
+  unsigned long tmp1, tmp2;
   __asm__ __volatile__ (
     // prepare interpolants
     "movd      (" ASMSYM(_slL2Row) "), %%mm0      \n\t"
@@ -439,14 +439,14 @@ skipPixel:
   UBYTE* pubLayer = (UBYTE*)_pulLayer;
   for( PIX pixV=0; pixV<_iRowCt; pixV++)
   {
-    SLONG slL2Point = _slL2Row;
-    SLONG slDL2oDU  = _slDL2oDURow;
+    long slL2Point = _slL2Row;
+    long slDL2oDU  = _slDL2oDURow;
     for( PIX pixU=0; pixU<_iPixCt; pixU++)
     {
       // if the point is not masked
       if( slL2Point < FTOX ) {
-        SLONG slL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
-        SLONG slIntensity = _slLightMax;
+        long slL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
+        long slIntensity = _slLightMax;
         slL = aubSqrt[slL];
         if( slL>_slHotSpot) slIntensity = ((255-slL)*_slLightStep);
         // add the intensity to the pixel
@@ -479,7 +479,7 @@ void CLayerMixer::AddAmbientMaskPoint( UBYTE *pubMask, UBYTE ubMask)
   // prepare some local variables
   mmDDL2oDU_addAmbientMaskPoint = _slDDL2oDU;
   mmDDL2oDV_addAmbientMaskPoint = _slDDL2oDV;
-  ULONG ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
+  unsigned long ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
   _slLightMax<<=7;
   _slLightStep>>=1;
 
@@ -564,7 +564,7 @@ skipPixel:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG tmp1, tmp2;
+  unsigned long tmp1, tmp2;
   __asm__ __volatile__ (
     // prepare interpolants
     "movd      (" ASMSYM(_slL2Row) "), %%mm0            \n\t"
@@ -652,14 +652,14 @@ skipPixel:
   UBYTE* pubLayer = (UBYTE*)_pulLayer;
   for( PIX pixV=0; pixV<_iRowCt; pixV++)
   {
-    SLONG slL2Point = _slL2Row;
-    SLONG slDL2oDU  = _slDL2oDURow;
+    long slL2Point = _slL2Row;
+    long slDL2oDU  = _slDL2oDURow;
     for( PIX pixU=0; pixU<_iPixCt; pixU++)
     {
       // if the point is not masked
       if( (*pubMask & ubMask) && (slL2Point<FTOX)) {
-        SLONG slL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
-        SLONG slIntensity = _slLightMax;
+        long slL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
+        long slIntensity = _slLightMax;
         slL = aubSqrt[slL];
         if( slL>_slHotSpot) slIntensity = ((255-slL)*_slLightStep);
         // add the intensity to the pixel
@@ -695,14 +695,14 @@ extern "C" {
 void CLayerMixer::AddDiffusionPoint(void)
 {
   // adjust params for diffusion lighting
-  SLONG slMax1oL = MAX_SLONG;
+  long slMax1oL = MAX_long;
   _slLightStep = FloatToInt(_slLightStep * _fMinLightDistance * _f1oFallOff);
   if( _slLightStep!=0) slMax1oL = (256<<8) / _slLightStep +256;
 
   // prepare some local variables
   mmDDL2oDU_AddDiffusionPoint = _slDDL2oDU;
   mmDDL2oDV_AddDiffusionPoint = _slDDL2oDV;
-  ULONG ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
+  unsigned long ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
   _slLightMax<<=7;
   _slLightStep>>=1;
 
@@ -779,7 +779,7 @@ skipPixel:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG tmp1, tmp2;
+  unsigned long tmp1, tmp2;
   __asm__ __volatile__ (
     // prepare interpolants
     "movd    (" ASMSYM(_slL2Row) "), %%mm0                      \n\t"
@@ -858,15 +858,15 @@ skipPixel:
   UBYTE* pubLayer = (UBYTE*)_pulLayer;
   for( PIX pixV=0; pixV<_iRowCt; pixV++)
   {
-    SLONG slL2Point = _slL2Row;
-    SLONG slDL2oDU  = _slDL2oDURow;
+    long slL2Point = _slL2Row;
+    long slDL2oDU  = _slDL2oDURow;
     for( PIX pixU=0; pixU<_iPixCt; pixU++)
     {
       // if the point is not masked
       if(slL2Point<FTOX) {
-        SLONG sl1oL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
+        long sl1oL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
         sl1oL = auw1oSqrt[sl1oL];
-        SLONG slIntensity = _slLightMax;
+        long slIntensity = _slLightMax;
         if( sl1oL<256) slIntensity = 0;
         else if( sl1oL<slMax1oL) slIntensity = (((sl1oL-256)*_slLightStep));
         // add the intensity to the pixel
@@ -896,14 +896,14 @@ extern "C" {
 void CLayerMixer::AddDiffusionMaskPoint( UBYTE *pubMask, UBYTE ubMask)
 {
   // adjust params for diffusion lighting
-  SLONG slMax1oL = MAX_SLONG;
+  long slMax1oL = MAX_long;
   _slLightStep = FloatToInt(_slLightStep * _fMinLightDistance * _f1oFallOff);
   if( _slLightStep!=0) slMax1oL = (256<<8) / _slLightStep +256;
 
   // prepare some local variables
   mmDDL2oDU_AddDiffusionMaskPoint = _slDDL2oDU;
   mmDDL2oDV_AddDiffusionMaskPoint = _slDDL2oDV;
-  ULONG ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
+  unsigned long ulLightRGB = ByteSwap(lm_colLight); // FIXME: shouldn't this be used in plain C impl too?
   _slLightMax<<=7;
   _slLightStep>>=1;
 
@@ -986,7 +986,7 @@ skipPixel:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG tmp1, tmp2;
+  unsigned long tmp1, tmp2;
   __asm__ __volatile__ (
     // prepare interpolants
     "movd      (" ASMSYM(_slL2Row) "), %%mm0                         \n\t"
@@ -1074,15 +1074,15 @@ skipPixel:
   UBYTE* pubLayer = (UBYTE*)_pulLayer;
   for( PIX pixV=0; pixV<_iRowCt; pixV++)
   {
-    SLONG slL2Point = _slL2Row;
-    SLONG slDL2oDU  = _slDL2oDURow;
+    long slL2Point = _slL2Row;
+    long slDL2oDU  = _slDL2oDURow;
     for( PIX pixU=0; pixU<_iPixCt; pixU++)
     {
       // if the point is not masked
       if( (*pubMask & ubMask) && (slL2Point<FTOX)) {
-        SLONG sl1oL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
+        long sl1oL = (slL2Point>>SHIFTX)&(SQRTTABLESIZE-1);  // and is just for degenerate cases
         sl1oL = auw1oSqrt[sl1oL];
-        SLONG slIntensity = _slLightMax;
+        long slIntensity = _slLightMax;
         if( sl1oL<256) slIntensity = 0;
         else if( sl1oL<slMax1oL) slIntensity = ((sl1oL-256)*(_slLightStep));
         // add the intensity to the pixel
@@ -1279,8 +1279,8 @@ void CLayerMixer::AddOneLayerGradient( CGradientParameters &gp)
   FLOAT fDGroDJ = (lm_vStepV % gp.gp_vGradientDir) *f1oDH;
   fDGroDI += fDGroDI/lm_pixPolygonSizeU;
   fDGroDJ += fDGroDJ/lm_pixPolygonSizeV;
-  SLONG fixDGroDI = FloatToInt(fDGroDI*32767.0f); // 16:15
-  SLONG fixDGroDJ = FloatToInt(fDGroDJ*32767.0f); // 16:15
+  long fixDGroDI = FloatToInt(fDGroDI*32767.0f); // 16:15
+  long fixDGroDJ = FloatToInt(fDGroDJ*32767.0f); // 16:15
   COLOR col0 = gp.gp_col0;
   COLOR col1 = gp.gp_col1;
   _pulLayer  = lm_pulShadowMap;
@@ -1288,8 +1288,8 @@ void CLayerMixer::AddOneLayerGradient( CGradientParameters &gp)
 
 #if (defined __MSVC_INLINE__)
   __int64 mmRowAdv;
-  SLONG fixGRow  = (fGr00-(fDGroDJ+fDGroDI)*0.5f)*32767.0f; // 16:15
-  SLONG slModulo = (lm_pixCanvasSizeU-lm_pixPolygonSizeU) *BYTES_PER_TEXEL;
+  long fixGRow  = (fGr00-(fDGroDJ+fDGroDI)*0.5f)*32767.0f; // 16:15
+  long slModulo = (lm_pixCanvasSizeU-lm_pixPolygonSizeU) *BYTES_PER_TEXEL;
   COLOR colStart = LerpColor( col0, col1, fStart);
   INDEX ctCols = lm_pixPolygonSizeU;
   INDEX ctRows = lm_pixPolygonSizeV;
@@ -1402,8 +1402,8 @@ rowDone:
   }
 #else
   // well, make gradient ...
-  SLONG slR0=0,slG0=0,slB0=0;
-  SLONG slR1=0,slG1=0,slB1=0;
+  long slR0=0,slG0=0,slB0=0;
+  long slR1=0,slG1=0,slB1=0;
   ColorToRGB( col0, (UBYTE&)slR0,(UBYTE&)slG0,(UBYTE&)slB0);
   ColorToRGB( col1, (UBYTE&)slR1,(UBYTE&)slG1,(UBYTE&)slB1);
   if( gp.gp_bDark) {
@@ -1434,9 +1434,9 @@ rowDone:
     SWORD fixBcol = fixBrow;
     for( INDEX i=0; i<lm_pixPolygonSizeU; i++)
     { // loop pixels
-      SLONG slR = Clamp( fixRcol>>6, -255, +255);
-      SLONG slG = Clamp( fixGcol>>6, -255, +255);
-      SLONG slB = Clamp( fixBcol>>6, -255, +255);
+      long slR = Clamp( fixRcol>>6, -255, +255);
+      long slG = Clamp( fixGcol>>6, -255, +255);
+      long slB = Clamp( fixBcol>>6, -255, +255);
       IncrementByteWithClip( ((UBYTE*)&_pulLayer[pixOffset])[0], slR);
       IncrementByteWithClip( ((UBYTE*)&_pulLayer[pixOffset])[1], slG);
       IncrementByteWithClip( ((UBYTE*)&_pulLayer[pixOffset])[2], slB);
@@ -1485,7 +1485,7 @@ rowDone:
 void CLayerMixer::AddDirectional(void)
 {
 #if (defined __MSVC_INLINE__)
-  ULONG ulLight = ByteSwap( lm_colLight);
+  unsigned long ulLight = ByteSwap( lm_colLight);
   __asm {
     // prepare pointers and variables
     mov     edi,D [_pulLayer]
@@ -1521,8 +1521,8 @@ rowNext:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG ulLight = ByteSwap( lm_colLight);
-  ULONG tmp;
+  unsigned long ulLight = ByteSwap( lm_colLight);
+  unsigned long tmp;
   __asm__ __volatile__ (
     // prepare pointers and variables
     "movl      (" ASMSYM(_pulLayer) "), %%edi \n\t"
@@ -1584,7 +1584,7 @@ rowNext:
 void CLayerMixer::AddMaskDirectional( UBYTE *pubMask, UBYTE ubMask)
 {
 #if (defined __MSVC_INLINE__)
-  ULONG ulLight = ByteSwap( lm_colLight);
+  unsigned long ulLight = ByteSwap( lm_colLight);
   // prepare some local variables
   __asm {
     // prepare pointers and variables
@@ -1617,8 +1617,8 @@ skipLight:
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG ulLight = ByteSwap( lm_colLight);
-  ULONG tmp;
+  unsigned long ulLight = ByteSwap( lm_colLight);
+  unsigned long tmp;
   __asm__ __volatile__ (
     // prepare pointers and variables
     "movzbl  %[ubMask], %%edx             \n\t"
@@ -1724,7 +1724,7 @@ void CLayerMixer::AddOneLayerDirectional( CBrushShadowLayer *pbsl, UBYTE *pubMas
   // calculate light color and ambient
   lm_colLight = lm_plsLight->GetLightColor();
   pbsl->bsl_colLastAnim = lm_colLight;
-  ULONG ulIntensity = NormFloatToByte(fIntensity);
+  unsigned long ulIntensity = NormFloatToByte(fIntensity);
   ulIntensity = (ulIntensity<<CT_RSHIFT)|(ulIntensity<<CT_GSHIFT)|(ulIntensity<<CT_BSHIFT);
   lm_colLight = MulColors(   lm_colLight, ulIntensity);
   lm_colLight = AdjustColor( lm_colLight, _slShdHueShift, _slShdSaturation);
@@ -1794,7 +1794,7 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG clob1, clob2, clob3;
+  unsigned long clob1, clob2, clob3;
   __asm__ __volatile__ (
     "cld                    \n\t"
     "imull   %%esi, %%ecx   \n\t"
@@ -1808,18 +1808,18 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
   );
 
 #else
-  ULONG count = this->lm_pixCanvasSizeU * this->lm_pixCanvasSizeV;
+  unsigned long count = this->lm_pixCanvasSizeU * this->lm_pixCanvasSizeV;
   #if PLATFORM_LITTLEENDIAN
   // Forces C fallback; BYTESWAP itself is a no-op on little endian.
-  ULONG swapped = BYTESWAP32_unsigned(colAmbient);
+  unsigned long swapped = BYTESWAP32_unsigned(colAmbient);
   #else
   STUBBED("actually need byteswap?");
   // (uses inline asm on MacOS PowerPC)
-  ULONG swapped = colAmbient;
+  unsigned long swapped = colAmbient;
   BYTESWAP(swapped);
   #endif
 
-  for (ULONG *ptr = this->lm_pulShadowMap; count; count--)
+  for (unsigned long *ptr = this->lm_pulShadowMap; count; count--)
   {
     *ptr = swapped;
     ptr++;
@@ -1832,7 +1832,7 @@ void CLayerMixer::MixOneMipmap(CBrushShadowMap *pbsm, INDEX iMipmap)
   // find gradient layer
   CGradientParameters gpGradient;
   BOOL  bHasGradient   = FALSE;
-  ULONG ulGradientType = lm_pbpoPolygon->bpo_bppProperties.bpp_ubGradientType;
+  unsigned long ulGradientType = lm_pbpoPolygon->bpo_bppProperties.bpp_ubGradientType;
   if( ulGradientType>0) {
     CEntity *pen = lm_pbpoPolygon->bpo_pbscSector->bsc_pbmBrushMip->bm_pbrBrush->br_penEntity;
     if( pen!=NULL) bHasGradient = pen->GetGradient( ulGradientType, gpGradient);
@@ -1914,7 +1914,7 @@ __forceinline void CLayerMixer::CopyShadowLayer(void)
     rep     movsd
   }
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG clob1, clob2, clob3;
+  unsigned long clob1, clob2, clob3;
   __asm__ __volatile__ (
     "cld                    \n\t"
     "imull   %%eax, %%ecx   \n\t"
@@ -1948,7 +1948,7 @@ __forceinline void CLayerMixer::FillShadowLayer( COLOR col)
   }
 
 #elif (defined __GNU_INLINE_X86_32__)
-  ULONG clob1, clob2, clob3;
+  unsigned long clob1, clob2, clob3;
   __asm__ __volatile__ (
     "cld                    \n\t"
     "imull   %%edx, %%ecx   \n\t"

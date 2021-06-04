@@ -60,12 +60,12 @@ public:
   /* Get pointer to entity property from its name. */
   class CEntityProperty *PropertyForName(const CTString &strPropertyName);
   /* Get pointer to entity property from its packed identifier. */
-  class CEntityProperty *PropertyForTypeAndID(ULONG ulType, ULONG ulID);
+  class CEntityProperty *PropertyForTypeAndID(unsigned long ulType, unsigned long ulID);
   /* Get event handler for given state and event code. */
-  CEntity::pEventHandler HandlerForStateAndEvent(SLONG slState, SLONG slEvent);
+  CEntity::pEventHandler HandlerForStateAndEvent(long slState, long slEvent);
   /* Get pointer to component from its type and identifier. */
   class CEntityComponent *ComponentForTypeAndID(
-    enum EntityComponentType ectType, SLONG slID);
+    enum EntityComponentType ectType, long slID);
   /* Get pointer to component from the component. */
   inline class CEntityComponent *ComponentForPointer(void *pv);
 
@@ -76,7 +76,7 @@ public:
   virtual void Write_t( CTStream *ostr); // throw char *
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
   // check if this kind of objects is auto-freed
   BOOL IsAutoFreed(void);
   // gather the CRC of the file

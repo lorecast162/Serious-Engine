@@ -133,10 +133,10 @@ static BOOL _bOpened = FALSE;
 #ifdef PLATFORM_UNIX
 
 static Uint8 sdl_silence = 0;
-static volatile SLONG sdl_backbuffer_allocation = 0;
+static volatile long sdl_backbuffer_allocation = 0;
 static Uint8 *sdl_backbuffer = NULL;
-static volatile SLONG sdl_backbuffer_pos = 0;
-static volatile SLONG sdl_backbuffer_remain = 0;
+static volatile long sdl_backbuffer_pos = 0;
+static volatile long sdl_backbuffer_remain = 0;
 static SDL_AudioDeviceID sdl_audio_device = 0;
 
 static void sdl_audio_callback(void *userdata, Uint8 *stream, int len)
@@ -275,7 +275,7 @@ static BOOL StartUp_SDLaudio( CSoundLibrary &sl, BOOL bReport=TRUE)
   }
 
   // determine whole mixer buffer size from mixahead console variable
-  sl.sl_slMixerBufferSize = (SLONG)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
+  sl.sl_slMixerBufferSize = (long)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
                             sl.sl_SwfeFormat.wBitsPerSample/8 * sl.sl_SwfeFormat.nChannels);
   // align size to be next multiply of WAVEOUTBLOCKSIZE
   sl.sl_slMixerBufferSize += WAVEOUTBLOCKSIZE - (sl.sl_slMixerBufferSize % WAVEOUTBLOCKSIZE);
@@ -290,7 +290,7 @@ static BOOL StartUp_SDLaudio( CSoundLibrary &sl, BOOL bReport=TRUE)
   }
 
   // initialize mixing and decoding buffer
-  sl.sl_pslMixerBuffer  = (SLONG*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
+  sl.sl_pslMixerBuffer  = (long*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
   sl.sl_pswDecodeBuffer = (SWORD*)AllocMemory( sl.sl_slDecodeBufferSize+4); // (+4 because of linear interpolation of last samples)
 
   // the audio callback can now safely fill the audio stream with silence
@@ -329,7 +329,7 @@ static void ShutDown_SDLaudio( CSoundLibrary &sl)
 
 // SDL_LockAudio() must be in effect when calling this!
 //  ...and stay in effect until after CopyMixerBuffer_SDLaudio() is called!
-static SLONG PrepareSoundBuffer_SDLaudio( CSoundLibrary &sl)
+static long PrepareSoundBuffer_SDLaudio( CSoundLibrary &sl)
 {
   ASSERT(sdl_backbuffer_remain >= 0);
   ASSERT(sdl_backbuffer_remain <= sdl_backbuffer_allocation);
@@ -339,15 +339,15 @@ static SLONG PrepareSoundBuffer_SDLaudio( CSoundLibrary &sl)
 
 // SDL_LockAudio() must be in effect when calling this!
 //  ...and have been in effect since PrepareSoundBuffer_SDLaudio was called!
-static void CopyMixerBuffer_SDLaudio( CSoundLibrary &sl, SLONG datasize)
+static void CopyMixerBuffer_SDLaudio( CSoundLibrary &sl, long datasize)
 {
   ASSERT((sdl_backbuffer_allocation - sdl_backbuffer_remain) >= datasize);
 
-  SLONG fillpos = sdl_backbuffer_pos + sdl_backbuffer_remain;
+  long fillpos = sdl_backbuffer_pos + sdl_backbuffer_remain;
   if (fillpos > sdl_backbuffer_allocation)
     fillpos -= sdl_backbuffer_allocation;
 
-  SLONG cpysize = datasize;
+  long cpysize = datasize;
   if ( (cpysize + fillpos) > sdl_backbuffer_allocation)
     cpysize = sdl_backbuffer_allocation - fillpos;
 
@@ -556,7 +556,7 @@ static void SetLibraryFormat( CSoundLibrary &sl)
   if( sl.sl_EsfFormat == CSoundLibrary::SF_NONE) return;
 
   // else check wave format to determine library format
-  ULONG ulFormat = sl.sl_SwfeFormat.nSamplesPerSec;
+  unsigned long ulFormat = sl.sl_SwfeFormat.nSamplesPerSec;
   // find format
   switch( ulFormat) {
     case 11025: sl.sl_EsfFormat = CSoundLibrary::SF_11025_16; break;
@@ -582,7 +582,7 @@ static BOOL DSFail( CSoundLibrary &sl, char *strError)
 
 
 // some helper functions for DirectSound
-static BOOL DSInitSecondary( CSoundLibrary &sl, LPDIRECTSOUNDBUFFER &pBuffer, SLONG slSize)
+static BOOL DSInitSecondary( CSoundLibrary &sl, LPDIRECTSOUNDBUFFER &pBuffer, long slSize)
 {
   // eventuallt adjust for EAX
   DWORD dwFlag3D = NONE;
@@ -611,7 +611,7 @@ static BOOL DSInitSecondary( CSoundLibrary &sl, LPDIRECTSOUNDBUFFER &pBuffer, SL
 }
 
 
-static BOOL DSLockBuffer( CSoundLibrary &sl, LPDIRECTSOUNDBUFFER pBuffer, SLONG slSize, LPVOID &lpData, DWORD &dwSize)
+static BOOL DSLockBuffer( CSoundLibrary &sl, LPDIRECTSOUNDBUFFER pBuffer, long slSize, LPVOID &lpData, DWORD &dwSize)
 {
   INDEX ctRetries = 1000;  // too much?
   if( sl.sl_bUsingEAX) slSize/=2; // buffer is mono in case of EAX
@@ -664,15 +664,15 @@ static void DSPlayBuffers( CSoundLibrary &sl)
   // adjust starting offsets for EAX
   if( sl.sl_bUsingEAX) {
     DWORD dwCursor1, dwCursor2;
-    SLONG slMinDelta = MAX_SLONG;
+    long slMinDelta = MAX_long;
     for( INDEX i=0; i<10; i++) { // shoud be enough to screw interrupts
       sl.sl_pDSSecondary->GetCurrentPosition(  &dwCursor1, NULL);
       sl.sl_pDSSecondary2->GetCurrentPosition( &dwCursor2, NULL);
-      SLONG slDelta1 = dwCursor2-dwCursor1;
+      long slDelta1 = dwCursor2-dwCursor1;
       sl.sl_pDSSecondary2->GetCurrentPosition( &dwCursor2, NULL);
       sl.sl_pDSSecondary->GetCurrentPosition(  &dwCursor1, NULL);
-      SLONG slDelta2 = dwCursor2-dwCursor1;
-      SLONG slDelta  = (slDelta1+slDelta2) /2;
+      long slDelta2 = dwCursor2-dwCursor1;
+      long slDelta  = (slDelta1+slDelta2) /2;
       if( slDelta<slMinDelta) slMinDelta = slDelta;
       //CPrintF( "D1=%5d,  D2=%5d,  AD=%5d,  MD=%5d\n", slDelta1, slDelta2, slDelta, slMinDelta);
     }
@@ -755,7 +755,7 @@ static BOOL StartUp_dsound( CSoundLibrary &sl, BOOL bReport=TRUE)
   if( hResult != DS_OK) return DSFail( sl, TRANS("  ! DirectSound error: Cannot set primary sound buffer format.\n"));
 
   // startup secondary sound buffer(s)
-  SLONG slBufferSize = (SLONG)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
+  long slBufferSize = (long)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
                        sl.sl_SwfeFormat.wBitsPerSample/8 * sl.sl_SwfeFormat.nChannels);
   if( !DSInitSecondary( sl, sl.sl_pDSSecondary, slBufferSize)) return FALSE;
 
@@ -794,7 +794,7 @@ static BOOL StartUp_dsound( CSoundLibrary &sl, BOOL bReport=TRUE)
     hResult = sl.sl_pDSSourceLeft->QueryInterface( IID_IKsPropertySet, (LPVOID*)&sl.sl_pKSProperty);
     if( hResult != DS_OK) return DSFail( sl, TRANS("  ! EAX error: Cannot set property interface.\n"));
     // query support
-    ULONG ulSupport = 0;
+    unsigned long ulSupport = 0;
     hResult = sl.sl_pKSProperty->QuerySupport( DSPROPSETID_EAX_ListenerProperties, DSPROPERTY_EAXLISTENER_ENVIRONMENT, &ulSupport);
     if( hResult != DS_OK || !(ulSupport&KSPROPERTY_SUPPORT_SET)) return DSFail( sl, TRANS("  ! EAX error: Cannot query property support.\n"));
     hResult = sl.sl_pKSProperty->QuerySupport( DSPROPSETID_EAX_ListenerProperties, DSPROPERTY_EAXLISTENER_ENVIRONMENTSIZE, &ulSupport);
@@ -811,7 +811,7 @@ static BOOL StartUp_dsound( CSoundLibrary &sl, BOOL bReport=TRUE)
   sl.sl_slDecodeBufferSize = sl.sl_slMixerBufferSize *
                            ((44100+sl.sl_SwfeFormat.nSamplesPerSec-1) /sl.sl_SwfeFormat.nSamplesPerSec);
   // allocate mixing and decoding buffers
-  sl.sl_pslMixerBuffer  = (SLONG*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
+  sl.sl_pslMixerBuffer  = (long*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
   sl.sl_pswDecodeBuffer = (SWORD*)AllocMemory( sl.sl_slDecodeBufferSize+4); // (+4 because of linear interpolation of last samples)
 
   // report success
@@ -914,7 +914,7 @@ static BOOL StartUp_waveout( CSoundLibrary &sl, BOOL bReport=TRUE)
   }
 
   // determine whole mixer buffer size from mixahead console variable
-  sl.sl_slMixerBufferSize = (SLONG)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
+  sl.sl_slMixerBufferSize = (long)(ceil(snd_tmMixAhead*sl.sl_SwfeFormat.nSamplesPerSec) *
                             sl.sl_SwfeFormat.wBitsPerSample/8 * sl.sl_SwfeFormat.nChannels);
   // align size to be next multiply of WAVEOUTBLOCKSIZE
   sl.sl_slMixerBufferSize += WAVEOUTBLOCKSIZE - (sl.sl_slMixerBufferSize % WAVEOUTBLOCKSIZE);
@@ -942,7 +942,7 @@ static BOOL StartUp_waveout( CSoundLibrary &sl, BOOL bReport=TRUE)
     wh.dwFlags = 0;
   }
   // initialize mixing and decoding buffer
-  sl.sl_pslMixerBuffer  = (SLONG*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
+  sl.sl_pslMixerBuffer  = (long*)AllocMemory( sl.sl_slMixerBufferSize *2); // (*2 because of 32-bit buffer)
   sl.sl_pswDecodeBuffer = (SWORD*)AllocMemory( sl.sl_slDecodeBufferSize+4); // (+4 because of linear interpolation of last samples)
 
   // done
@@ -1453,9 +1453,9 @@ void CSoundTimerHandler::HandleTimer(void)
   /* memory leak checking routines
   ASSERT( _CrtCheckMemory());
   ASSERT( _CrtIsMemoryBlock( (void*)_pSound->sl_pswDecodeBuffer,
-                             (ULONG)_pSound->sl_slDecodeBufferSize, NULL, NULL, NULL));
+                             (unsigned long)_pSound->sl_slDecodeBufferSize, NULL, NULL, NULL));
   ASSERT( _CrtIsValidPointer( (void*)_pSound->sl_pswDecodeBuffer,
-                              (ULONG)_pSound->sl_slDecodeBufferSize, TRUE)); */
+                              (unsigned long)_pSound->sl_slDecodeBufferSize, TRUE)); */
   // mix all needed sounds
   _pSound->MixSounds();
 }
@@ -1473,11 +1473,11 @@ void CSoundTimerHandler::HandleTimer(void)
 static LPVOID _lpData, _lpData2;
 static DWORD  _dwSize, _dwSize2;
 
-static void CopyMixerBuffer_dsound( CSoundLibrary &sl, SLONG slMixedSize)
+static void CopyMixerBuffer_dsound( CSoundLibrary &sl, long slMixedSize)
 {
   LPVOID lpData;
   DWORD dwSize;
-  SLONG slPart1Size, slPart2Size;
+  long slPart1Size, slPart2Size;
 
   // if EAX is in use
   if( sl.sl_bUsingEAX)
@@ -1527,7 +1527,7 @@ static void CopyMixerBuffer_dsound( CSoundLibrary &sl, SLONG slMixedSize)
 static void CopyMixerBuffer_waveout( CSoundLibrary &sl)
 {
   MMRESULT res;
-  SLONG slOffset = 0;
+  long slOffset = 0;
   for( INDEX iBuffer = 0; iBuffer<sl.sl_awhWOBuffers.Count(); iBuffer++)
   { // skip prepared buffer
     WAVEHDR &wh = sl.sl_awhWOBuffers[iBuffer];
@@ -1545,12 +1545,12 @@ static void CopyMixerBuffer_waveout( CSoundLibrary &sl)
 
 
 // finds room in sound buffer to copy in next crop of samples
-static SLONG PrepareSoundBuffer_dsound( CSoundLibrary &sl)
+static long PrepareSoundBuffer_dsound( CSoundLibrary &sl)
 {
   // determine writable block size (difference between write and play pointers)
   HRESULT hr1,hr2;
   DWORD dwCurrentCursor, dwCurrentCursor2;
-  SLONG slDataToMix;
+  long slDataToMix;
   ASSERT( sl.sl_pDSSecondary!=NULL && sl.sl_pDSPrimary!=NULL);
 
   // if EAX is in use
@@ -1562,11 +1562,11 @@ static SLONG PrepareSoundBuffer_dsound( CSoundLibrary &sl)
     dwCurrentCursor *=2; // stereo mixer
     dwCurrentCursor2*=2; // stereo mixer
     // store pointers and wrapped block sizes
-    SLONG slDataToMix1 = dwCurrentCursor - _iWriteOffset;
+    long slDataToMix1 = dwCurrentCursor - _iWriteOffset;
     if( slDataToMix1<0) slDataToMix1 += sl.sl_slMixerBufferSize;
     ASSERT( slDataToMix1>=0 && slDataToMix1<=sl.sl_slMixerBufferSize);
     slDataToMix1 = Min( slDataToMix1, sl.sl_slMixerBufferSize); 
-    SLONG slDataToMix2 = dwCurrentCursor2 - _iWriteOffset2;
+    long slDataToMix2 = dwCurrentCursor2 - _iWriteOffset2;
     if( slDataToMix2<0) slDataToMix2 += sl.sl_slMixerBufferSize;
     ASSERT( slDataToMix2>=0 && slDataToMix2<=sl.sl_slMixerBufferSize);
     slDataToMix = Min( slDataToMix1, slDataToMix2);
@@ -1589,10 +1589,10 @@ static SLONG PrepareSoundBuffer_dsound( CSoundLibrary &sl)
 }
 
 
-static SLONG PrepareSoundBuffer_waveout( CSoundLibrary &sl)
+static long PrepareSoundBuffer_waveout( CSoundLibrary &sl)
 {
   // scan waveout buffers to find all that are ready to receive sound data (i.e. not playing)
-  SLONG slDataToMix=0;
+  long slDataToMix=0;
   for( INDEX iBuffer=0; iBuffer<sl.sl_awhWOBuffers.Count(); iBuffer++)
   { // if done playing
     WAVEHDR &wh = sl.sl_awhWOBuffers[iBuffer];
@@ -1634,7 +1634,7 @@ void CSoundLibrary::MixSounds(void)
   _pfSoundProfile.StartTimer(CSoundProfile::PTI_MIXSOUNDS);
 
   // seek available buffer(s) for next crop of samples
-  SLONG slDataToMix;
+  long slDataToMix;
 
 #ifdef PLATFORM_WIN32
   if( sl_bUsingDirectSound) { // using direct sound

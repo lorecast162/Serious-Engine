@@ -694,9 +694,9 @@ BOOL CServer::CharacterNameIsUsed(CPlayerCharacter &pcCharacter)
 }
 
 // find a mask of all players on a certain client
-ULONG CServer::MaskOfPlayersOnClient(INDEX iClient)
+unsigned long CServer::MaskOfPlayersOnClient(INDEX iClient)
 {
-  ULONG ulClientPlayers = 0;
+  unsigned long ulClientPlayers = 0;
   for(INDEX ipl=0; ipl<srv_aplbPlayers.Count(); ipl++) {
     CPlayerBuffer &plb = srv_aplbPlayers[ipl];
     if (plb.IsActive() && plb.plb_iClient==iClient) {
@@ -1000,7 +1000,7 @@ void CServer::ConnectRemoteSessionState(INDEX iClient, CNetworkMessage &nm)
     strmInfo<<_pNetwork->ga_World.wo_fnmFileName;
     strmInfo<<_pNetwork->ga_sesSessionState.ses_ulSpawnFlags;
     strmInfo.Write_t(_pNetwork->ga_aubDefaultProperties, NET_MAXSESSIONPROPERTIES);
-    SLONG slSize = strmInfo.GetStreamSize();
+    long slSize = strmInfo.GetStreamSize();
 
     // send the stream to the remote session state
     _pNetwork->SendToClientReliable(iClient, strmInfo);
@@ -1052,7 +1052,7 @@ void CServer::SendSessionStateData(INDEX iClient)
     // write main session state
     _pNetwork->ga_sesSessionState.Write_t(pstrmState);
     pstrmState->SetPos_t(0);
-    SLONG slFullSize = pstrmState->GetStreamSize();
+    long slFullSize = pstrmState->GetStreamSize();
 
     CTMemoryStream strmInfo;
     strmInfo<<INDEX(MSG_REP_STATEDELTA);
@@ -1064,11 +1064,11 @@ void CServer::SendSessionStateData(INDEX iClient)
     strmDefaultState.SetPos_t(0);
     DIFF_Diff_t(&strmDefaultState, pstrmState, pstrmDelta);
     pstrmDelta->SetPos_t(0);
-    SLONG slDeltaSize = pstrmDelta->GetStreamSize();
+    long slDeltaSize = pstrmDelta->GetStreamSize();
     CzlibCompressor comp;
     comp.PackStream_t(*pstrmDelta, strmInfo);
 
-    SLONG slSize = strmInfo.GetStreamSize();
+    long slSize = strmInfo.GetStreamSize();
 
     // send the stream to the remote session state
     _pNetwork->SendToClientReliable(iClient, strmInfo);
@@ -1493,7 +1493,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
   // if a chat message was sent
   case MSG_CHAT_IN: {
     // get it
-    ULONG ulFrom, ulTo;
+    unsigned long ulFrom, ulTo;
     CTString strMessage;
     nmMessage>>ulFrom>>ulTo>>strMessage;
 
@@ -1502,7 +1502,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
     // if the source has no players
     if (ulFrom==0) {
       // make it public message
-      ulTo = (ULONG) -1;
+      ulTo = (unsigned long) -1;
     }
 
     // make the outgoing message
@@ -1540,7 +1540,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
     CTMemoryStream strmCRC;
     strmCRC<<INDEX(MSG_REQ_CRCCHECK);
     strmCRC.Write_t(_pNetwork->ga_pubCRCList, _pNetwork->ga_slCRCList);
-    SLONG slSize = strmCRC.GetStreamSize();
+    long slSize = strmCRC.GetStreamSize();
 
     // send the stream to the remote session state
     _pNetwork->SendToClientReliable(iClient, strmCRC);
@@ -1551,7 +1551,7 @@ void CServer::Handle(INDEX iClient, CNetworkMessage &nmMessage)
   // if a crc response is received
   case MSG_REP_CRCCHECK: {
     // get it
-    ULONG ulCRC;
+    unsigned long ulCRC;
     INDEX iLastSequence;
     nmMessage>>ulCRC>>iLastSequence;
     // if not same

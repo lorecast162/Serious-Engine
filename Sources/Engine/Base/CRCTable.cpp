@@ -27,7 +27,7 @@ extern INDEX net_bReportCRC;
 class CCRCEntry {
 public:
   CTFileName ce_fnmFile;    // the file that CRC is for
-  ULONG ce_ulCRC;           // CRC of the file
+  unsigned long ce_ulCRC;           // CRC of the file
   BOOL ce_bActive;          // set if the file is now active for CRC checking
 
   // filename is its name (used for storing in nametable)
@@ -70,7 +70,7 @@ BOOL CRCT_IsFileAdded(const CTFileName &fnm)
 }
 
 // add one file to active list and get its crc
-void CRCT_AddFile_t(const CTFileName &fnm, ULONG ulCRC/*=0*/) // throw char *
+void CRCT_AddFile_t(const CTFileName &fnm, unsigned long ulCRC/*=0*/) // throw char *
 {
   // if not gathering CRCs now
   if (!CRCT_bGatherCRCs) {
@@ -161,12 +161,12 @@ void CRCT_MakeFileList_t(CTStream &strmFiles)  // throw char *
 }
 
 // dump checksums for all files from the list
-ULONG CRCT_MakeCRCForFiles_t(CTStream &strmFiles)  // throw char *
+unsigned long CRCT_MakeCRCForFiles_t(CTStream &strmFiles)  // throw char *
 {
   BOOL bOld = CRCT_bGatherCRCs;
   CRCT_bGatherCRCs = TRUE;
 
-  ULONG ulCRC;
+  unsigned long ulCRC;
   CRC_Start(ulCRC);
   // read number of active files
   INDEX ctFiles;

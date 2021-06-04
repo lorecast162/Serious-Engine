@@ -64,7 +64,7 @@ void CPaletteButton::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     COLORREF clrfColor = CLRF_CLR( PaletteColorValues[ iButtonNo]);
 
     pDC->FillSolidRect( &lpDrawItemStruct->rcItem, clrfColor);
-    ULONG ulMask = pModelerView->m_ModelObject.mo_ColorMask;
+    unsigned long ulMask = pModelerView->m_ModelObject.mo_ColorMask;
     if( ulMask & ((1L) << iButtonNo))
       pDC->DrawEdge( &lpDrawItemStruct->rcItem, EDGE_SUNKEN, BF_RECT);
     else
@@ -103,7 +103,7 @@ void CPaletteButton::OnRButtonDown(UINT nFlags, CPoint point)
   CModelerView *pModelerView = CModelerView::GetActiveView();
   if( (pModelerView != NULL) && (iClickedColor < 30))
   {
-    ULONG ulMask = pModelerView->m_ModelObject.mo_ColorMask;
+    unsigned long ulMask = pModelerView->m_ModelObject.mo_ColorMask;
     ulMask = ulMask ^ ((1L) << iClickedColor);
     pModelerView->m_ModelObject.mo_ColorMask = ulMask;
     Invalidate( FALSE);

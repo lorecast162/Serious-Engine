@@ -82,7 +82,7 @@ enum ETerrainEdit {
 
 class CTerrainUndo {
 public:
-  ULONG tu_ulEntityID;
+  unsigned long tu_ulEntityID;
   UWORD *tu_puwUndoBuffer;
   UWORD *tu_puwRedoBuffer;
   Rect tu_rcRect;

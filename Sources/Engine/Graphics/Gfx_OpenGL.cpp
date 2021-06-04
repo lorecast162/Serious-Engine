@@ -36,8 +36,8 @@ extern INDEX ogl_iTBufferSamples;
 
 
 // fog/haze textures
-extern ULONG _fog_ulTexture;
-extern ULONG _haze_ulTexture;
+extern unsigned long _fog_ulTexture;
+extern unsigned long _haze_ulTexture;
 
 // change control
 extern INDEX GFX_ctVertices;
@@ -140,7 +140,7 @@ static BOOL HasExtension( const char *strAllExtensions, const char *strExtension
 
 
 // add OpenGL extensions to engine
-void CGfxLibrary::AddExtension_OGL( ULONG ulFlag, const char *strName)
+void CGfxLibrary::AddExtension_OGL( unsigned long ulFlag, const char *strName)
 {
   gl_ulFlags = (gl_ulFlags & ~ulFlag) | ulFlag;
   go_strSupportedExtensions += strName;
@@ -149,7 +149,7 @@ void CGfxLibrary::AddExtension_OGL( ULONG ulFlag, const char *strName)
 
 
 // determine OpenGL extensions that engine supports
-void CGfxLibrary::TestExtension_OGL( ULONG ulFlag, const char *strName)
+void CGfxLibrary::TestExtension_OGL( unsigned long ulFlag, const char *strName)
 {
   if( HasExtension( go_strExtensions, strName)) AddExtension_OGL( ulFlag, strName);
 }
@@ -394,7 +394,7 @@ void CGfxLibrary::InitContext_OGL(void)
 
   // check if 32-bit textures are supported
   GLuint uiTmpTex;
-  const ULONG ulTmpTex = 0xFFFFFFFF;
+  const unsigned long ulTmpTex = 0xFFFFFFFF;
   pglGenTextures( 1, &uiTmpTex);
   pglBindTexture( GL_TEXTURE_2D, uiTmpTex);
   pglTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, 1,1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &ulTmpTex);
@@ -418,8 +418,8 @@ void CGfxLibrary::InitContext_OGL(void)
 
   // prepare pattern texture
   extern CTexParams _tpPattern;
-  extern ULONG _ulPatternTexture;
-  extern ULONG _ulLastUploadedPattern;
+  extern unsigned long _ulPatternTexture;
+  extern unsigned long _ulLastUploadedPattern;
   pglGenTextures( 1, (GLuint*)&_ulPatternTexture);
   _ulLastUploadedPattern = 0;
   _tpPattern.Clear();

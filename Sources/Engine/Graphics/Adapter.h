@@ -35,7 +35,7 @@ public:
   CDisplayMode da_admDisplayModes[25]; // 25 should be just enough
   INDEX da_ctDisplayModes;       // number of display modes with hardware acceleration (>=1)
   INDEX da_iCurrentDisplayMode;  // currently active display mode (-1 if none)
-  ULONG da_ulFlags;              // various flags (DAF_ ...) 
+  unsigned long da_ulFlags;              // various flags (DAF_ ...) 
   CTString da_strVendor;         // OpenGL will fill this upon initialization of adapter ...
   CTString da_strRenderer;       //  ... till then, it will be set to unknown/OpenGL ICD/1.1 or ...
   CTString da_strVersion;        //  ... 3Dfx/OpenGL/1.1
@@ -59,7 +59,7 @@ BOOL CDS_SetMode( PIX pixSizeI, PIX pixSizeJ, enum DisplayDepth dd);
 // reset windows to mode chosen by user within windows diplay properties
 void CDS_ResetMode(void);
 
-ULONG DetermineDesktopWidth(void);
+unsigned long DetermineDesktopWidth(void);
 
 #endif  /* include-once check. */
 

@@ -85,7 +85,7 @@ public:
   FLOAT tm_fLerpFactor2;  // secondary lerp-factor used for unpredicted movement
 
   #ifdef PLATFORM_WIN32
-  ULONG tm_TimerID;       // windows timer ID
+  unsigned long tm_TimerID;       // windows timer ID
   #else
   int tm_TimerID;         // SDL_TimerID in fact
   #endif

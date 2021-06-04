@@ -34,10 +34,10 @@ BOOL IsTerrainBelowPoint(CTerrain *ptrTerrain, const FLOAT3D &vPoint, FLOAT fMax
 // Extract all tiles that intersect with given box
 void FindTilesInBox(CTerrain *ptrTerrain, FLOATaabbox3D &bbox);
 // Add these flags to all tiles that have been extracted
-void AddFlagsToExtractedTiles(ULONG ulFlags);
+void AddFlagsToExtractedTiles(unsigned long ulFlags);
 
 // Create new texture
-void CreateTexture(CTextureData &td, INDEX iWidth, INDEX iHeight, ULONG ulFlags);
+void CreateTexture(CTextureData &td, INDEX iWidth, INDEX iHeight, unsigned long ulFlags);
 
 void CreateTopMap(CTextureData &tdTopMap, PIX pixWidth , PIX pixHeight);
 void PrepareSharedTopMapMemory(CTextureData *ptdTopMap, INDEX iTileIndex);

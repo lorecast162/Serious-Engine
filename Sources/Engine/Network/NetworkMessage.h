@@ -116,10 +116,10 @@ public:
 
 #define MAX_NETWORKMESSAGE_SIZE 2048      // max. length of message buffer
   UBYTE *nm_pubMessage;       // the message data itself
-  SLONG nm_slMaxSize;         // size of message buffer
+  long nm_slMaxSize;         // size of message buffer
 
   UBYTE *nm_pubPointer;       // pointer for reading/writing message
-  SLONG nm_slSize;            // size of message
+  long nm_slSize;            // size of message
   INDEX nm_iBit;              // next bit index to read/write (0 if not reading/writing bits)
 public:
   /* Constructor for empty message (for receiving). */
@@ -154,17 +154,17 @@ public:
   void UnpackDefault(CNetworkMessage &nmUnpacked);
 
   // read/write functions
-  void Read(void *pvBuffer, SLONG slSize);
-  void Write(const void *pvBuffer, SLONG slSize);
+  void Read(void *pvBuffer, long slSize);
+  void Write(const void *pvBuffer, long slSize);
   void ReadBits(void *pvBuffer, INDEX ctBits);
   void WriteBits(const void *pvBuffer, INDEX ctBits);
 
   /* Read an object from message. */
   inline CNetworkMessage &operator>>(float  &f) { Read( &f, sizeof( f)); return *this; }
-  inline CNetworkMessage &operator>>(ULONG &ul) { Read(&ul, sizeof(ul)); return *this; }
+  inline CNetworkMessage &operator>>(unsigned long &ul) { Read(&ul, sizeof(ul)); return *this; }
   inline CNetworkMessage &operator>>(UWORD &uw) { Read(&uw, sizeof(uw)); return *this; }
   inline CNetworkMessage &operator>>(UBYTE &ub) { Read(&ub, sizeof(ub)); return *this; }
-  inline CNetworkMessage &operator>>(SLONG &sl) { Read(&sl, sizeof(sl)); return *this; }
+  inline CNetworkMessage &operator>>(long &sl) { Read(&sl, sizeof(sl)); return *this; }
   inline CNetworkMessage &operator>>(SWORD &sw) { Read(&sw, sizeof(sw)); return *this; }
   inline CNetworkMessage &operator>>(SBYTE &sb) { Read(&sb, sizeof(sb)); return *this; }
   inline CNetworkMessage &operator>>(MESSAGETYPE &mt) { Read(&mt, sizeof(mt)); return *this; }
@@ -172,10 +172,10 @@ public:
   /* Write an object into message. */
   inline CNetworkMessage &operator<<(const float  &f) { Write( &f, sizeof( f)); return *this; }
   inline CNetworkMessage &operator<<(const double &d) { Write( &d, sizeof( d)); return *this; }
-  inline CNetworkMessage &operator<<(const ULONG &ul) { Write(&ul, sizeof(ul)); return *this; }
+  inline CNetworkMessage &operator<<(const unsigned long &ul) { Write(&ul, sizeof(ul)); return *this; }
   inline CNetworkMessage &operator<<(const UWORD &uw) { Write(&uw, sizeof(uw)); return *this; }
   inline CNetworkMessage &operator<<(const UBYTE &ub) { Write(&ub, sizeof(ub)); return *this; }
-  inline CNetworkMessage &operator<<(const SLONG &sl) { Write(&sl, sizeof(sl)); return *this; }
+  inline CNetworkMessage &operator<<(const long &sl) { Write(&sl, sizeof(sl)); return *this; }
   inline CNetworkMessage &operator<<(const SWORD &sw) { Write(&sw, sizeof(sw)); return *this; }
   inline CNetworkMessage &operator<<(const SBYTE &sb) { Write(&sb, sizeof(sb)); return *this; }
   inline CNetworkMessage &operator<<(const MESSAGETYPE &mt) { Write(&mt, sizeof(mt)); return *this; }
@@ -258,7 +258,7 @@ public:
   // get number of blocks used by this object
   INDEX GetUsedBlocks(void);
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
   // get index of newest sequence stored
   INDEX GetNewestSequence(void);
 
@@ -290,7 +290,7 @@ public:
   FLOAT3D pa_vTranslation;
   ANGLE3D pa_aRotation;
   ANGLE3D pa_aViewRotation;
-  ULONG pa_ulButtons;       // 32 bits for action buttons (application defined)
+  unsigned long pa_ulButtons;       // 32 bits for action buttons (application defined)
     // keep flags that are likely to be changed/set more often at lower bits,
     // so that better compression can be achieved for network transmission
   __int64 pa_llCreated;     // when was created (for ping calc.) in ms
@@ -303,7 +303,7 @@ public:
   void Normalize(void);
 
   // create a checksum value for sync-check
-  void ChecksumForSync(ULONG &ulCRC);
+  void ChecksumForSync(unsigned long &ulCRC);
   // dump sync data to text file
   void DumpSync_t(CTStream &strm);  // throw char *
 

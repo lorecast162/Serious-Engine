@@ -237,8 +237,8 @@ static void MemoryInfo(void)
    _HEAPINFO hinfo;
    int heapstatus;
    hinfo._pentry = NULL;
-   SLONG slTotalUsed = 0;
-   SLONG slTotalFree = 0;
+   long slTotalUsed = 0;
+   long slTotalFree = 0;
    INDEX ctUsed = 0;
    INDEX ctFree = 0;
 
@@ -454,7 +454,7 @@ void LoadCommands(void)
     CTString strName = fnm.FileName();
     // declare it
     extern void Declaration(
-      ULONG ulQualifiers, INDEX istType, CShellSymbol &ssNew,
+      unsigned long ulQualifiers, INDEX istType, CShellSymbol &ssNew,
       INDEX (*pPreFunc)(INDEX), void (*pPostFunc)(INDEX));
 
     INDEX iType = ShellTypeNewString();

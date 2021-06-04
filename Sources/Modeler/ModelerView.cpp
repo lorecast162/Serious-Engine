@@ -446,7 +446,7 @@ static BOOL TimeIsBefore(TIME tmTime, TIME tmMark, TIME tmWrap)
  * Draw a line for arrow drawing.
  */
 static inline void DrawLine(CDrawPort &dp, const FLOAT2D &vPoint0,
-                                 const FLOAT2D &vPoint1, COLOR color, ULONG ulLineType)
+                                 const FLOAT2D &vPoint1, COLOR color, unsigned long ulLineType)
 {
   PIX x0 = (PIX)vPoint0(1);
   PIX x1 = (PIX)vPoint1(1);
@@ -460,7 +460,7 @@ static inline void DrawLine(CDrawPort &dp, const FLOAT2D &vPoint0,
  * Draw an arrow for debugging edge directions.
  */
 static inline void DrawArrow(CDrawPort &dp, PIX i0, PIX j0, PIX i1, PIX j1, COLOR color,
-                             ULONG ulLineType)
+                             unsigned long ulLineType)
 {
   FLOAT2D vPoint0 = FLOAT2D((FLOAT)i0, (FLOAT)j0);
   FLOAT2D vPoint1 = FLOAT2D((FLOAT)i1, (FLOAT)j1);
@@ -494,7 +494,7 @@ void CModelerView::DrawArrowAndTypeText(CPerspectiveProjection3D &prProjection,
   // clip the edge line
   FLOAT3D vClipped0 = tv0;
   FLOAT3D vClipped1 = tv1;
-  ULONG ulClipFlags = prProjection.ClipLine(vClipped0, vClipped1);
+  unsigned long ulClipFlags = prProjection.ClipLine(vClipped0, vClipped1);
 
   // if the edge remains after clipping to front plane
   if (ulClipFlags != LCF_EDGEREMOVED)
@@ -630,7 +630,7 @@ void CModelerView::RenderView( CDrawPort *pDrawPort)
     }
   } else {
     m_ModelObject.mo_toTexture.SetData( NULL);
-    ULONG CurrentTextureType = m_RenderPrefs.GetRenderType();
+    unsigned long CurrentTextureType = m_RenderPrefs.GetRenderType();
     // no need to revert to white-texture mode, renderer with handle NULL texture just fine
     // if( CurrentTextureType&RT_TEXTURE) 
     //   m_RenderPrefs.SetTextureType( RT_WHITE_TEXTURE);
@@ -1724,7 +1724,7 @@ void CModelerView::OnRButtonUp(UINT nFlags, CPoint point)
 }
 //--------------------------------------------------------------------------------------------
 // restart animation for all attachments recursivly
-void PlayAnimForAllAttachments( CModelObject &mo, ULONG ulFlags)
+void PlayAnimForAllAttachments( CModelObject &mo, unsigned long ulFlags)
 {
   FOREACHINLIST( CAttachmentModelObject, amo_lnInMain, mo.mo_lhAttachments, itamo)
   {
@@ -1912,7 +1912,7 @@ void CModelerView::OnIdle(void)
     UBYTE ubRed = 128+((BYTE)(sin( fTimeVar1)*127));
     UBYTE ubGreen = 128+((BYTE)(sin( fTimeVar2)*127));
     UBYTE ubBlue = 128+((BYTE)(sin( fTimeVar3)*127));
-    m_LightColor = ((ULONG)ubRed)<<24 | ((ULONG)ubGreen)<<16 | ((ULONG)ubBlue)<<8;
+    m_LightColor = ((unsigned long)ubRed)<<24 | ((unsigned long)ubGreen)<<16 | ((unsigned long)ubBlue)<<8;
     theApp.m_chPlacement.MarkChanged();
   }
 
@@ -2056,7 +2056,7 @@ void CModelerView::OnContextMenu(CWnd* pWnd, CPoint point)
       if( m_RenderPrefs.WireOn()) pPopup->CheckMenuItem(ID_REND_WIRE_ONOFF, MF_CHECKED);
       if( m_RenderPrefs.HiddenLines()) pPopup->CheckMenuItem(ID_REND_HIDDEN_LINES, MF_CHECKED);
     
-      ULONG rtRenderType = m_RenderPrefs.GetRenderType();
+      unsigned long rtRenderType = m_RenderPrefs.GetRenderType();
       if( (rtRenderType & RT_NO_POLYGON_FILL) != 0)
         pPopup->CheckMenuItem( ID_REND_NO_TEXTURE, MF_CHECKED);
       if( (rtRenderType & RT_WHITE_TEXTURE) != 0)
@@ -3486,7 +3486,7 @@ void CModelerView::OnCreateMipModels()
         iSurface++)
       {
         // get rendering flags from main mip model for current surface
-        ULONG ulRenderFlags;
+        unsigned long ulRenderFlags;
         enum SurfaceShadingType sstShading;
         enum SurfaceTranslucencyType sttTranslucency;
         m_ModelObject.GetSurfaceRenderFlags( 0, iSurface, sstShading, sttTranslucency, ulRenderFlags);

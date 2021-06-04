@@ -103,7 +103,7 @@ CSize CBrowser::CalcDynamicLayout(int nLength, DWORD nMode)
   CRect NewBrowserPos;
   CRect NewTreePos;
   
-  ULONG ulNewTreeHeight = m_TreeHeight;
+  unsigned long ulNewTreeHeight = m_TreeHeight;
   if( csResult.cy < (m_TreeHeight + V_BORDER*2 + 10) )
   {
     ulNewTreeHeight = csResult.cy - +V_BORDER*2 - 10;
@@ -162,8 +162,8 @@ void CBrowser::AddDirectoryRecursiv(CVirtualTreeNode *pOneDirectory, HTREEITEM h
   InsertedDir = m_TreeCtrl.InsertItem( 0, L"", 0, 0, TVIS_SELECTED, TVIF_STATE, 0,
                                        hParent, TVI_SORT );
 
-  pOneDirectory->vtn_Handle = (ULONG) InsertedDir;
-  m_TreeCtrl.SetItemData( InsertedDir, (ULONG)(pOneDirectory));
+  pOneDirectory->vtn_Handle = (unsigned long) InsertedDir;
+  m_TreeCtrl.SetItemData( InsertedDir, (unsigned long)(pOneDirectory));
   m_TreeCtrl.SetItemText( InsertedDir, CString(pOneDirectory->vtn_strName));
   m_TreeCtrl.SetItemImage( InsertedDir, pOneDirectory->vtn_itIconType,
                            pOneDirectory->vtn_itIconType + NO_OF_ICONS);

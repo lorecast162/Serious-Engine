@@ -74,7 +74,7 @@ INDEX GFX_ctVertices = 0;
 // for D3D: mark need for clipping (when wants to be disable but cannot be because of user clip plane)
 //static BOOL _bWantsClipping = TRUE;
 // current color mask (for Get... function)
-static ULONG _ulCurrentColorMask = (CT_RMASK|CT_GMASK|CT_BMASK|CT_AMASK);
+static unsigned long _ulCurrentColorMask = (CT_RMASK|CT_GMASK|CT_BMASK|CT_AMASK);
 // locking state for OGL
 static BOOL _bCVAReallyLocked = FALSE;
 
@@ -120,8 +120,8 @@ void (*gfxSetViewMatrix)( const FLOAT *pfMatrix) = NULL;
 void (*gfxPolygonMode)( GfxPolyMode ePolyMode) = NULL;
 void (*gfxSetTextureWrapping)( enum GfxWrap eWrapU, enum GfxWrap eWrapV) = NULL;
 void (*gfxSetTextureModulation)( INDEX iScale) = NULL;
-void (*gfxGenerateTexture)( ULONG &ulTexObject) = NULL;
-void (*gfxDeleteTexture)( ULONG &ulTexObject) = NULL;
+void (*gfxGenerateTexture)( unsigned long &ulTexObject) = NULL;
+void (*gfxDeleteTexture)( unsigned long &ulTexObject) = NULL;
 void (*gfxSetVertexArray)( GFXVertex4 *pvtx, INDEX ctVtx) = NULL;
 void (*gfxSetNormalArray)( GFXNormal *pnor) = NULL;
 void (*gfxSetTexCoordArray)( GFXTexCoord *ptex, BOOL b4) = NULL;
@@ -134,7 +134,7 @@ void (*gfxFinish)(void) = NULL;
 void (*gfxLockArrays)(void) = NULL;
 void (*gfxEnableTruform)( void) = NULL;
 void (*gfxDisableTruform)(void) = NULL;
-void (*gfxSetColorMask)( ULONG ulColorMask) = NULL; 
+void (*gfxSetColorMask)( unsigned long ulColorMask) = NULL; 
 
 
 
@@ -176,14 +176,14 @@ static LPDIRECT3DTEXTURE8 *_ppd3dCurrentTexture;
 INDEX GetTexturePixRatio_OGL( GLuint uiBindNo);
 INDEX GetFormatPixRatio_OGL( GLenum eFormat);
 void  MimicTexParams_OGL( CTexParams &tpLocal);
-void  UploadTexture_OGL( ULONG *pulTexture, PIX pixSizeU, PIX pixSizeV,
+void  UploadTexture_OGL( unsigned long *pulTexture, PIX pixSizeU, PIX pixSizeV,
                                 GLenum eInternalFormat, BOOL bUseSubImage);
 
 #ifdef SE1_D3D
 extern INDEX GetTexturePixRatio_D3D( LPDIRECT3DTEXTURE8 pd3dTexture);
 extern INDEX GetFormatPixRatio_D3D( D3DFORMAT d3dFormat);
 extern void  MimicTexParams_D3D( CTexParams &tpLocal);
-extern void  UploadTexture_D3D( LPDIRECT3DTEXTURE8 *ppd3dTexture, ULONG *pulTexture,
+extern void  UploadTexture_D3D( LPDIRECT3DTEXTURE8 *ppd3dTexture, unsigned long *pulTexture,
                                 PIX pixSizeU, PIX pixSizeV, D3DFORMAT eInternalFormat, BOOL bDiscard);
 #endif // SE1_D3D
 
@@ -335,7 +335,7 @@ void gfxSetTextureUnit( INDEX iUnit)
 
 
 // set texture as current
-void gfxSetTexture( ULONG &ulTexObject, CTexParams &tpLocal)
+void gfxSetTexture( unsigned long &ulTexObject, CTexParams &tpLocal)
 {
   // clamp texture filtering if needed
   static INDEX _iLastTextureFiltering = 0;
@@ -378,7 +378,7 @@ void gfxSetTexture( ULONG &ulTexObject, CTexParams &tpLocal)
 
 
 // upload texture
-void gfxUploadTexture( ULONG *pulTexture, PIX pixWidth, PIX pixHeight, ULONG ulFormat, BOOL bNoDiscard)
+void gfxUploadTexture( unsigned long *pulTexture, PIX pixWidth, PIX pixHeight, unsigned long ulFormat, BOOL bNoDiscard)
 {
   // determine API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
@@ -407,7 +407,7 @@ void gfxUploadTexture( ULONG *pulTexture, PIX pixWidth, PIX pixHeight, ULONG ulF
 
 
 // returns size of uploaded texture
-SLONG gfxGetTextureSize( ULONG ulTexObject, BOOL bHasMipmaps/*=TRUE*/)
+long gfxGetTextureSize( unsigned long ulTexObject, BOOL bHasMipmaps/*=TRUE*/)
 {
   // nothing used if nothing uploaded
   if( ulTexObject==0) return 0;
@@ -415,7 +415,7 @@ SLONG gfxGetTextureSize( ULONG ulTexObject, BOOL bHasMipmaps/*=TRUE*/)
   // determine API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
   ASSERT( GfxValidApi(eAPI) );
-  SLONG slMipSize;
+  long slMipSize;
 
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
@@ -457,7 +457,7 @@ SLONG gfxGetTextureSize( ULONG ulTexObject, BOOL bHasMipmaps/*=TRUE*/)
 
   // eventually count in all the mipmaps (takes extra 33% of texture size)
   extern INDEX gap_bAllowSingleMipmap;
-  const SLONG slUploadSize = (bHasMipmaps || !gap_bAllowSingleMipmap) ? slMipSize*4/3 : slMipSize;
+  const long slUploadSize = (bHasMipmaps || !gap_bAllowSingleMipmap) ? slMipSize*4/3 : slMipSize;
 
   _sfStats.StopTimer(CStatForm::STI_GFXAPI);
   return slUploadSize;
@@ -466,7 +466,7 @@ SLONG gfxGetTextureSize( ULONG ulTexObject, BOOL bHasMipmaps/*=TRUE*/)
 
 
 // returns bytes/pixels ratio for uploaded texture
-INDEX gfxGetTexturePixRatio( ULONG ulTextureObject)
+INDEX gfxGetTexturePixRatio( unsigned long ulTextureObject)
 {
   // determine API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
@@ -480,7 +480,7 @@ INDEX gfxGetTexturePixRatio( ULONG ulTextureObject)
 
 
 // returns bytes/pixels ratio for uploaded texture
-INDEX gfxGetFormatPixRatio( ULONG ulTextureFormat)
+INDEX gfxGetFormatPixRatio( unsigned long ulTextureFormat)
 {
   // determine API
   const GfxAPIType eAPI = _pGfx->gl_eCurrentAPI;
@@ -497,11 +497,11 @@ INDEX gfxGetFormatPixRatio( ULONG ulTextureFormat)
 // PATTERN TEXTURE FOR LINES
 
 CTexParams _tpPattern;
-ULONG _ulPatternTexture = NONE;
-ULONG _ulLastUploadedPattern = 0;
+unsigned long _ulPatternTexture = NONE;
+unsigned long _ulLastUploadedPattern = 0;
 
 // upload pattern to accelerator memory
-void gfxSetPattern( ULONG ulPattern)
+void gfxSetPattern( unsigned long ulPattern)
 {
   // set pattern to be current texture
   _tpPattern.tp_bSingleMipmap = TRUE;
@@ -511,8 +511,8 @@ void gfxSetPattern( ULONG ulPattern)
   // if this pattern is currently uploaded, do nothing
   if( _ulLastUploadedPattern==ulPattern) return;
 
-  // convert bits to ULONGs
-  ULONG aulPattern[32];
+  // convert bits to unsigned longs
+  unsigned long aulPattern[32];
   for( INDEX iBit=0; iBit<32; iBit++) {
     if( (0x80000000>>iBit) & ulPattern) aulPattern[iBit] = 0xFFFFFFFF;
     else aulPattern[iBit] = 0x00000000;
@@ -528,7 +528,7 @@ void gfxSetPattern( ULONG ulPattern)
 
 
 // for D3D - (type 0=vtx, 1=nor, 2=col, 3=tex)
-void SetVertexArray_D3D( INDEX iType, ULONG *pulVtx);
+void SetVertexArray_D3D( INDEX iType, unsigned long *pulVtx);
 
 
 extern void gfxUnlockArrays(void)
@@ -657,7 +657,7 @@ void gfxSetTruform( INDEX iLevel, BOOL bLinearNormals)
 
 
 // readout current colormask
-extern ULONG gfxGetColorMask(void)
+extern unsigned long gfxGetColorMask(void)
 {
   return _ulCurrentColorMask;
 }
@@ -681,14 +681,14 @@ static void none_SetMatrix( const FLOAT *pfMatrix) { NOTHING; };
 static void none_PolygonMode( GfxPolyMode ePolyMode) { NOTHING; };
 static void none_SetTextureWrapping( enum GfxWrap eWrapU, enum GfxWrap eWrapV) { NOTHING; };
 static void none_SetTextureModulation( INDEX iScale) { NOTHING; };
-static void none_GenDelTexture( ULONG &ulTexObject) { NOTHING; };
+static void none_GenDelTexture( unsigned long &ulTexObject) { NOTHING; };
 static void none_SetVertexArray( GFXVertex4 *pvtx, INDEX ctVtx) { NOTHING; };
 static void none_SetNormalArray( GFXNormal *pnor) { NOTHING; };
 static void none_SetTexCoordArray( GFXTexCoord *ptex, BOOL b4) { NOTHING; };
 static void none_SetColorArray( GFXColor *pcol) { NOTHING; };
 static void none_DrawElements( INDEX ctElem, INDEX_T *pidx) { NOTHING; };
 static void none_SetConstantColor( COLOR col) { NOTHING; };
-static void none_SetColorMask( ULONG ulColorMask) { NOTHING; };
+static void none_SetColorMask( unsigned long ulColorMask) { NOTHING; };
 
 
 

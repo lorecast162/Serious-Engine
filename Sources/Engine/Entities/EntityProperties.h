@@ -101,21 +101,21 @@ public:
     EPT_STRINGTRANS = 22,       // CTString that gets translated to different languages
     EPT_FLOATQUAT3D = 23,       // FLOATquat3D
     EPT_FLOATMATRIX3D = 24,     // FLOATmatrix3D
-    EPT_FLAGS = 25,             // flags - ULONG bitfield with names for each field
+    EPT_FLAGS = 25,             // flags - unsigned long bitfield with names for each field
     EPT_MODELINSTANCE = 26,
     // next free number: 27
   } ep_eptType;               // type of property
   CEntityPropertyEnumType *ep_pepetEnumType;   // if the type is EPT_ENUM or EPT_FLAGS
 
-  ULONG ep_ulID;         // property ID for this class
-  SLONG ep_slOffset;     // offset of the property in the class
+  unsigned long ep_ulID;         // property ID for this class
+  long ep_slOffset;     // offset of the property in the class
   const char *ep_strName;      // descriptive name of the property (for editor)
-  ULONG ep_ulFlags;      // additional flags for the property
+  unsigned long ep_ulFlags;      // additional flags for the property
   char  ep_chShortcut;   // shortcut key for selecting the property in editor (0 for none)
   COLOR ep_colColor;     // property color, for various wed purposes (like target arrows)
 
   CEntityProperty(PropertyType eptType, CEntityPropertyEnumType *pepetEnumType,
-    ULONG ulID, SLONG slOffset, const char *strName, char chShortcut, COLOR colColor, ULONG ulFlags)
+    unsigned long ulID, long slOffset, const char *strName, char chShortcut, COLOR colColor, unsigned long ulFlags)
     : ep_eptType         (eptType      )
     , ep_pepetEnumType   (pepetEnumType)
     , ep_ulID            (ulID         )
@@ -137,8 +137,8 @@ public:
 // one entry in function table
 class CEventHandlerEntry {
 public:
-  SLONG ehe_slState;                    // code of the automaton state
-  SLONG ehe_slBaseState;                // code of the base state if overridden
+  long ehe_slState;                    // code of the automaton state
+  long ehe_slBaseState;                // code of the base state if overridden
   CEntity::pEventHandler ehe_pEventHandler;  // handler function
   const char *ehe_strName;              // symbolic name of handler for debugging
 };
@@ -164,7 +164,7 @@ public:
   void Release(void);
 public:
   EntityComponentType ec_ectType;       // type of component
-  ULONG ec_slID;      // component ID in this class
+  unsigned long ec_slID;      // component ID in this class
 
   CTFileName ec_fnmComponent;  // component file name
 
@@ -179,11 +179,11 @@ public:
 
   // NOTE: This uses special EFNM initialization for CTFileName class!
   CEntityComponent(EntityComponentType ectType,
-    ULONG ulID, const char *strEFNMComponent)
+    unsigned long ulID, const char *strEFNMComponent)
     : ec_ectType(ectType)
     , ec_slID(ulID)
     , ec_fnmComponent(strEFNMComponent, 4) { ec_pvPointer = NULL; };
-  CEntityComponent(void) { ec_slID = (ULONG) -1; ec_pvPointer = NULL; };
+  CEntityComponent(void) { ec_slID = (unsigned long) -1; ec_pvPointer = NULL; };
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -218,23 +218,23 @@ public:
   /* Get pointer to entity property from its name. */
   class CEntityProperty *PropertyForName(const CTString &strPropertyName);
   /* Get pointer to entity property from its packed identifier. */
-  class CEntityProperty *PropertyForTypeAndID(CEntityProperty::PropertyType eptType, ULONG ulID);
+  class CEntityProperty *PropertyForTypeAndID(CEntityProperty::PropertyType eptType, unsigned long ulID);
   /* Get event handler given state and event code. */
-  CEntity::pEventHandler HandlerForStateAndEvent(SLONG slState, SLONG slEvent);
+  CEntity::pEventHandler HandlerForStateAndEvent(long slState, long slEvent);
   /* Get event handler name for given state. */
-  const char *HandlerNameForState(SLONG slState);
+  const char *HandlerNameForState(long slState);
   /* Get derived class override for given state. */
-  SLONG GetOverridenState(SLONG slState);
+  long GetOverridenState(long slState);
   /* Get pointer to component from its type and identifier. */
   class CEntityComponent *ComponentForTypeAndID(EntityComponentType ectType,
-    SLONG slID);
+    long slID);
   /* Get pointer to component from the component. */
   class CEntityComponent *ComponentForPointer(void *pv);
   // precache given component
-  void PrecacheModel(SLONG slID);
-  void PrecacheTexture(SLONG slID);
-  void PrecacheSound(SLONG slID);
-  void PrecacheClass(SLONG slID, INDEX iUser = -1);
+  void PrecacheModel(long slID);
+  void PrecacheTexture(long slID);
+  void PrecacheSound(long slID);
+  void PrecacheClass(long slID, INDEX iUser = -1);
 };
 
 /* rcg10062001 */

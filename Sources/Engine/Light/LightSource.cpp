@@ -38,7 +38,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 CLightSource::CLightSource(void)
 {
   // set invalid properties, must be initialized by its entity
-  ls_ulFlags = (ULONG) -1;
+  ls_ulFlags = (unsigned long) -1;
   ls_rHotSpot = -1;
   ls_rFallOff = -1;
   ls_colColor = 0;
@@ -278,7 +278,7 @@ void CLightSource::UpdateLayer(CBrushShadowLayer &bsl)
 
 static inline BOOL IsPolygonInfluencedByDirectionalLight(CBrushPolygon *pbpo)
 {
-  ULONG ulFlags = pbpo->bpo_ulFlags;
+  unsigned long ulFlags = pbpo->bpo_ulFlags;
   // if polygon has no directional light
   if (!(ulFlags&(BPOF_HASDIRECTIONALLIGHT|BPOF_HASDIRECTIONALAMBIENT))) {
     // not influenced
@@ -369,7 +369,7 @@ static INDEX _iDynamic; // 0=disallow, 1=maybe (depend on flag), 2=allow
 
 static inline BOOL IsPolygonInfluencedByPointLight(CBrushPolygon *pbpo)
 {
-  ULONG ulFlags = pbpo->bpo_ulFlags;
+  unsigned long ulFlags = pbpo->bpo_ulFlags;
 
   // if has no shadows
   BOOL bIsTransparent = (ulFlags&BPOF_PORTAL) && !(ulFlags&(BPOF_TRANSLUCENT|BPOF_TRANSPARENT));
@@ -412,7 +412,7 @@ void CLightSource::FindShadowLayersPoint(BOOL bSelectedOnly)
   _iDynamic = 2;
   if( ls_ulFlags&LSF_NONPERSISTENT) {
     extern INDEX shd_iAllowDynamic;
-    if( ((ULONG)shd_iAllowDynamic) > 2) shd_iAllowDynamic = 1L; // clamp fast
+    if( ((unsigned long)shd_iAllowDynamic) > 2) shd_iAllowDynamic = 1L; // clamp fast
     _iDynamic = shd_iAllowDynamic;
   }
 
@@ -660,11 +660,11 @@ void CLightSource::GetLightColor( UBYTE &ubR, UBYTE &ubG, UBYTE &ubB) const
   FLOAT fRatio;
   COLOR col0, col1;
   UBYTE ubMR, ubMG, ubMB;
-  ls_paoLightAnimation->GetFrame( (SLONG&)col0, (SLONG&)col1, fRatio);
+  ls_paoLightAnimation->GetFrame( (long&)col0, (long&)col1, fRatio);
   LerpColor( col0, col1, fRatio, ubMR, ubMG, ubMB);
-  ubR = ( ((((SLONG)ubR)<<8)|ubR) * ((((SLONG)ubMR)<<8)|ubMR) ) >>24;
-  ubG = ( ((((SLONG)ubG)<<8)|ubG) * ((((SLONG)ubMG)<<8)|ubMG) ) >>24;
-  ubB = ( ((((SLONG)ubB)<<8)|ubB) * ((((SLONG)ubMB)<<8)|ubMB) ) >>24;
+  ubR = ( ((((long)ubR)<<8)|ubR) * ((((long)ubMR)<<8)|ubMR) ) >>24;
+  ubG = ( ((((long)ubG)<<8)|ubG) * ((((long)ubMG)<<8)|ubMG) ) >>24;
+  ubB = ( ((((long)ubB)<<8)|ubB) * ((((long)ubMB)<<8)|ubMB) ) >>24;
 }
 
 
@@ -684,9 +684,9 @@ void CLightSource::GetLightAmbient( UBYTE &ubAR, UBYTE &ubAG, UBYTE &ubAB) const
   FLOAT fRatio;
   COLOR col0, col1;
   UBYTE ubMR, ubMG, ubMB;
-  ls_paoAmbientLightAnimation->GetFrame( (SLONG&)col0, (SLONG&)col1, fRatio);
+  ls_paoAmbientLightAnimation->GetFrame( (long&)col0, (long&)col1, fRatio);
   LerpColor( col0, col1, fRatio, ubMR, ubMG, ubMB);
-  ubAR = ( ((((SLONG)ubAR)<<8)|ubAR) * ((((SLONG)ubMR)<<8)|ubMR) ) >>24;
-  ubAG = ( ((((SLONG)ubAG)<<8)|ubAG) * ((((SLONG)ubMG)<<8)|ubMG) ) >>24;
-  ubAB = ( ((((SLONG)ubAB)<<8)|ubAB) * ((((SLONG)ubMB)<<8)|ubMB) ) >>24;
+  ubAR = ( ((((long)ubAR)<<8)|ubAR) * ((((long)ubMR)<<8)|ubMR) ) >>24;
+  ubAG = ( ((((long)ubAG)<<8)|ubAG) * ((((long)ubMG)<<8)|ubMG) ) >>24;
+  ubAB = ( ((((long)ubAB)<<8)|ubAB) * ((((long)ubMB)<<8)|ubMB) ) >>24;
 }

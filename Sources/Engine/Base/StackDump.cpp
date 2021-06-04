@@ -23,8 +23,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #error You probably should not try to compile this.
 #endif
 
-extern ULONG _ulEngineBuildMajor;
-extern ULONG _ulEngineBuildMinor;
+extern unsigned long _ulEngineBuildMajor;
+extern unsigned long _ulEngineBuildMinor;
 
 //==========================================
 // Matt Pietrek

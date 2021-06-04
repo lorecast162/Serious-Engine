@@ -39,7 +39,7 @@ public:
 
   void SetMipPageFromView(CModelerView* pModelerView);
   void SetViewFromMipPage(CModelerView* pModelerView);
-  void ToggleMipFlag( ULONG ulFlag);
+  void ToggleMipFlag( unsigned long ulFlag);
 
 // Dialog Data
 	//{{AFX_DATA(CDlgInfoPgMip)

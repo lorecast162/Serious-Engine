@@ -168,7 +168,7 @@ void RendererInfo(void)
 {
   CPrintF("Renderer information:\n");
 
-  SLONG slMem = 0;
+  long slMem = 0;
 
   slMem += CRenderer::re_aadeAddEdges.da_Count*sizeof(CAddEdge);
   slMem += CRenderer::re_asedScreenEdges.da_Count*sizeof(CScreenEdge);
@@ -988,9 +988,9 @@ void RenderView(CWorld &woWorld, CEntity &enViewer,
 
 // Render a world with some viewer, projection and drawport. (viewer may be NULL)
 // internal version used for rendering shadows
-ULONG RenderShadows(CWorld &woWorld, CEntity &enViewer,
+unsigned long RenderShadows(CWorld &woWorld, CEntity &enViewer,
   CAnyProjection3D &prProjection, const FLOATaabbox3D &boxViewer,
-  UBYTE *pubShadowMask, SLONG slShadowWidth, SLONG slShadowHeight,
+  UBYTE *pubShadowMask, long slShadowWidth, long slShadowHeight,
   UBYTE ubIllumination)
 {
   _pfWorldEditingProfile.StartTimer(CWorldEditingProfile::PTI_RENDERSHADOWS);
@@ -1021,7 +1021,7 @@ ULONG RenderShadows(CWorld &woWorld, CEntity &enViewer,
   // render the view
   re.Render();
 
-  ULONG ulFlags = 0;
+  unsigned long ulFlags = 0;
   if (!re.re_bSomeLightExists) {
     ulFlags|=BSLF_ALLDARK;
   }

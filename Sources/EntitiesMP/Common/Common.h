@@ -205,11 +205,11 @@ DECL_DLL CEntityPointer SpawnReminder(CEntity *penOwner, FLOAT fWaitTime, INDEX 
 DECL_DLL CEntityPointer SpawnFlame(CEntity *penOwner, CEntity *penAttach, const FLOAT3D &vSource);
 
 // Set components
-DECL_DLL void SetComponents(CEntity *pen, CModelObject &mo, ULONG ulIDModel, ULONG ulIDTexture,
-                   ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture);
+DECL_DLL void SetComponents(CEntity *pen, CModelObject &mo, unsigned long ulIDModel, unsigned long ulIDTexture,
+                   unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture);
 // Add attachment to model
-DECL_DLL void AddAttachmentToModel(CEntity *pen, CModelObject &mo, INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture,
-                          ULONG ulIDReflectionTexture, ULONG ulIDSpecularTexture, ULONG ulIDBumpTexture);
+DECL_DLL void AddAttachmentToModel(CEntity *pen, CModelObject &mo, INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture,
+                          unsigned long ulIDReflectionTexture, unsigned long ulIDSpecularTexture, unsigned long ulIDBumpTexture);
 // Remove attachment from model
 DECL_DLL void RemoveAttachmentFromModel(CModelObject &mo, INDEX iAttachment);
 
@@ -261,22 +261,22 @@ DECL_DLL void Debris_Begin(
 DECL_DLL CEntityPointer Debris_Spawn(
   CEntity *penSpawner,
   CEntity *penComponents,
-  SLONG idModelComponent,
-  SLONG idTextureComponent,
-  SLONG idReflectionTextureComponent,
-  SLONG idSpecularTextureComponent,
-  SLONG idBumpTextureComponent,
+  long idModelComponent,
+  long idTextureComponent,
+  long idReflectionTextureComponent,
+  long idSpecularTextureComponent,
+  long idBumpTextureComponent,
   INDEX iModelAnim,
   FLOAT fSize,                // size relative to entity size (or 0 for absolute stretch of 1)
   const FLOAT3D &vPosRatio);
 DECL_DLL CEntityPointer Debris_Spawn_Independent(
   CEntity *penSpawner,
   CEntity *penComponents,
-  SLONG idModelComponent,
-  SLONG idTextureComponent,
-  SLONG idReflectionTextureComponent,
-  SLONG idSpecularTextureComponent,
-  SLONG idBumpTextureComponent,
+  long idModelComponent,
+  long idTextureComponent,
+  long idReflectionTextureComponent,
+  long idSpecularTextureComponent,
+  long idBumpTextureComponent,
   INDEX iModelAnim,
   FLOAT fSize,
   CPlacement3D plAbsolutePlacement,

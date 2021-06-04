@@ -295,7 +295,7 @@ void CEntityClass::Write_t( CTStream *ostr) // throw char *
   ASSERTALWAYS("Do not write CEntityClass objects!");
 }
 // get amount of memory used by this object
-SLONG CEntityClass::GetUsedMemory(void)
+long CEntityClass::GetUsedMemory(void)
 {
   // we don't know exact memory used, but we want to enumerate them
   return 0;
@@ -327,18 +327,18 @@ class CEntityProperty *CEntityClass::PropertyForName(const CTString &strProperty
 };
 /* Get pointer to entity property from its packed identifier. */
 class CEntityProperty *CEntityClass::PropertyForTypeAndID(
-  ULONG ulType, ULONG ulID) {
+  unsigned long ulType, unsigned long ulID) {
   return ec_pdecDLLClass->PropertyForTypeAndID((CEntityProperty::PropertyType)ulType, ulID);
 };
 
 /* Get event handler for given state and event code. */
-CEntity::pEventHandler CEntityClass::HandlerForStateAndEvent(SLONG slState, SLONG slEvent) {
+CEntity::pEventHandler CEntityClass::HandlerForStateAndEvent(long slState, long slEvent) {
   return ec_pdecDLLClass->HandlerForStateAndEvent(slState, slEvent);
 }
 
 /* Get pointer to component from its identifier. */
 class CEntityComponent *CEntityClass::ComponentForTypeAndID(
-  enum EntityComponentType ectType, SLONG slID) {
+  enum EntityComponentType ectType, long slID) {
   return ec_pdecDLLClass->ComponentForTypeAndID(ectType, slID);
 }
 /* Get pointer to component from the component. */
@@ -385,7 +385,7 @@ class CEntityProperty *CDLLEntityClass::PropertyForName(const CTString &strPrope
  * Get pointer to entity property from its packed identifier.
  */
 class CEntityProperty *CDLLEntityClass::PropertyForTypeAndID(
-  CEntityProperty::PropertyType eptType, ULONG ulID)
+  CEntityProperty::PropertyType eptType, unsigned long ulID)
 {
   // for each property
   for (INDEX iProperty=0; iProperty<dec_ctProperties; iProperty++) {
@@ -419,7 +419,7 @@ class CEntityProperty *CDLLEntityClass::PropertyForTypeAndID(
  * Get pointer to component from its identifier.
  */
 class CEntityComponent *CDLLEntityClass::ComponentForTypeAndID(
-  EntityComponentType ectType, SLONG slID)
+  EntityComponentType ectType, long slID)
 {
   // for each component
   for (INDEX iComponent=0; iComponent<dec_ctComponents; iComponent++) {
@@ -477,7 +477,7 @@ class CEntityComponent *CDLLEntityClass::ComponentForPointer(void *pv)
 }
 
 // precache given component
-void CDLLEntityClass::PrecacheModel(SLONG slID)
+void CDLLEntityClass::PrecacheModel(long slID)
 {
   CTmpPrecachingNow tpn;
 
@@ -486,7 +486,7 @@ void CDLLEntityClass::PrecacheModel(SLONG slID)
   pecModel->ObtainWithCheck();
 }
 
-void CDLLEntityClass::PrecacheTexture(SLONG slID)
+void CDLLEntityClass::PrecacheTexture(long slID)
 {
   CTmpPrecachingNow tpn;
 
@@ -495,7 +495,7 @@ void CDLLEntityClass::PrecacheTexture(SLONG slID)
   pecTexture->ObtainWithCheck();
 }
 
-void CDLLEntityClass::PrecacheSound(SLONG slID)
+void CDLLEntityClass::PrecacheSound(long slID)
 {
   CTmpPrecachingNow tpn;
 
@@ -504,7 +504,7 @@ void CDLLEntityClass::PrecacheSound(SLONG slID)
   pecSound->ObtainWithCheck();
 }
 
-void CDLLEntityClass::PrecacheClass(SLONG slID, INDEX iUser /* = -1 */)
+void CDLLEntityClass::PrecacheClass(long slID, INDEX iUser /* = -1 */)
 {
   CTmpPrecachingNow tpn;
 
@@ -518,7 +518,7 @@ void CDLLEntityClass::PrecacheClass(SLONG slID, INDEX iUser /* = -1 */)
 /*
  * Get event handler given state and event code.
  */
-CEntity::pEventHandler CDLLEntityClass::HandlerForStateAndEvent(SLONG slState, SLONG slEvent)
+CEntity::pEventHandler CDLLEntityClass::HandlerForStateAndEvent(long slState, long slEvent)
 {
   // we ignore the event code here
   (void) slEvent;
@@ -543,7 +543,7 @@ CEntity::pEventHandler CDLLEntityClass::HandlerForStateAndEvent(SLONG slState, S
 }
 
 /* Get event handler name for given state. */
-const char *CDLLEntityClass::HandlerNameForState(SLONG slState)
+const char *CDLLEntityClass::HandlerNameForState(long slState)
 {
   // for each handler
   for (INDEX iHandler=0; iHandler<dec_ctHandlers; iHandler++) {
@@ -565,7 +565,7 @@ const char *CDLLEntityClass::HandlerNameForState(SLONG slState)
 }
 
 /* Get derived class override for given state. */
-SLONG CDLLEntityClass::GetOverridenState(SLONG slState)
+long CDLLEntityClass::GetOverridenState(long slState)
 {
   // for each handler
   for (INDEX iHandler=0; iHandler<dec_ctHandlers; iHandler++) {

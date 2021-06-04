@@ -49,10 +49,10 @@ public:
   // Release tile
   void Clear(void);
   // Terrain tile flags handling
-  inline ULONG &GetFlags()             { return tt_ulTileFlags; }
-  inline void SetFlags(ULONG ulFlags)  { tt_ulTileFlags  = ulFlags; }
-  inline void AddFlag(ULONG ulFlag)    { tt_ulTileFlags |= ulFlag; }
-  inline void RemoveFlag(ULONG ulFlag) { tt_ulTileFlags &= ~ulFlag; }
+  inline unsigned long &GetFlags()             { return tt_ulTileFlags; }
+  inline void SetFlags(unsigned long ulFlags)  { tt_ulTileFlags  = ulFlags; }
+  inline void AddFlag(unsigned long ulFlag)    { tt_ulTileFlags |= ulFlag; }
+  inline void RemoveFlag(unsigned long ulFlag) { tt_ulTileFlags &= ~ulFlag; }
 
   CStaticStackArray<GFXVertex4>   &GetVertices();
   CStaticStackArray<GFXTexCoord>  &GetTexCoords();
@@ -71,7 +71,7 @@ public:
   // Update quad tree node
   void UpdateQuadTreeNode();
   // Count used memory
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 
 //temp:
 void AddTriangle(INDEX iind1,INDEX iind2,INDEX iind3);
@@ -107,7 +107,7 @@ public:
   INDEX tt_ctBorderVertices[4];  // Number of vertices inserted for each border
 
   FLOAT tt_fLodLerpFactor;  // Lod lerp factor
-  ULONG tt_ulTileFlags;
+  unsigned long tt_ulTileFlags;
   BOOL  tt_bUseOnlyGlobalTopMap; // Allways use global top map
 
   INDEX tt_iOffsetX;  // Offset of this tile in world

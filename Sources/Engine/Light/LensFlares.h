@@ -39,7 +39,7 @@ public:
   FLOAT olf_fLightDesaturation;       // desaturation factor for light color (1=monochrome)
   FLOAT oft_fFallOffFactor;           // flare falloff relative to light falloff
   ANGLE olf_aRotationFactor;          // flare rotation (deg/screen width)
-  ULONG olf_ulFlags;
+  unsigned long olf_ulFlags;
 };
 
 /*

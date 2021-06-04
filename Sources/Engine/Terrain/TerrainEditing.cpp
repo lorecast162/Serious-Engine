@@ -76,7 +76,7 @@ static INDEX GetFirstTileInMidLod(CTerrain *ptrTerrain, Rect &rcExtract)
 }
 
 // Add given flags to all tiles in rect
-static void AddFlagsToTilesInRect(CTerrain *ptrTerrain, Rect &rcExtract, ULONG ulFlags, BOOL bRegenerateTiles=FALSE)
+static void AddFlagsToTilesInRect(CTerrain *ptrTerrain, Rect &rcExtract, unsigned long ulFlags, BOOL bRegenerateTiles=FALSE)
 {
   ASSERT(ptrTerrain!=NULL);
   FLOATaabbox3D bboxExtract = CalculateAABBoxFromRect(ptrTerrain, rcExtract);
@@ -184,7 +184,7 @@ void ShowSelectionInternal(CTerrain *ptrTerrain, Rect &rcExtract, CTextureData *
   GFXColor *pacolBrush = (GFXColor*)&ptdBrush->td_pulFrames[iFirst];
 
   // Fill vertex colors for selection preview
-  SLONG slStrength = (SLONG) (Clamp(Abs(fStrenght),0.0f,1.0f) * 256.0f);
+  long slStrength = (long) (Clamp(Abs(fStrenght),0.0f,1.0f) * 256.0f);
   // for each row
   for(INDEX iy=0;iy<pixHeight;iy++) {
     // for each col

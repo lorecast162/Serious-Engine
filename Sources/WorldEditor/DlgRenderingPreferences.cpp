@@ -148,7 +148,7 @@ void CDlgRenderingPreferences::DoDataExchange(CDataExchange* pDX)
     iFillType = pwrpPrefs.GetPolygonsFillType();
     m_PolygonFillType.SetCurSel( iFillType);
     // set currently selected modeler's texture rendering type
-    ULONG rtRenderType = pmrpPrefs.GetRenderType();
+    unsigned long rtRenderType = pmrpPrefs.GetRenderType();
     iFillType = 0;
     if( (rtRenderType & RT_NO_POLYGON_FILL) != 0)       iFillType = 0;
     else if( (rtRenderType & RT_WHITE_TEXTURE) != 0)    iFillType = 1;
@@ -248,7 +248,7 @@ void CDlgRenderingPreferences::DoDataExchange(CDataExchange* pDX)
     pwrpPrefs.SetLensFlaresType( lftFlares);
 
     // get current model's texturizing type from model's texture combo box
-    ULONG ulMdlFillType;
+    unsigned long ulMdlFillType;
     ulMdlFillType = m_TextureFillType.GetCurSel();
     switch( ulMdlFillType)
     {

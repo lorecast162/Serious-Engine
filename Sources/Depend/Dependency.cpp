@@ -86,16 +86,16 @@ BOOL CDependencyList::ExistsInList(CListHead &lh, CTFileName fnTestName) const
 void CDependencyList::ExtractDependencies()
 {
   int file_handle;
-  volatile ULONG ulDFNM = 'NFD';
-  volatile ULONG ulTFNM = 'NFT';
-  volatile ULONG ulEFNM = 'NFE';
+  volatile unsigned long ulDFNM = 'NFD';
+  volatile unsigned long ulTFNM = 'NFT';
+  volatile unsigned long ulEFNM = 'NFE';
   char strDFNM[]="DFNM";
   char strTFNM[]="TFNM";
   char strEFNM[]="EFNM";
 
-  ulDFNM |= ULONG('M')<<24;
-  ulTFNM |= ULONG('M')<<24;
-  ulEFNM |= ULONG('M')<<24;
+  ulDFNM |= unsigned long('M')<<24;
+  ulTFNM |= unsigned long('M')<<24;
+  ulEFNM |= unsigned long('M')<<24;
 
   // for all list members
   CListHead lhToProcess;
@@ -126,7 +126,7 @@ void CDependencyList::ExtractDependencies()
       pdi->di_tTime = statFileStatus.st_mtime;
       ASSERT(pdi->di_tTime<=time(NULL));
       // get size
-      SLONG ulSize = statFileStatus.st_size;
+      long ulSize = statFileStatus.st_size;
       // read file into memory
       char *pFileInMemory = (char *) AllocMemory( ulSize);
       // must be allocated properly
@@ -143,7 +143,7 @@ void CDependencyList::ExtractDependencies()
       // find all file name indentifiers in memory file ("EFNM" or "DFNM")
       for( INDEX charCt=0; charCt<ulSize-4; charCt++)
       {
-        ULONG ulMemValue = *((ULONG *)(pFileInMemory + charCt));
+        unsigned long ulMemValue = *((unsigned long *)(pFileInMemory + charCt));
         char *pchrDependentFile;
         // if we found file name inside exe file (notice little-big indian convetion)
         if( ulMemValue == ulEFNM)
@@ -183,7 +183,7 @@ void CDependencyList::ExtractDependencies()
             (!ExistsInList(lhToProcess, fnTestName)))
           {
             // create new depend info object
-            // NOTICE: string containing file name starts after ULONG determing its lenght (+8!)
+            // NOTICE: string containing file name starts after unsigned long determing its lenght (+8!)
             CDependInfo *pDI = new CDependInfo( fnTestName, fnFileName);
             // add it at tail of dependency list
             lhToProcess.AddTail( pDI->di_Node);
@@ -433,14 +433,14 @@ void CDependencyList::ExtractTranslations_t( const CTFileName &fnTranslations)
     CTFileStream strm;
     strm.Open_t(di.di_fnFileName);
     // load it in memory
-    SLONG slSize = strm.GetStreamSize();
+    long slSize = strm.GetStreamSize();
     UBYTE *pubFile = (UBYTE *)AllocMemory(slSize);
     strm.Read_t(pubFile, slSize);
 
     // for each byte in file
     for(INDEX iByte=0; iByte<slSize-4; iByte++) {
       UBYTE *pub = pubFile+iByte;
-      ULONG ul = *((ULONG*)pub);
+      unsigned long ul = *((unsigned long*)pub);
 
       BYTESWAP(ul);
 

@@ -63,7 +63,7 @@ public:
   // check if this kind of objects is auto-freed
   virtual BOOL IsAutoFreed(void) { return TRUE; };
   // get amount of memory used by this object
-  virtual SLONG GetUsedMemory(void) { return -1; };
+  virtual long GetUsedMemory(void) { return -1; };
   // gather the CRC of the file
   virtual void AddToCRCTable(void);
 };

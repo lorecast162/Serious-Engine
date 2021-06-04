@@ -34,8 +34,8 @@ public:
   INDEX Unlock(void);
 
 private:
-  ULONG LockCounter;
-  ULONG owner;
+  unsigned long LockCounter;
+  unsigned long owner;
 };
 
 // lock object for locking a mutex with automatic unlocking

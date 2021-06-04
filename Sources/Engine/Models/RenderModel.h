@@ -38,13 +38,13 @@ private:
 	BOOL rp_BBoxAllVisible;                         // determines visibility of all frames BBox
   COLOR rp_InkColor;                              // ink color (wire frame)
   COLOR rp_PaperColor;                            // paper color
-  ULONG rp_RenderType;								            // model's rendering type
+  unsigned long rp_RenderType;								            // model's rendering type
 	INDEX rp_ShadowQuality;								          // model shadow's quality (substraction to mip model index)
 public:
   CModelRenderPrefs();                            // constructor sets defult values
-  void SetRenderType(ULONG rtNew);      // set model rendering type
-  void SetTextureType(ULONG rtNew);     // set model rendering texture type
-  void SetShadingType(ULONG rtNew);     // set model shading texture type
+  void SetRenderType(unsigned long rtNew);      // set model rendering type
+  void SetTextureType(unsigned long rtNew);     // set model rendering texture type
+  void SetShadingType(unsigned long rtNew);     // set model shading texture type
   void SetShadowQuality(INDEX iNew);    // set shadow quality (best 0, worse -1, ...)
   void DesreaseShadowQuality(void);               // decrease shadow quality
   void IncreaseShadowQuality(void);               // increase shadow quality
@@ -60,7 +60,7 @@ public:
   COLOR GetPaperColor();                          // get paper color
   void BBoxFrameShow(BOOL bShow);                 // show bounding box frame
   void BBoxAllShow(BOOL bShow);                   // show bounding box all frames
-  ULONG GetRenderType(void);                      // get model rendering type
+  unsigned long GetRenderType(void);                      // get model rendering type
   INDEX GetShadowQuality(void);                   // retrieves current shadow quality level
 	void Read_t( CTStream *istrFile);   // throw char * // read and
 	void Write_t( CTStream *ostrFile);  // throw char * // write functions
@@ -76,7 +76,7 @@ extern ENGINE_API void EndModelRenderingView( BOOL bRestoreOrtho=TRUE);
 
 // begin/end model rendering to shadow mask
 extern ENGINE_API void BeginModelRenderingMask(
-  CAnyProjection3D &prProjection, UBYTE *pubMask, SLONG slMaskWidth, SLONG slMaskHeight);
+  CAnyProjection3D &prProjection, UBYTE *pubMask, long slMaskWidth, long slMaskHeight);
 extern ENGINE_API void EndModelRenderingMask(void);
 
 #define RMF_ATTACHMENT          (1UL<<0)    // set for attachment render models
@@ -94,7 +94,7 @@ public:
 // implementation:
   CModelData *rm_pmdModelData;        // model's data
   struct ModelMipInfo *rm_pmmiMip;    // current mip
-  ULONG rm_rtRenderType;              // current rendering preferences
+  unsigned long rm_rtRenderType;              // current rendering preferences
   // lerp information
   INDEX rm_iFrame0, rm_iFrame1;       
   FLOAT rm_fRatio;
@@ -116,7 +116,7 @@ public:
   // bounding box min/max coords in object space
   FLOAT3D rm_vObjectMinBB, rm_vObjectMaxBB;
   // flags and blend color global for this rendering
-  ULONG rm_ulFlags;
+  unsigned long rm_ulFlags;
   COLOR rm_colBlend;
 
   // set modelview matrix if not already set

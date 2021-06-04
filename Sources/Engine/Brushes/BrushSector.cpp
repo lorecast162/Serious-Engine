@@ -1381,10 +1381,10 @@ void CBrushSector::ReTriple( CBrushPolygonSelection &selPolygon)
 
 
 // get amount of memory used by this object
-SLONG CBrushSector::GetUsedMemory(void)
+long CBrushSector::GetUsedMemory(void)
 {
   // init
-  SLONG slUsedMemory = sizeof(CBrushSector);
+  long slUsedMemory = sizeof(CBrushSector);
   // add some more
   slUsedMemory += bsc_strName.Length();
   slUsedMemory += bsc_rdOtherSidePortals.Count() * sizeof(CRelationLnk);

@@ -42,8 +42,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern INDEX gap_iTruformLevel;
 
-extern ULONG _fog_ulTexture;
-extern ULONG _haze_ulTexture;
+extern unsigned long _fog_ulTexture;
+extern unsigned long _haze_ulTexture;
 
 
 // state variables
@@ -76,8 +76,8 @@ static INDEX _iVtxPos = 0;
 static INDEX _iTexPass = 0;
 static INDEX _iColPass = 0;
 static DWORD _dwCurrentVS = NONE;
-static ULONG _ulStreamsMask = NONE;
-static ULONG _ulLastStreamsMask = NONE;
+static unsigned long _ulStreamsMask = NONE;
+static unsigned long _ulLastStreamsMask = NONE;
 static BOOL  _bProjectiveMapping = FALSE;
 static BOOL  _bLastProjectiveMapping = FALSE;
 static DWORD _dwVtxLockFlags;                 // for vertex and normal
@@ -86,7 +86,7 @@ static DWORD _dwTexLockFlags[GFX_MAXLAYERS];  // for texture coords
 
 // shaders created so far
 struct VertexShader {
-  ULONG vs_ulMask;
+  unsigned long vs_ulMask;
   DWORD vs_dwHandle;
 };
 static CStaticStackArray<VertexShader> _avsShaders;
@@ -166,21 +166,21 @@ static BOOL HasTextureFormat_D3D( D3DFORMAT d3dTextureFormat)
 
 
 // returns number of vertices based on vertex size and required size in memory (KB)
-extern INDEX VerticesFromSize_D3D( SLONG &slSize)
+extern INDEX VerticesFromSize_D3D( long &slSize)
 {
   slSize = Clamp( slSize, 64L, 4096L);
   return (slSize*1024 / VTXSIZE);
 }
 
 // returns size in memory based on number of vertices
-extern SLONG SizeFromVertices_D3D( INDEX ctVertices)
+extern long SizeFromVertices_D3D( INDEX ctVertices)
 {
   return (ctVertices * VTXSIZE);
 }
    
 
 // construct vertex shader out of streams' bit-mask
-extern DWORD SetupShader_D3D( ULONG ulStreamsMask)
+extern DWORD SetupShader_D3D( unsigned long ulStreamsMask)
 {
   HRESULT hr;
   const LPDIRECT3DDEVICE8 pd3dDev = _pGfx->gl_pd3dDevice;
@@ -664,8 +664,8 @@ void CGfxLibrary::InitContext_D3D()
 
   // prepare pattern texture
   extern CTexParams _tpPattern;
-  extern ULONG _ulPatternTexture;
-  extern ULONG _ulLastUploadedPattern;
+  extern unsigned long _ulPatternTexture;
+  extern unsigned long _ulLastUploadedPattern;
   _ulPatternTexture = NONE;
   _ulLastUploadedPattern = 0;
   _tpPattern.Clear();
@@ -844,7 +844,7 @@ BOOL CGfxLibrary::InitDisplay_D3D( INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
     // determine refresh rate and presentation interval
     extern INDEX gap_iRefreshRate;
     const UINT uiRefresh = gap_iRefreshRate>0 ? gap_iRefreshRate : D3DPRESENT_RATE_DEFAULT;
-    const SLONG slIntervals = d3dCaps.PresentationIntervals;
+    const long slIntervals = d3dCaps.PresentationIntervals;
     UINT uiInterval = (slIntervals&D3DPRESENT_INTERVAL_IMMEDIATE) ? D3DPRESENT_INTERVAL_IMMEDIATE : D3DPRESENT_INTERVAL_ONE;
     extern INDEX gap_iSwapInterval;
     switch(gap_iSwapInterval) {
@@ -1035,10 +1035,10 @@ static void CheckStreams(void)
 
 
 // prepare vertex array for D3D (type 0=vtx, 1=nor, 2=col, 3=tex, 4=projtex)
-extern void SetVertexArray_D3D( INDEX iType, ULONG *pulVtx)
+extern void SetVertexArray_D3D( INDEX iType, unsigned long *pulVtx)
 {
   HRESULT hr;
-  SLONG slStride;
+  long slStride;
   DWORD dwLockFlag;
   INDEX iStream, iThisPass;
   INDEX ctLockSize, iLockOffset;
@@ -1157,8 +1157,8 @@ extern void SetVertexArray_D3D( INDEX iType, ULONG *pulVtx)
   ASSERT( _iVtxPos >=0 && _iVtxPos<65536);
 
   // fetch D3D buffer
-  ULONG *pulLockedBuffer;
-  hr = pd3dVB->Lock( iLockOffset*sizeof(ULONG), ctLockSize*sizeof(ULONG), (UBYTE**)&pulLockedBuffer, dwLockFlag);
+  unsigned long *pulLockedBuffer;
+  hr = pd3dVB->Lock( iLockOffset*sizeof(unsigned long), ctLockSize*sizeof(unsigned long), (UBYTE**)&pulLockedBuffer, dwLockFlag);
   D3D_CHECKERROR(hr);
 
   // copy (or convert) vertices there and unlock
@@ -1199,8 +1199,8 @@ extern void DrawElements_D3D( INDEX ctIndices, INDEX *pidx)
   // determine lock position and type
   if( (_iIdxOffset+ctIndices) >= _pGfx->gl_ctIndices) _iIdxOffset = 0;
   const DWORD dwLockFlag   = (_iIdxOffset>0) ? D3DLOCK_NOOVERWRITE : D3DLOCK_DISCARD;
-  const SLONG slLockSize   =  ctIndices *IDXSIZE; 
-  const SLONG slLockOffset = _iIdxOffset*IDXSIZE; 
+  const long slLockSize   =  ctIndices *IDXSIZE; 
+  const long slLockOffset = _iIdxOffset*IDXSIZE; 
 
   // copy indices to index buffer
   HRESULT hr;
@@ -1314,8 +1314,8 @@ elemEnd:
   // eventually (re)construct vertex shader out of streams' bit-mask
   if( _ulLastStreamsMask != _ulStreamsMask)
   { // reset streams that were used before
-    ULONG ulThisMask = _ulStreamsMask;
-    ULONG ulLastMask = _ulLastStreamsMask;
+    unsigned long ulThisMask = _ulStreamsMask;
+    unsigned long ulLastMask = _ulLastStreamsMask;
     for( INDEX iStream=0; iStream<MAXSTREAMS; iStream++) {
       if( (ulThisMask&1)==0 && (ulLastMask&1)!=0) {
         hr = pd3dDev->SetStreamSource( iStream,NULL,0);

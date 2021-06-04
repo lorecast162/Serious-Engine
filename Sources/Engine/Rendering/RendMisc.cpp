@@ -100,7 +100,7 @@ CScreenPolygon::~CScreenPolygon(void) {
 
 // Coordinate conversion functions
 static FLOAT fDiff;
-static SLONG slTmp;
+static long slTmp;
 
 
 static inline PIX PIXCoord(FLOAT f) // (f+0.9999f) or (ceil(f))
@@ -122,7 +122,7 @@ static inline PIX PIXCoord(FLOAT f) // (f+0.9999f) or (ceil(f))
 
  #elif (defined __GNU_INLINE_X86_32__)
   PIX pixRet;
-  SLONG clobber;
+  long clobber;
   __asm__ __volatile__ (
     "flds    (%%eax)              \n\t"
     "fistl   (%%edx)              \n\t"
@@ -151,7 +151,7 @@ static inline PIX PIXCoord(FIX16_16 x) { return (PIX)Ceil(x); };
 /*
  * Calculate edge line type depending on whether its polygon is visible or not.
  */
-static inline ULONG EdgeLineType(BOOL bPolygonVisible)
+static inline unsigned long EdgeLineType(BOOL bPolygonVisible)
 {
   // if polygon is visible
   if (bPolygonVisible) {
@@ -192,7 +192,7 @@ static inline void PutTheMostFatPixel(CDrawPort &dp, PIX i, PIX j, COLOR color)
  * Draw a line for arrow drawing.
  */
 static inline void DrawArrowLine(CDrawPort &dp, const FLOAT2D &vPoint0,
-                                 const FLOAT2D &vPoint1, COLOR color, ULONG ulLineType)
+                                 const FLOAT2D &vPoint1, COLOR color, unsigned long ulLineType)
 {
   PIX x0 = (PIX)vPoint0(1);
   PIX x1 = (PIX)vPoint1(1);
@@ -206,7 +206,7 @@ static inline void DrawArrowLine(CDrawPort &dp, const FLOAT2D &vPoint0,
  * Draw an arrow for debugging edge directions.
  */
 static inline void DrawArrow(CDrawPort &dp, PIX i0, PIX j0, PIX i1, PIX j1, COLOR color,
-                             ULONG ulLineType)
+                             unsigned long ulLineType)
 {
   FLOAT2D vPoint0 = FLOAT2D((FLOAT)i0, (FLOAT)j0);
   FLOAT2D vPoint1 = FLOAT2D((FLOAT)i1, (FLOAT)j1);
@@ -364,7 +364,7 @@ void CRenderer::ProjectClipAndDrawArrow(
   // clip the edge line
   FLOAT3D vClipped0 = tv0;
   FLOAT3D vClipped1 = tv1;
-  ULONG ulClipFlags = re_prProjection->ClipLine(vClipped0, vClipped1);
+  unsigned long ulClipFlags = re_prProjection->ClipLine(vClipped0, vClipped1);
   // if the edge remains after clipping to front plane
   if (ulClipFlags != LCF_EDGEREMOVED) {
     // project the vertices

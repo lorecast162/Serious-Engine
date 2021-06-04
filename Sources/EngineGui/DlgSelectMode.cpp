@@ -201,7 +201,7 @@ void CDlgSelectMode::ApplySettings( CDisplayMode *pdm, enum GfxAPIType *m_pGfxAP
   default: ASSERT(FALSE); ddDepth = DD_DEFAULT;  break;
   }
   // get resolution
-  const ULONG ulRes = (ULONG)m_ctrlResCombo.GetItemData( m_ctrlResCombo.GetCurSel());
+  const unsigned long ulRes = (unsigned long)m_ctrlResCombo.GetItemData( m_ctrlResCombo.GetCurSel());
   const PIX pixSizeI = ulRes>>16;
   const PIX pixSizeJ = ulRes&0xFFFF;
 

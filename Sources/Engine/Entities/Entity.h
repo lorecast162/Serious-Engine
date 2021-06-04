@@ -33,7 +33,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define DUMPVECTOR(v) \
   strm.FPrintF_t(#v ":  %g,%g,%g %08x,%08x,%08x\n", \
-    (v)(1), (v)(2), (v)(3), (ULONG&)(v)(1), (ULONG&)(v)(2), (ULONG&)(v)(3))
+    (v)(1), (v)(2), (v)(3), (unsigned long&)(v)(1), (unsigned long&)(v)(2), (unsigned long&)(v)(3))
 #define DUMPVECTOR2(strDes, v) \
   strm.FPrintF_t( "%s:  %g,%g,%g\n", strDes, (v)(1), (v)(2), (v)(3))
 #define DUMPLONG(l) \
@@ -174,13 +174,13 @@ public:
 
 public:
   enum RenderType en_RenderType;  // how is it rendered
-  ULONG en_ulPhysicsFlags;        // ways of interacting with environment
-  ULONG en_ulCollisionFlags;      // which entities to collide with
+  unsigned long en_ulPhysicsFlags;        // ways of interacting with environment
+  unsigned long en_ulCollisionFlags;      // which entities to collide with
 
-  ULONG en_ulFlags;               // various flags
-  ULONG en_ulSpawnFlags;          // in what game types is this entity active
+  unsigned long en_ulFlags;               // various flags
+  unsigned long en_ulSpawnFlags;          // in what game types is this entity active
   INDEX en_ctReferences;          // reference counter for delayed destruction
-  ULONG en_ulID;                  // unique entity identifier
+  unsigned long en_ulID;                  // unique entity identifier
 
   CPlacement3D en_plPlacement;      // placement in world space
   FLOATmatrix3D en_mRotation;       // precalc. matrix for object rotation
@@ -216,24 +216,24 @@ public:
   inline void RemReference(void);
 
   /* Get pointer to entity property from its packed identifier. */
-  class CEntityProperty *PropertyForTypeAndID(ULONG ulType, ULONG ulID);
+  class CEntityProperty *PropertyForTypeAndID(unsigned long ulType, unsigned long ulID);
   /* Helpers for writing/reading entity pointers. */
   void ReadEntityPointer_t(CTStream *istr, CEntityPointer &pen);
   void WriteEntityPointer_t(CTStream *ostr, CEntityPointer pen);
   /* Get pointer to entity component from its packed identifier. */
-  class CEntityComponent *ComponentForTypeAndID(ULONG ulType, ULONG ulID);
+  class CEntityComponent *ComponentForTypeAndID(unsigned long ulType, unsigned long ulID);
   /* Get pointer to entity property from its name. */
   class CEntityProperty *PropertyForName(const CTString &strPropertyName);
   /* Copy one entity property from property of another entity. */
   void CopyOneProperty( CEntityProperty &epPropertySrc, CEntityProperty &epPropertyDest,
-                        CEntity &enOther, ULONG ulFlags);
+                        CEntity &enOther, unsigned long ulFlags);
 
   /* Read all properties from a stream. */
   void ReadProperties_t(CTStream &istrm);  // throw char *
   /* Write all properties to a stream. */
   void WriteProperties_t(CTStream &ostrm); // throw char *
   /* Copy entity properties from another entity of same class. */
-  void CopyEntityProperties(CEntity &enOther, ULONG ulFlags);
+  void CopyEntityProperties(CEntity &enOther, unsigned long ulFlags);
 
   /* Internal versions for entity reinitialization (do not discard shadows etc.). */
   void Initialize_internal(const CEntityEvent &eeInput);
@@ -270,7 +270,7 @@ public:
   // make predictor (complete raw copy with all states/variables and 
   // making predictor/predicted links)
 #define COPY_PREDICTOR  (1UL<<2)  
-  virtual void Copy(CEntity &enOther, ULONG ulFlags);
+  virtual void Copy(CEntity &enOther, unsigned long ulFlags);
   virtual CEntity &operator=(CEntity &enOther) {ASSERT(FALSE); return *this;};
   // find a pointer to another entity while copying
   static CEntity *FindRemappedEntityPointer(CEntity *penOriginal);
@@ -281,7 +281,7 @@ public:
   /* Precache components that might be needed. */
   virtual void Precache(void);
   // create a checksum value for sync-check
-  virtual void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck);
+  virtual void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck);
   // dump sync data to text file
   virtual void DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck);  // throw char *
 
@@ -319,35 +319,35 @@ public:
   virtual void SetDefaultProperties(void);
 
   /* Get a filename for a component of given type and id. */
-  const CTFileName &FileNameForComponent(SLONG slType, SLONG slID);
+  const CTFileName &FileNameForComponent(long slType, long slID);
   // Get data for a texture component
-  CTextureData *GetTextureDataForComponent(SLONG slID);
+  CTextureData *GetTextureDataForComponent(long slID);
   // Get data for a model component
-  CModelData *GetModelDataForComponent(SLONG slID);
+  CModelData *GetModelDataForComponent(long slID);
 
   // model manipulation functions -- only for RT_MODEL/RT_EDITORMODEL
   /* Set the model data for model entity. */
   void SetModel(const CTFileName &fnmModel);
-  void SetModel(SLONG idModelComponent);
+  void SetModel(long idModelComponent);
   BOOL SetSkaModel(const CTString &fnmModel);
   void SetSkaModel_t(const CTString &fnmModel);
   void SetSkaColisionInfo();
   /* Get the model data for model entity. */
   const CTFileName &GetModel(void);
   /* Start new animation for model entity. */
-  void StartModelAnim(INDEX iNewModelAnim, ULONG ulFlags);
+  void StartModelAnim(INDEX iNewModelAnim, unsigned long ulFlags);
 
   /* Play a given sound object. */
-  void PlaySound(CSoundObject &so, SLONG idSoundComponent, SLONG slPlayType);
-  void PlaySound(CSoundObject &so, const CTFileName &fnmSound, SLONG slPlayType);
-  double GetSoundLength(SLONG idSoundComponent);
+  void PlaySound(CSoundObject &so, long idSoundComponent, long slPlayType);
+  void PlaySound(CSoundObject &so, const CTFileName &fnmSound, long slPlayType);
+  double GetSoundLength(long idSoundComponent);
 
   // set/get model main blend color
   COLOR GetModelColor(void) const;
   void  SetModelColor( const COLOR colBlend);
 
   /* Set the main texture data for model entity. */
-  void SetModelMainTexture(SLONG idTextureComponent);
+  void SetModelMainTexture(long idTextureComponent);
   void SetModelMainTexture(const CTFileName &fnmTexture);
   /* Get the main texture data for model entity. */
   const CTFileName &GetModelMainTexture(void);
@@ -355,19 +355,19 @@ public:
   void StartModelMainTextureAnim(INDEX iNewTextureAnim);
 
   /* Set the reflection texture data for model entity. */
-  void SetModelReflectionTexture(SLONG idTextureComponent);
+  void SetModelReflectionTexture(long idTextureComponent);
   /* Set the specular texture data for model entity. */
-  void SetModelSpecularTexture(SLONG idTextureComponent);
+  void SetModelSpecularTexture(long idTextureComponent);
 
   /* Add attachment to model */
-  void AddAttachment(INDEX iAttachment, ULONG ulIDModel, ULONG ulIDTexture);
+  void AddAttachment(INDEX iAttachment, unsigned long ulIDModel, unsigned long ulIDTexture);
   void AddAttachment(INDEX iAttachment, CTFileName fnModel, CTFileName fnTexture);
   /* Remove attachment from model */
   void RemoveAttachment(INDEX iAttachment);
   /* Set the reflection texture data for model attachment entity. */
-  void SetModelAttachmentReflectionTexture(INDEX iAttachment, SLONG idTextureComponent);
+  void SetModelAttachmentReflectionTexture(INDEX iAttachment, long idTextureComponent);
   /* Set the specular texture data for model attachment entity. */
-  void SetModelAttachmentSpecularTexture(INDEX iAttachment, SLONG idTextureComponent);
+  void SetModelAttachmentSpecularTexture(INDEX iAttachment, long idTextureComponent);
   
   // Get all vertices of model entity in absolute space
   void GetModelVerticesAbsolute( CStaticStackArray<FLOAT3D> &avVertices, FLOAT fNormalOffset, FLOAT fMipFactor);
@@ -381,13 +381,13 @@ public:
   virtual void AdjustShaderParams(INDEX iSurfaceID,CShader *pShader,ShaderParams &spParams);
 
   // precache given component
-  void PrecacheModel(SLONG slID);
-  void PrecacheTexture(SLONG slID);
-  void PrecacheSound(SLONG slID);
-  void PrecacheClass(SLONG slID, INDEX iUser = -1);
+  void PrecacheModel(long slID);
+  void PrecacheTexture(long slID);
+  void PrecacheSound(long slID);
+  void PrecacheClass(long slID, INDEX iUser = -1);
 
   /* Create a new entity of given class in this world. */
-  CEntity *CreateEntity(const CPlacement3D &plPlacement, SLONG idModelComponent);
+  CEntity *CreateEntity(const CPlacement3D &plPlacement, long idModelComponent);
 
   /* Apply some damage directly to one entity. */
   void InflictDirectDamage(CEntity *penToDamage, CEntity *penInflictor, enum DamageType dmtType,
@@ -405,7 +405,7 @@ public:
   void NotifyCollisionChanged(void);
 
   // get a pseudo-random number (safe for network gaming)
-  ULONG IRnd(void);   // [0x0000 , 0xFFFF]
+  unsigned long IRnd(void);   // [0x0000 , 0xFFFF]
   FLOAT FRnd(void);   // [0.0f , 1.0f]
 
   // DLL class overridables
@@ -416,11 +416,11 @@ public:
 
   // these functions are dummy in CEntity, but are implemented in CRationalEntity
   /* Jump to a new state. */
-  void Jump(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput) {};
+  void Jump(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput) {};
   /* Call a subautomaton. */
-  void Call(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput) {};
+  void Call(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput) {};
   /* Return from a subautomaton. */
-  void Return(SLONG slThisState, const CEntityEvent &eeReturn) {};
+  void Return(long slThisState, const CEntityEvent &eeReturn) {};
   // print stack to debug output
   virtual const char *PrintStackDebug(void);
 
@@ -432,7 +432,7 @@ public:
   virtual FLOAT GetOpacity(void) { return 1.0f; };
 
   // returns ammount of memory used by entity
-  virtual SLONG GetUsedMemory(void);
+  virtual long GetUsedMemory(void);
 
 public:
 
@@ -457,7 +457,7 @@ public:
   void Destroy(void);
 
   /* Get state transition for given state and event code. */
-  virtual CEntity::pEventHandler HandlerForStateAndEvent(SLONG slState, SLONG slEvent);
+  virtual CEntity::pEventHandler HandlerForStateAndEvent(long slState, long slEvent);
   /* Handle an event, return false if the event is not handled. */
   virtual BOOL HandleEvent(const CEntityEvent &ee);
 
@@ -476,14 +476,14 @@ public:
   // teleport this entity to a new location -- takes care of telefrag damage
   void Teleport(const CPlacement3D &plNew, BOOL bTelefrag=TRUE);
 
-  void SetFlags(ULONG ulFlags);
-  inline ULONG GetFlags(void) const { return en_ulFlags; };
-  inline void SetSpawnFlags(ULONG ulFlags) { en_ulSpawnFlags = ulFlags; }
-  inline ULONG GetSpawnFlags(void) const { return en_ulSpawnFlags; };
-  void SetPhysicsFlags(ULONG ulFlags);
-  inline ULONG GetPhysicsFlags(void) const { return en_ulPhysicsFlags; };
-  void SetCollisionFlags(ULONG ulFlags);
-  inline ULONG GetCollisionFlags(void) const { return en_ulCollisionFlags; };
+  void SetFlags(unsigned long ulFlags);
+  inline unsigned long GetFlags(void) const { return en_ulFlags; };
+  inline void SetSpawnFlags(unsigned long ulFlags) { en_ulSpawnFlags = ulFlags; }
+  inline unsigned long GetSpawnFlags(void) const { return en_ulSpawnFlags; };
+  void SetPhysicsFlags(unsigned long ulFlags);
+  inline unsigned long GetPhysicsFlags(void) const { return en_ulPhysicsFlags; };
+  void SetCollisionFlags(unsigned long ulFlags);
+  inline unsigned long GetCollisionFlags(void) const { return en_ulCollisionFlags; };
   inline BOOL IsPredictor(void) const { return en_ulFlags&ENF_PREDICTOR; };
   inline BOOL IsPredicted(void) const { return en_ulFlags&ENF_PREDICTED; };
   inline BOOL IsPredictable(void) const { return en_ulFlags&ENF_PREDICTABLE; };
@@ -498,7 +498,7 @@ public:
   // check if active for prediction now
   BOOL IsAllowedForPrediction(void) const;
   // check an event for prediction, returns true if already predicted
-  BOOL CheckEventPrediction(ULONG ulTypeID, ULONG ulEventID);
+  BOOL CheckEventPrediction(unsigned long ulTypeID, unsigned long ulEventID);
 
   inline enum RenderType GetRenderType(void) { return en_RenderType; };
   inline CEntityClass *GetClass(void) { return en_pecClass; };
@@ -559,7 +559,7 @@ public:
   /* Get light source information - return NULL if not a light source. */
   virtual CLightSource *GetLightSource(void);
   /* Is target valid. */
-  virtual BOOL IsTargetValid(SLONG slPropertyOffset, CEntity *penTarget);
+  virtual BOOL IsTargetValid(long slPropertyOffset, CEntity *penTarget);
 
   /* Get force type name, return empty string if not used. */
   virtual const CTString &GetForceName(INDEX iForce);
@@ -593,7 +593,7 @@ public:
   virtual FLOAT3D GetClassificationBoxStretch(void);
 
   /* Get anim data for given animation property - return NULL for none. */
-  virtual CAnimData *GetAnimData(SLONG slPropertyOffset);
+  virtual CAnimData *GetAnimData(long slPropertyOffset);
   /* Adjust model shading parameters if needed - return TRUE if needs model shadows. */
   virtual BOOL AdjustShadingParameters(FLOAT3D &vLightDirection,
     COLOR &colLight, COLOR &colAmbient);
@@ -618,7 +618,7 @@ public:
   // get offset for depth-sorting of alpha models (in meters, positive is nearer)
   virtual FLOAT GetDepthSortOffset(void);
   // get visibility tweaking bits
-  virtual ULONG GetVisTweaks(void);
+  virtual unsigned long GetVisTweaks(void);
 
   /* Get max tessellation level. */
   virtual FLOAT GetMaxTessellationLevel(void);
@@ -716,7 +716,7 @@ public:
   FLOAT en_fHealth;            // health of the entity
 
   /* Copy entity from another entity of same class. */
-  virtual void Copy(CEntity &enOther, ULONG ulFlags);
+  virtual void Copy(CEntity &enOther, unsigned long ulFlags);
   /* Read from stream. */
   virtual void Read_t( CTStream *istr);  // throw char *
   /* Write to stream. */
@@ -736,7 +736,7 @@ public:
     FLOAT fDamageAmmount, const FLOAT3D &vHitPoint, const FLOAT3D &vDirection);
 
   // returns bytes of memory used by this object
-  inline SLONG GetUsedMemory(void) {
+  inline long GetUsedMemory(void) {
     return( sizeof(CLiveEntity) - sizeof(CEntity) + CEntity::GetUsedMemory());
   };
 };
@@ -753,7 +753,7 @@ public:
 public:
   TIME en_timeTimer;          // moment in time this entity waits for timer
 
-  CStaticStackArray<SLONG> en_stslStateStack; // stack of states for entity AI
+  CStaticStackArray<long> en_stslStateStack; // stack of states for entity AI
 
   /* Calculate physics for moving. */
   virtual void ClearMovingTemp(void);
@@ -761,28 +761,28 @@ public:
   virtual void DoMoving(void);
   virtual void PostMoving(void);
   // create a checksum value for sync-check
-  virtual void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck);
+  virtual void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck);
   // dump sync data to text file
   virtual void DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck);  // throw char *
 
   /* Copy entity from another entity of same class. */
-  virtual void Copy(CEntity &enOther, ULONG ulFlags);
+  virtual void Copy(CEntity &enOther, unsigned long ulFlags);
   /* Read from stream. */
   virtual void Read_t( CTStream *istr);  // throw char *
   /* Write to stream. */
   virtual void Write_t( CTStream *ostr); // throw char *
 
   /* Unwind stack to a given state. */
-  void UnwindStack(SLONG slThisState);
+  void UnwindStack(long slThisState);
 
 public:
 
   /* Jump to a new state. */
-  void Jump(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput);
+  void Jump(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput);
   /* Call a subautomaton. */
-  void Call(SLONG slThisState, SLONG slTargetState, BOOL bOverride, const CEntityEvent &eeInput);
+  void Call(long slThisState, long slTargetState, BOOL bOverride, const CEntityEvent &eeInput);
   /* Return from a subautomaton. */
-  void Return(SLONG slThisState, const CEntityEvent &eeReturn);
+  void Return(long slThisState, const CEntityEvent &eeReturn);
   // print stack to debug output
   const char *PrintStackDebug(void);
 
@@ -805,9 +805,9 @@ public:
   virtual BOOL HandleEvent(const CEntityEvent &ee);
 
   // returns bytes of memory used by this object
-  inline SLONG GetUsedMemory(void) {
-    SLONG slUsedMemory = sizeof(CRationalEntity) - sizeof(CLiveEntity) + CLiveEntity::GetUsedMemory();
-    slUsedMemory += en_stslStateStack.sa_Count * sizeof(SLONG);
+  inline long GetUsedMemory(void) {
+    long slUsedMemory = sizeof(CRationalEntity) - sizeof(CLiveEntity) + CLiveEntity::GetUsedMemory();
+    slUsedMemory += en_stslStateStack.sa_Count * sizeof(long);
     return slUsedMemory;
   };
 };

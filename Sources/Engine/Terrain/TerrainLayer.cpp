@@ -527,9 +527,9 @@ void CTerrainLayer::Clear()
 }
 
 // Count used memory
-SLONG CTerrainLayer::GetUsedMemory(void)
+long CTerrainLayer::GetUsedMemory(void)
 {
-  SLONG slUsedMemory=0;
+  long slUsedMemory=0;
   slUsedMemory += sizeof(CTerrainLayer);
   slUsedMemory += sizeof(UBYTE)*tl_iMaskWidth*tl_iMaskHeight;
   return slUsedMemory;

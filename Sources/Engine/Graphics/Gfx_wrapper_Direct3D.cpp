@@ -32,14 +32,14 @@ static void UpdateClipPlane_D3D(void)
     afObjectClipPlane[3] = pcp[3] + (pcp[0]*pvm[12] + pcp[1]*pvm[13] + pcp[2]*pvm[14]);
   } else {
     // just copy clip plane
-    (ULONG&)afObjectClipPlane[0] = (ULONG&)D3D_afClipPlane[0];
-    (ULONG&)afObjectClipPlane[1] = (ULONG&)D3D_afClipPlane[1];
-    (ULONG&)afObjectClipPlane[2] = (ULONG&)D3D_afClipPlane[2];
-    (ULONG&)afObjectClipPlane[3] = (ULONG&)D3D_afClipPlane[3];
+    (unsigned long&)afObjectClipPlane[0] = (unsigned long&)D3D_afClipPlane[0];
+    (unsigned long&)afObjectClipPlane[1] = (unsigned long&)D3D_afClipPlane[1];
+    (unsigned long&)afObjectClipPlane[2] = (unsigned long&)D3D_afClipPlane[2];
+    (unsigned long&)afObjectClipPlane[3] = (unsigned long&)D3D_afClipPlane[3];
   }
   // skip if the same as last time
-  ULONG *pulThis = (ULONG*) afObjectClipPlane;
-  ULONG *pulLast = (ULONG*)_afActiveClipPlane;
+  unsigned long *pulThis = (unsigned long*) afObjectClipPlane;
+  unsigned long *pulLast = (unsigned long*)_afActiveClipPlane;
   if( pulLast[0]==pulThis[0] && pulLast[1]==pulThis[1]
    && pulLast[2]==pulThis[2] && pulLast[3]==pulThis[3]) return;
   // update (if supported!)
@@ -728,7 +728,7 @@ static void d3d_BlendFunc( GfxBlend eSrc, GfxBlend eDst)
 
 
 
-static void d3d_SetColorMask( ULONG ulColorMask)
+static void d3d_SetColorMask( unsigned long ulColorMask)
 {
   // only if supported
   _ulCurrentColorMask = ulColorMask; // keep for Get...()
@@ -745,7 +745,7 @@ static void d3d_SetColorMask( ULONG ulColorMask)
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
   // no emulation
-  ULONG ulBitMask = NONE;
+  unsigned long ulBitMask = NONE;
   if( (ulColorMask&CT_RMASK) == CT_RMASK) ulBitMask |= D3DCOLORWRITEENABLE_RED;
   if( (ulColorMask&CT_GMASK) == CT_GMASK) ulBitMask |= D3DCOLORWRITEENABLE_GREEN;
   if( (ulColorMask&CT_BMASK) == CT_BMASK) ulBitMask |= D3DCOLORWRITEENABLE_BLUE;
@@ -962,7 +962,7 @@ static void d3d_SetViewMatrix( const FLOAT *pfMatrix/*=NULL*/)
 
   if( pfMatrix!=NULL) {
     // need to keep it for clip plane
-    CopyLongs( (ULONG*)pfMatrix, (ULONG*)D3D_afViewMatrix, 16);
+    CopyLongs( (unsigned long*)pfMatrix, (unsigned long*)D3D_afViewMatrix, 16);
     hr = _pGfx->gl_pd3dDevice->SetTransform( D3DTS_VIEW, (_D3DMATRIX*)D3D_afViewMatrix);
   } else {
     // load identity matrix
@@ -1073,8 +1073,8 @@ static void d3d_SetTextureWrapping( enum GfxWrap eWrapU, enum GfxWrap eWrapV)
 #ifndef NDEBUG
   // check wrapping consistency
   D3DTEXTUREADDRESS d3dtaU, d3dtaV;
-  hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_ADDRESSU, (ULONG*)&d3dtaU);  D3D_CHECKERROR(hr);
-  hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_ADDRESSV, (ULONG*)&d3dtaV);  D3D_CHECKERROR(hr);
+  hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_ADDRESSU, (unsigned long*)&d3dtaU);  D3D_CHECKERROR(hr);
+  hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_ADDRESSV, (unsigned long*)&d3dtaV);  D3D_CHECKERROR(hr);
   ASSERT( (d3dtaU==D3DTADDRESS_WRAP  && _tpGlobal[GFX_iActiveTexUnit].tp_eWrapU==GFX_REPEAT)
        || (d3dtaU==D3DTADDRESS_CLAMP && _tpGlobal[GFX_iActiveTexUnit].tp_eWrapU==GFX_CLAMP)
        || (_tpGlobal[GFX_iActiveTexUnit].tp_eWrapU==0));
@@ -1136,7 +1136,7 @@ static void d3d_SetTextureModulation( INDEX iScale)
 
 
 
-static void d3d_GenerateTexture( ULONG &ulTexObject)
+static void d3d_GenerateTexture( unsigned long &ulTexObject)
 {
   ASSERT( _pGfx->gl_eCurrentAPI==GAT_D3D);
   _sfStats.StartTimer(CStatForm::STI_BINDTEXTURE);
@@ -1152,7 +1152,7 @@ static void d3d_GenerateTexture( ULONG &ulTexObject)
 
 
 // unbind texture from API
-static void d3d_DeleteTexture( ULONG &ulTexObject)
+static void d3d_DeleteTexture( unsigned long &ulTexObject)
 {
   // skip if already unbound
   ASSERT( _pGfx->gl_eCurrentAPI==GAT_D3D);
@@ -1181,7 +1181,7 @@ static void d3d_SetVertexArray( GFXVertex4 *pvtx, INDEX ctVtx)
   GFX_ctVertices = ctVtx;
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
-  SetVertexArray_D3D( 0, (ULONG*)pvtx); // type 0 = vertices
+  SetVertexArray_D3D( 0, (unsigned long*)pvtx); // type 0 = vertices
 
   _sfStats.StopTimer(CStatForm::STI_GFXAPI);
 }
@@ -1194,7 +1194,7 @@ static void d3d_SetNormalArray( GFXNormal *pnor)
   ASSERT( pnor!=NULL);
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
-  SetVertexArray_D3D( 1, (ULONG*)pnor); // type 1 = normals
+  SetVertexArray_D3D( 1, (unsigned long*)pnor); // type 1 = normals
 
   _sfStats.StopTimer(CStatForm::STI_GFXAPI);
 }
@@ -1208,7 +1208,7 @@ static void d3d_SetColorArray( GFXColor *pcol)
   d3d_EnableColorArray();
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
   
-  SetVertexArray_D3D( 2, (ULONG*)pcol); // type 2 = colors
+  SetVertexArray_D3D( 2, (unsigned long*)pcol); // type 2 = colors
 
   _sfStats.StopTimer(CStatForm::STI_GFXAPI);
 }
@@ -1222,7 +1222,7 @@ static void d3d_SetTexCoordArray( GFXTexCoord *ptex, BOOL b4/*=FALSE*/)
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
   // type 3 = regular texture coordinates; type 4 = projective texture coordinates
-  SetVertexArray_D3D( b4?4:3, (ULONG*)ptex);
+  SetVertexArray_D3D( b4?4:3, (unsigned long*)ptex);
 
   _sfStats.StopTimer(CStatForm::STI_GFXAPI);
 }
@@ -1235,7 +1235,7 @@ static void d3d_SetConstantColor( COLOR col)
   d3d_DisableColorArray();
   _sfStats.StartTimer(CStatForm::STI_GFXAPI);
 
-  const ULONG d3dColor = rgba2argb(col);
+  const unsigned long d3dColor = rgba2argb(col);
   HRESULT hr = _pGfx->gl_pd3dDevice->SetRenderState( D3DRS_AMBIENT, d3dColor);
   D3D_CHECKERROR(hr); 
 

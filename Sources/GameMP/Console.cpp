@@ -163,7 +163,7 @@ void CGame::ConsoleRender(CDrawPort *pdp)
   //LCDRenderGrid();
   LCDRenderClouds2();
   dpConsole.DrawLine( 0, pixSizeJ-1, pixSizeI, pixSizeJ-1, LCDFadedColor(SE_COL_BLUE_NEUTRAL|255));
-  const ULONG colFill = (colDark & ~CT_AMASK) | 0x2F;
+  const unsigned long colFill = (colDark & ~CT_AMASK) | 0x2F;
   dpConsole.Fill( 0, pixSizeJ-pixLineSpacing*1.6f, pixSizeI, pixLineSpacing*1.6f, colFill);
 
   // setup font
@@ -184,7 +184,7 @@ void CGame::ConsoleRender(CDrawPort *pdp)
   dpConsole.SetTextMode(+1);
 
   // add blinking cursor
-  if( ((ULONG)(_pTimer->GetRealTimeTick()*2)) & 1) {
+  if( ((unsigned long)(_pTimer->GetRealTimeTick()*2)) & 1) {
     CTString strCursor="_";
     FLOAT fTextScalingX = dpConsole.dp_fTextScaling * dpConsole.dp_fTextAspect;
     PIX pixCellSize = (PIX) (_pfdConsoleFont->fd_pixCharWidth * fTextScalingX + dpConsole.dp_pixTextCharSpacing);

@@ -44,7 +44,7 @@ public:
   CListHead ls_lhLayers;        // list of shadow map layers of this light source
   class CEntity *ls_penEntity;  // the entity of this light source
 
-  ULONG ls_ulFlags;                 // various flags
+  unsigned long ls_ulFlags;                 // various flags
 
   RANGE ls_rHotSpot;                // distance before intensity starts to fall off
   RANGE ls_rFallOff;                // distance before intensity reaches zero

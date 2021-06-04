@@ -199,10 +199,10 @@ struct ENGINE_API ModelPolygon
 	ModelPolygon();                                 // constructor
 	~ModelPolygon();                                // destructor
 	CStaticArray<struct ModelPolygonVertex> mp_PolygonVertices;	// this polygon's vertices
-	ULONG mp_RenderFlags;														// flags which define rendering of this polygon
-	ULONG mp_ColorAndAlpha;							      			// color and global alpha for this polygon
+	unsigned long mp_RenderFlags;														// flags which define rendering of this polygon
+	unsigned long mp_ColorAndAlpha;							      			// color and global alpha for this polygon
 	INDEX mp_Surface;																// in which surface this polygon belongs
-	SLONG mp_slVisibility;                          // how this poligon is visible
+	long mp_slVisibility;                          // how this poligon is visible
   BOOL  mp_bClipped;                              // is polygon clipped
   void Read_t( CTStream *istrFile);       // throw char *
 	void Write_t( CTStream *ostrFile);      // throw char *
@@ -224,10 +224,10 @@ struct ENGINE_API MappingSurface
   COLOR ms_colSpecular;														// specular color of this surface
   COLOR ms_colBump;															  // bump color of this surface
 
-  ULONG ms_ulOnColor;                             // on and off colors for surface
-  ULONG ms_ulOffColor;
+  unsigned long ms_ulOnColor;                             // on and off colors for surface
+  unsigned long ms_ulOffColor;
 
-  ULONG ms_ulRenderingFlags;                           // surface rendering flags
+  unsigned long ms_ulRenderingFlags;                           // surface rendering flags
   enum SurfaceShadingType      ms_sstShadingType;      // surface shading types
   enum SurfaceTranslucencyType ms_sttTranslucencyType; // surface translucency types
   CStaticArray<INDEX> ms_aiPolygons;	            // indices of all polygons in surface
@@ -241,7 +241,7 @@ struct ENGINE_API MappingSurface
   BOOL operator==(const MappingSurface &msOther) const;
 
   // convert old polygon flags from CTGfx into new rendering parameters
-  void SetRenderingParameters(ULONG ulOldFlags);
+  void SetRenderingParameters(unsigned long ulOldFlags);
   void Read_t( CTStream *istrFile, BOOL bReadPolygonsPerSurface, BOOL bReadSurfaceColors);       // throw char *
 	void Write_t( CTStream *ostrFile);      // throw char *
   void ReadSettings_t( CTStream *istrFile);       // throw char *
@@ -272,7 +272,7 @@ class ENGINE_API CModelCollisionBox {
 public:
   FLOAT3D mcb_vCollisionBoxMin;                   // min vector of collision box
   FLOAT3D mcb_vCollisionBoxMax;                   // max vector of collision box
-  ULONG mcb_iCollisionBoxDimensionEquality;       // HEIGHT_EQ_WIDTH or LENGTH_EQ_WIDTH or LENGTH_EQ_HEIGHT
+  unsigned long mcb_iCollisionBoxDimensionEquality;       // HEIGHT_EQ_WIDTH or LENGTH_EQ_WIDTH or LENGTH_EQ_HEIGHT
   CTString mcb_strName;                           // name of collision box (exported as define)
 // functions
   CModelCollisionBox(void);
@@ -312,7 +312,7 @@ public:
   CTFileName mi_PatchFiles[MAX_TEXTUREPATCHES];	    // and their names
   MEX mi_Width, mi_Height;												// size of mapping texture
   BOOL mi_Flags;      														// model flags (MF_...)
-  SLONG mi_ShadowQuality;	  	  								  // how models will be shaded
+  long mi_ShadowQuality;	  	  								  // how models will be shaded
   FLOAT3D mi_Stretch;															// stretch vector (static one, dynamic one is in model object)
 };
 

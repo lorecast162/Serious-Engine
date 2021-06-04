@@ -80,8 +80,8 @@ void CDlgInfoPgRendering::DoDataExchange(CDataExchange* pDX)
     COLOR colFirstBump;
     CTString strFirstName = "Invalid name";
 
-    ULONG ulFlagsOn = MAX_ULONG;
-    ULONG ulFlagsOff = MAX_ULONG;
+    unsigned long ulFlagsOn = MAX_unsigned long;
+    unsigned long ulFlagsOff = MAX_unsigned long;
 
     INDEX ctSelectedSurfaces = pDoc->GetCountOfSelectedSurfaces();
 
@@ -94,7 +94,7 @@ void CDlgInfoPgRendering::DoDataExchange(CDataExchange* pDX)
       // skip non selected surfaces
       if( !(ms.ms_ulRenderingFlags&SRF_SELECTED)) continue;
       strFirstName = ms.ms_Name;
-      ULONG ulRenderFlags = ms.ms_ulRenderingFlags;
+      unsigned long ulRenderFlags = ms.ms_ulRenderingFlags;
       ulFlagsOn &= ulRenderFlags;
       ulFlagsOff &= ~ulRenderFlags;
       
@@ -247,7 +247,7 @@ void CDlgInfoPgRendering::DoDataExchange(CDataExchange* pDX)
     for( INDEX iSurface=0; iSurface<mmi.mmpi_MappingSurfaces.Count(); iSurface++)
     {
       MappingSurface &ms = mmi.mmpi_MappingSurfaces[ iSurface];
-      ULONG ulFlagsBefore = ms.ms_ulRenderingFlags;
+      unsigned long ulFlagsBefore = ms.ms_ulRenderingFlags;
       // skip non selected surfaces
       if( !(ms.ms_ulRenderingFlags&SRF_SELECTED)) continue;
       TRI_STATE_CTRL_TO_FLAGS( m_IsBump,        SRF_BUMP);
@@ -257,7 +257,7 @@ void CDlgInfoPgRendering::DoDataExchange(CDataExchange* pDX)
       TRI_STATE_CTRL_TO_FLAGS( m_IsSpecular,    SRF_SPECULAR);
       TRI_STATE_CTRL_TO_FLAGS( m_IsInvisible,   SRF_INVISIBLE);
       TRI_STATE_CTRL_TO_FLAGS( m_IsDoubleSided, SRF_DOUBLESIDED);
-      ULONG ulFlagsAfter = ms.ms_ulRenderingFlags;
+      unsigned long ulFlagsAfter = ms.ms_ulRenderingFlags;
       
       BOOL bBumpSet = ((ulFlagsBefore&SRF_BUMP)!=(ulFlagsAfter&SRF_BUMP))&&(ulFlagsAfter&SRF_BUMP);
       BOOL bDetailSet = ((ulFlagsBefore&SRF_DETAIL)!=(ulFlagsAfter&SRF_DETAIL))&&(ulFlagsAfter&SRF_DETAIL);

@@ -292,7 +292,7 @@ BOOL CDlgCreateAnimatedTexture::OnInitDialog()
       CTFileStream fileScript;
       fileScript.Open_t( m_fnSourceFileName);
       // get size of script file
-      ULONG ulScriptFileSize = fileScript.GetStreamSize();
+      unsigned long ulScriptFileSize = fileScript.GetStreamSize();
       char *pchrFile = new char[ ulScriptFileSize+1];
       // set eol character
       pchrFile[ ulScriptFileSize] = 0;

@@ -260,8 +260,8 @@ void CDlgPgTexture::DoDataExchange(CDataExchange* pDX)
       }
     }
     // obtain masks for setting and clearing texture flags
-    ULONG ulBitsToClear = MAX_ULONG;
-    ULONG ulBitsToSet = 0;
+    unsigned long ulBitsToClear = MAX_unsigned long;
+    unsigned long ulBitsToSet = 0;
     if( m_checkClampU.GetCheck() == 0) ulBitsToClear &= ~BPTF_CLAMPU;
     if( m_checkClampU.GetCheck() == 1) ulBitsToSet   |=  BPTF_CLAMPU;
     if( m_checkClampV.GetCheck() == 0) ulBitsToClear &= ~BPTF_CLAMPV;

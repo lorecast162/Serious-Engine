@@ -43,7 +43,7 @@ public:
   FLOAT3D  bvx_vRelative;               // relative coordinates used for collision
   DOUBLE3D bvx_vdPreciseRelative;       // precise relative coordinates used for editing
   DOUBLE3D *bvx_pvdPreciseAbsolute;     // precise vertex coordinates in absolute space
-  ULONG    bvx_ulFlags;                 // flags
+  unsigned long    bvx_ulFlags;                 // flags
   CBrushSector *bvx_pbscSector;         // back-pointer to sector
 
   /* Default constructor. */
@@ -58,7 +58,7 @@ public:
   void SetAbsolutePosition(const DOUBLE3D &vAbsolute);
 
   // get amount of memory used by this object
-  inline SLONG GetUsedMemory(void) { return sizeof(CBrushVertex); };
+  inline long GetUsedMemory(void) { return sizeof(CBrushVertex); };
 };
 
 
@@ -82,7 +82,7 @@ public:
   inline void Clear(void) {};
 
   // get amount of memory used by this object
-  inline SLONG GetUsedMemory(void) { return sizeof(CBrushPlane); };
+  inline long GetUsedMemory(void) { return sizeof(CBrushPlane); };
 };
 
 
@@ -105,7 +105,7 @@ public:
   BOOL TouchesInAnySector(CBrushEdge &bedOther);
 
   // get amount of memory used by this object
-  inline SLONG GetUsedMemory(void) { return sizeof(CBrushEdge); };
+  inline long GetUsedMemory(void) { return sizeof(CBrushEdge); };
 };
 
 // a reference to edge used in brush polygon
@@ -173,7 +173,7 @@ public:
 class ENGINE_API CBrushShadowLayer {
 public:
 // implementation:
-  ULONG bsl_ulFlags;    // flags
+  unsigned long bsl_ulFlags;    // flags
   CListNode bsl_lnInShadowMap;    // node in list of all layers of a shadow map
   CListNode bsl_lnInLightSource;  // node in list of all layers of a light source
   class CBrushShadowMap *bsl_pbsmShadowMap; // the shadow map
@@ -182,7 +182,7 @@ public:
   PIX bsl_pixMinV;
   PIX bsl_pixSizeU;
   PIX bsl_pixSizeV;
-  SLONG bsl_slSizeInPixels; // size of bit mask in pixels (with all mip-maps)
+  long bsl_slSizeInPixels; // size of bit mask in pixels (with all mip-maps)
   UBYTE *bsl_pubLayer;  // bit mask set where the polygon is lighted
   COLOR bsl_colLastAnim;  // last animating color cached
 
@@ -195,7 +195,7 @@ public:
   FLOAT GetLightStrength(PIX pixU, PIX pixV, FLOAT fLt, FLOAT fUp);
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 
@@ -244,7 +244,7 @@ public:
   // get number of shadow layers
   INDEX GetShadowLayersCount(void) { return bsm_lhLayers.Count(); };
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 
@@ -319,7 +319,7 @@ public:
   void Write_t( CTStream &strm);  // throw char *
 
   // get amount of memory used by this object
-  inline SLONG GetUsedMemory(void) { return sizeof(CBrushPolygonTexture); };
+  inline long GetUsedMemory(void) { return sizeof(CBrushPolygonTexture); };
 };
 
 
@@ -425,7 +425,7 @@ public:
 public:
 // interface:
   FLOATaabbox3D bpo_boxBoundingBox;           // bounding box
-  ULONG bpo_ulFlags;                          // flags
+  unsigned long bpo_ulFlags;                          // flags
 
   CBrushPlane *bpo_pbplPlane;                 // plane of this polygon
   CStaticArray<CBrushPolygonEdge> bpo_abpePolygonEdges;   // edges in this polygon
@@ -481,7 +481,7 @@ public:
   FLOAT GetDistanceFromEdges(const FLOAT3D &v);
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 }
 #ifdef __arm__
 __attribute__((aligned(64)))
@@ -562,10 +562,10 @@ public:
   class CBrushMip *bsc_pbmBrushMip;                   // pointer to brush mip of this sector
   COLOR bsc_colColor;                                 // color of this sector
   COLOR bsc_colAmbient;                               // ambient light for that sector
-  ULONG bsc_ulFlags;                                  // flags
-  ULONG bsc_ulFlags2;                                 // second set of flags
-  ULONG bsc_ulTempFlags;                              // flags that are not saved
-  ULONG bsc_ulVisFlags;                               // special visibility flags
+  unsigned long bsc_ulFlags;                                  // flags
+  unsigned long bsc_ulFlags2;                                 // second set of flags
+  unsigned long bsc_ulTempFlags;                              // flags that are not saved
+  unsigned long bsc_ulVisFlags;                               // special visibility flags
   FLOATaabbox3D bsc_boxBoundingBox;                   // bounding box in absolute space
   FLOATaabbox3D bsc_boxRelative;                      // bounding box in relative space
   CListNode bsc_lnInActiveSectors; // node in sectors active in some operation (e.g. rendering)
@@ -669,7 +669,7 @@ public:
   }
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 
@@ -765,7 +765,7 @@ public:
   CAnyProjection3D br_prProjection;   // projection currently used by this brush
   CEntity *br_penEntity;              // back pointer from brush to its entity
   class CFieldSettings *br_pfsFieldSettings;// field settings for field brushes
-  ULONG br_ulFlags;                   // brush flags
+  unsigned long br_ulFlags;                   // brush flags
 
   /* Wrapper for CObject3D::Optimize(), updates profiling information. */
   static void OptimizeObject3D(CObject3D &ob);

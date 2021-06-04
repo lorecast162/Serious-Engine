@@ -38,7 +38,7 @@ extern INDEX snd_bMono;
 
 // a bunch of local vars coming up
 
-static SLONG slMixerBufferSampleRate;  // quality of destination buffer
+static long slMixerBufferSampleRate;  // quality of destination buffer
 static CSoundData *psd;
 
 // nasm on MacOS X is getting wrong addresses of external globals, so I have
@@ -54,11 +54,11 @@ static FLOAT f4G    = 4294967296.0f;
 #define INASM static
 #endif
 
-INASM SLONG slMixerBufferSize;        // size in samples per channel of the destination buffers
+INASM long slMixerBufferSize;        // size in samples per channel of the destination buffers
 INASM void *pvMixerBuffer;            // pointer to the start of the destination buffers
 INASM SWORD *pswSrcBuffer;
-INASM SLONG slLeftVolume,  slRightVolume, slLeftFilter, slRightFilter;
-INASM SLONG slLastLeftSample, slLastRightSample, slSoundBufferSize;
+INASM long slLeftVolume,  slRightVolume, slLeftFilter, slRightFilter;
+INASM long slLastLeftSample, slLastRightSample, slSoundBufferSize;
 INASM FLOAT fSoundSampleRate, fPhase;
 INASM FLOAT fOfsDelta, fStep, fLeftStep, fRightStep, fLeftOfs, fRightOfs;
 INASM __int64 fixLeftOfs, fixRightOfs; // fixed integers 32:32
@@ -66,7 +66,7 @@ INASM __int64 mmSurroundFactor, mmLeftStep, mmRightStep, mmVolumeGain;
 INASM BOOL bNotLoop, bEndOfSound;
 
 // reset mixer buffer (wipes it with zeroes and remembers pointers in static mixer variables)
-void ResetMixer( const SLONG *pslBuffer, const SLONG slBufferSize)
+void ResetMixer( const long *pslBuffer, const long slBufferSize)
 {
   // clamp master volumes
   snd_fSoundVolume = Clamp(snd_fSoundVolume, 0.0f, 1.0f);
@@ -95,7 +95,7 @@ void ResetMixer( const SLONG *pslBuffer, const SLONG slBufferSize)
 
 
 // copy mixer buffer to the output buffer(s)
-void CopyMixerBuffer_stereo( const SLONG slSrcOffset, void *pDstBuffer, const SLONG slBytes)
+void CopyMixerBuffer_stereo( const long slSrcOffset, void *pDstBuffer, const long slBytes)
 {
   ASSERT( pDstBuffer!=NULL);
   ASSERT( slBytes%4==0);
@@ -118,7 +118,7 @@ void CopyMixerBuffer_stereo( const SLONG slSrcOffset, void *pDstBuffer, const SL
 
 
 // copy one channel from mixer buffer to the output buffer(s)
-void CopyMixerBuffer_mono( const SLONG slSrcOffset, void *pDstBuffer, const SLONG slBytes)
+void CopyMixerBuffer_mono( const long slSrcOffset, void *pDstBuffer, const long slBytes)
 {
   ASSERT( pDstBuffer!=NULL);
   ASSERT( slBytes%2==0);
@@ -163,8 +163,8 @@ copyLoop:
   // (This is untested, currently. --ryan.)
   WORD *dest = (WORD *) pDstBuffer;
   WORD *src = (WORD *) ( ((char *) pvMixerBuffer) + slSrcOffset );
-  SLONG max = slBytes / 4;
-  for (SLONG i = 0; i < max; i++) {
+  long max = slBytes / 4;
+  for (long i = 0; i < max; i++) {
       *dest = *src;
       dest++;    // move 16 bits.
       src+=2;    // move 32 bits.
@@ -174,7 +174,7 @@ copyLoop:
 
 
 // plain conversion of mixer buffer from 32-bit to 16-bit clamped
-static void ConvertMixerBuffer( const SLONG slBytes)
+static void ConvertMixerBuffer( const long slBytes)
 {
   ASSERT( slBytes%4==0);
   if( slBytes<4) return;
@@ -220,10 +220,10 @@ copyLoop:
   #else
 
   SWORD *dest = (SWORD *) pvMixerBuffer;
-  SLONG *src = (SLONG *) pvMixerBuffer;
-  SLONG max = slBytes / 2;
+  long *src = (long *) pvMixerBuffer;
+  long max = slBytes / 2;
   int tmp;
-  for (SLONG i = 0; i < max; i++) {
+  for (long i = 0; i < max; i++) {
       tmp = *src;
       if (tmp>32767) tmp=32767;
       if (tmp<-32767) tmp=-32767;
@@ -237,7 +237,7 @@ copyLoop:
 
 
 // normalize mixer buffer
-void NormalizeMixerBuffer( const FLOAT fNormStrength, const SLONG slBytes, FLOAT &fLastNormValue)
+void NormalizeMixerBuffer( const FLOAT fNormStrength, const long slBytes, FLOAT &fLastNormValue)
 {
   // just convert to 16-bit if normalization isn't required
   ASSERT( slBytes%4==0);
@@ -249,8 +249,8 @@ void NormalizeMixerBuffer( const FLOAT fNormStrength, const SLONG slBytes, FLOAT
 
   // well, I guess we'll might need to normalize a bit, so first - find maximum
   INDEX i;
-  SLONG slPeak = 0;
-  SLONG *pslSrc = (SLONG*)pvMixerBuffer;
+  long slPeak = 0;
+  long *pslSrc = (long*)pvMixerBuffer;
   const INDEX iSamples = slBytes/2; // 16-bit was assumed -> samples (treat as mono)
   for( i=0; i<iSamples; i++) slPeak = Max( Abs(pslSrc[i]), slPeak);
 
@@ -271,7 +271,7 @@ void NormalizeMixerBuffer( const FLOAT fNormStrength, const SLONG slBytes, FLOAT
   SWORD *pswDst = (SWORD*)pvMixerBuffer;
   FLOAT fCurrentNormValue = fLastNormValue;
   for( i=0; i<iSamples; i++) {
-    SLONG slSample = FloatToInt(pslSrc[i]*fCurrentNormValue);
+    long slSample = FloatToInt(pslSrc[i]*fCurrentNormValue);
     pswDst[i] = (SWORD)Clamp( slSample, -32767, +32767);
     fCurrentNormValue = fCurrentNormValue+fNormAdd; // interpolate normalizer
          if( fCurrentNormValue<fNormValue && fNormAdd<0) fCurrentNormValue = fNormValue; // clamp interpolated value
@@ -436,8 +436,8 @@ loopEnd:
 
  #else
   // initialize some local vars
-  SLONG slLeftSample, slRightSample, slNextSample;
-  SLONG *pslDstBuffer = (SLONG*)pvMixerBuffer;
+  long slLeftSample, slRightSample, slNextSample;
+  long *pslDstBuffer = (long*)pvMixerBuffer;
   fixLeftOfs   = (__int64)(fLeftOfs   * 65536.0);
   fixRightOfs  = (__int64)(fRightOfs  * 65536.0);
   __int64 fixLeftStep  = (__int64)(fLeftStep  * 65536.0);
@@ -445,8 +445,8 @@ loopEnd:
   __int64 fixSoundBufferSize = ((__int64)slSoundBufferSize)<<16;
   mmSurroundFactor = (__int64)(SWORD)mmSurroundFactor;
 
-  SLONG slLeftVolume_ = slLeftVolume >> 16;
-  SLONG slRightVolume_ = slRightVolume >> 16;
+  long slLeftVolume_ = slLeftVolume >> 16;
+  long slRightVolume_ = slRightVolume >> 16;
 
   // loop thru source buffer
   INDEX iCt = slMixerBufferSize;
@@ -484,8 +484,8 @@ loopEnd:
     slLeftSample  = (slLastLeftSample  * slLeftVolume_) >>15;
     slRightSample = (slLastRightSample * slRightVolume_)>>15;
 
-    slLeftSample  ^= (SLONG)((mmSurroundFactor>> 0)&0xFFFFFFFF);
-    slRightSample ^= (SLONG)((mmSurroundFactor>>32)&0xFFFFFFFF);
+    slLeftSample  ^= (long)((mmSurroundFactor>> 0)&0xFFFFFFFF);
+    slRightSample ^= (long)((mmSurroundFactor>>32)&0xFFFFFFFF);
 
     // mix in current sample
     slLeftSample  += pslDstBuffer[0];
@@ -664,8 +664,8 @@ loopEnd:
 
  #else
   // initialize some local vars
-  SLONG slLeftSample, slRightSample, slNextSample;
-  SLONG *pslDstBuffer = (SLONG*)pvMixerBuffer;
+  long slLeftSample, slRightSample, slNextSample;
+  long *pslDstBuffer = (long*)pvMixerBuffer;
   fixLeftOfs   = (__int64)(fLeftOfs   * 65536.0);
   fixRightOfs  = (__int64)(fRightOfs  * 65536.0);
   __int64 fixLeftStep  = (__int64)(fLeftStep  * 65536.0);
@@ -673,8 +673,8 @@ loopEnd:
   __int64 fixSoundBufferSize = ((__int64)slSoundBufferSize)<<16;
   mmSurroundFactor = (__int64)(SWORD)mmSurroundFactor;
 
-  SLONG slLeftVolume_ = slLeftVolume >> 16;
-  SLONG slRightVolume_ = slRightVolume >> 16;
+  long slLeftVolume_ = slLeftVolume >> 16;
+  long slRightVolume_ = slRightVolume >> 16;
 
   // loop thru source buffer
   INDEX iCt = slMixerBufferSize;
@@ -712,8 +712,8 @@ loopEnd:
     slLeftSample  = (slLastLeftSample  * slLeftVolume_) >>15;
     slRightSample = (slLastRightSample * slRightVolume_)>>15;
 
-    slLeftSample  ^= (SLONG)((mmSurroundFactor>> 0)&0xFFFFFFFF);
-    slRightSample ^= (SLONG)((mmSurroundFactor>>32)&0xFFFFFFFF);
+    slLeftSample  ^= (long)((mmSurroundFactor>> 0)&0xFFFFFFFF);
+    slRightSample ^= (long)((mmSurroundFactor>>32)&0xFFFFFFFF);
 
     // mix in current sample
     slLeftSample  += pslDstBuffer[0];
@@ -758,8 +758,8 @@ void MixSound( CSoundObject *pso)
   }
 
   // check for supported sound formats
-  const SLONG slChannels = pso->so_pCsdLink->sd_wfeFormat.nChannels;
-  const SLONG slBytes    = pso->so_pCsdLink->sd_wfeFormat.wBitsPerSample/8;
+  const long slChannels = pso->so_pCsdLink->sd_wfeFormat.nChannels;
+  const long slBytes    = pso->so_pCsdLink->sd_wfeFormat.wBitsPerSample/8;
   // unsupported sound formats will be ignored
   if( (slChannels!=1 && slChannels!=2) || slBytes!=2) return;
 
@@ -846,8 +846,8 @@ void MixSound( CSoundObject *pso)
   slLeftVolume  = FloatToInt(fLeftVolume  * 65536*32767.0f);
   slRightVolume = FloatToInt(fRightVolume * 65536*32767.0f);
   const FLOAT fMixBufSize = 65536*32767.0f / slMixerBufferSize;
-  const SLONG slLeftGain  = FloatToInt( (fNewLeftVolume -fLeftVolume)  *fMixBufSize);
-  const SLONG slRightGain = FloatToInt( (fNewRightVolume-fRightVolume) *fMixBufSize);
+  const long slLeftGain  = FloatToInt( (fNewLeftVolume -fLeftVolume)  *fMixBufSize);
+  const long slRightGain = FloatToInt( (fNewRightVolume-fRightVolume) *fMixBufSize);
   mmVolumeGain  = ((__int64)(slRightGain)<<32) | ((__int64)(slLeftGain)&0xFFFFFFFF);
   // extrapolate back new volumes because of not enough precision in interpolation!
   // (otherwise we might hear occasional pucks)
@@ -868,10 +868,10 @@ void MixSound( CSoundObject *pso)
   if( psd->sd_ulFlags&SDF_ENCODED) {
     _pfSoundProfile.StartTimer(CSoundProfile::PTI_DECODESOUND);
     // decode some samples from it
-    SLONG slWantedBytes  = FloatToInt(slMixerBufferSize*fStep*pso->so_pCsdLink->sd_wfeFormat.nChannels) *2;
+    long slWantedBytes  = FloatToInt(slMixerBufferSize*fStep*pso->so_pCsdLink->sd_wfeFormat.nChannels) *2;
     void *pvDecodeBuffer = _pSound->sl_pswDecodeBuffer;
     ASSERT(slWantedBytes<=_pSound->sl_slDecodeBufferSize);
-    SLONG slDecodedBytes = pso->so_psdcDecoder->Decode( pvDecodeBuffer, slWantedBytes);
+    long slDecodedBytes = pso->so_psdcDecoder->Decode( pvDecodeBuffer, slWantedBytes);
     ASSERT(slDecodedBytes<=slWantedBytes);
     // if it has a loop
     if (!bNotLoop) {
@@ -891,7 +891,7 @@ void MixSound( CSoundObject *pso)
       }
     }
     // copy first sample to the last one (this is needed for linear interpolation)
-    (ULONG&)(((UBYTE*)pvDecodeBuffer)[slDecodedBytes]) = *(ULONG*)pvDecodeBuffer;
+    (unsigned long&)(((UBYTE*)pvDecodeBuffer)[slDecodedBytes]) = *(unsigned long*)pvDecodeBuffer;
     // fix some mixer variables to play temporary decode buffer instead of real sound
     pswSrcBuffer = (SWORD*)pvDecodeBuffer;
     slSoundBufferSize = slDecodedBytes>>2;  // convert to samples

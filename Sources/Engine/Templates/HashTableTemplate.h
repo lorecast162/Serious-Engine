@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CHashTableSlot_TYPE {
 public:
-  ULONG hts_ulKey;      // hashing key
+  unsigned long hts_ulKey;      // hashing key
   TYPE *hts_ptElement;  // the element inhere
   CHashTableSlot_TYPE(void)  { hts_ptElement = NULL; };
   void Clear(void) { hts_ptElement = NULL; };
@@ -38,13 +38,13 @@ public:
   INDEX ht_ctSlotsPerCompStep;    // allocation step for number of slots in one compartment
   CStaticArray<CHashTableSlot_TYPE> ht_ahtsSlots;  // all slots are here
 
-  ULONG (*ht_GetItemKey)(VALUE_TYPE &Value);
+  unsigned long (*ht_GetItemKey)(VALUE_TYPE &Value);
   VALUE_TYPE (*ht_GetItemValue)(TYPE* Item);
 
   // internal finding, returns pointer to the the slot 
-  CHashTableSlot_TYPE *FindSlot(ULONG ulKey, VALUE_TYPE &Value);
+  CHashTableSlot_TYPE *FindSlot(unsigned long ulKey, VALUE_TYPE &Value);
   // internal finding, returns the index of the item in the nametable
-  INDEX FindSlotIndex(ULONG ulKey, VALUE_TYPE &Value);
+  INDEX FindSlotIndex(unsigned long ulKey, VALUE_TYPE &Value);
   // get the item stored in the hashtable by it's index
   TYPE* GetItemFromIndex(INDEX iIndex);
   // get the value of the item stored in the hashtable by it's index
@@ -64,7 +64,7 @@ public:
   /* Set allocation parameters. */
   void SetAllocationParameters(INDEX ctCompartments, INDEX ctSlotsPerComp, INDEX ctSlotsPerCompStep);
   // set callbacks
-  void SetCallbacks(ULONG (*GetItemKey)(VALUE_TYPE &Item), VALUE_TYPE (*GetItemValue)(TYPE* Item));
+  void SetCallbacks(unsigned long (*GetItemKey)(VALUE_TYPE &Item), VALUE_TYPE (*GetItemValue)(TYPE* Item));
 
   // find an object by value, return a pointer to it
   TYPE* Find(VALUE_TYPE &Value);

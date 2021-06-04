@@ -144,7 +144,7 @@ void CFontData::Make_t( const CTFileName &fnTexture, PIX pixCharWidth, PIX pixCh
   fd_pixCharWidth  = pixCharWidth;
   fd_pixCharHeight = pixCharHeight;
   // determine address in memory where font definition begins in its larger mip-map
-  ULONG *pulFont = fd_ptdTextureData->td_pulFrames;
+  unsigned long *pulFont = fd_ptdTextureData->td_pulFrames;
   ASSERT( pulFont!=NULL);
 
   // find number of letters in line (assuming that the 1st line represents the width of every line)
@@ -177,7 +177,7 @@ void CFontData::Make_t( const CTFileName &fnTexture, PIX pixCharWidth, PIX pixCh
       { // for all of the letter's pixels
         for( INDEX iPixelColumn=0; iPixelColumn<fd_pixCharWidth; iPixelColumn++)
         { // calculate current pixel's adress in font's texture
-          ULONG *puwPixel = (ULONG*)( pulFont + pixFontCharModulo * iCurrentLetterLine +  // calc right letter line
+          unsigned long *puwPixel = (unsigned long*)( pulFont + pixFontCharModulo * iCurrentLetterLine +  // calc right letter line
                                       fd_pixCharWidth * iCurrentLetterColumn +            // move to right letter column
                                       pixTexWidth * iPixelLine +   // move trough pixel lines of one letter
                                       iPixelColumn);               // move trough pixel columns of one letter

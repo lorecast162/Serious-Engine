@@ -71,7 +71,7 @@ static inline void BoxToGrid(
 }
 
 // key calculations
-static inline ULONG MakeCode(INDEX iX, INDEX iZ)
+static inline unsigned long MakeCode(INDEX iX, INDEX iZ)
 {
   return (iX<<16)|(iZ&0xffff);
 }
@@ -88,17 +88,17 @@ static inline INDEX MakeKey(INDEX iX, INDEX iZ)
   return iKey;
 }
 
-static inline INDEX MakeKeyFromCode(ULONG ulCode)
+static inline INDEX MakeKeyFromCode(unsigned long ulCode)
 {
-  INDEX iX = SLONG(ulCode)>>16;
-  INDEX iZ = SLONG(SWORD(ulCode&0xffff));
+  INDEX iX = long(ulCode)>>16;
+  INDEX iZ = long(SWORD(ulCode&0xffff));
   return MakeKey(iX, iZ);
 }
 
 // collision grid classes
 class CGridCell {
 public:
-  ULONG gc_ulCode;      // 32 bit uid of the cell (from its coordinates in grid)
+  unsigned long gc_ulCode;      // 32 bit uid of the cell (from its coordinates in grid)
   INDEX gc_iNextCell;   // next cell with this hash code
   INDEX gc_iFirstEntry; // first entry in this cell
 };
@@ -118,7 +118,7 @@ public:
   ~CCollisionGrid(void);
   void Clear(void);
   // create a new grid cell in given hash table entry
-  INDEX CreateCell(INDEX iKey, ULONG ulCode);
+  INDEX CreateCell(INDEX iKey, unsigned long ulCode);
   // remove a cell
   void RemoveCell(INDEX igc);
   // get grid cell for its coordinates
@@ -159,7 +159,7 @@ void CCollisionGrid::Clear(void)
 }
 
 // create a new grid cell in given hash table entry
-INDEX CCollisionGrid::CreateCell(INDEX iKey, ULONG ulCode)
+INDEX CCollisionGrid::CreateCell(INDEX iKey, unsigned long ulCode)
 {
   // find an empty cell
   INDEX igc = cg_agcCells.Allocate();
@@ -207,7 +207,7 @@ INDEX CCollisionGrid::FindCell(INDEX iX, INDEX iZ, BOOL bCreate)
   // make uid of the cell
   ASSERT(iX>=GRID_MIN && iX<=GRID_MAX);
   ASSERT(iZ>=GRID_MIN && iZ<=GRID_MAX);
-  ULONG ulCode = MakeCode(iX, iZ);
+  unsigned long ulCode = MakeCode(iX, iZ);
   // get the hash key for the cell
   INDEX iKey = MakeKey(iX, iZ);  // x+z, use lower bits
   ASSERT(iKey==MakeKeyFromCode(ulCode));
@@ -455,13 +455,13 @@ void CWorld::FindEntitiesNearBox(const FLOATaabbox3D &boxNear,
 
 
 // get amount of memory used by this object
-extern SLONG GetCollisionGridMemory( CCollisionGrid *pcg)
+extern long GetCollisionGridMemory( CCollisionGrid *pcg)
 {
   // no collision grid?
   if( pcg==NULL) return 0;
 
   // phew, it's here!
-  SLONG slUsedMemory = pcg->cg_aiFirstCells.Count() * sizeof(INDEX);
+  long slUsedMemory = pcg->cg_aiFirstCells.Count() * sizeof(INDEX);
   slUsedMemory += pcg->cg_agcCells.Count()   * sizeof(CGridCell);
   slUsedMemory += pcg->cg_ageEntries.Count() * sizeof(CGridEntry);
   slUsedMemory += pcg->cg_agcCells.aa_aiFreeElements.sa_Count   * sizeof(INDEX);

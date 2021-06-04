@@ -60,7 +60,7 @@ struct GFXColor
 {
   union {
     struct { UBYTE r,g,b,a; } ub;
-    struct { ULONG abgr;    } ul;  // reverse order - use ByteSwap()!
+    struct { unsigned long abgr;    } ul;  // reverse order - use ByteSwap()!
   };
 
   GFXColor() {};
@@ -91,33 +91,33 @@ struct GFXColor
 #endif
 
   void MultiplyRGBA( const GFXColor &col1, const GFXColor &col2) {
-    ub.r = (ULONG(col1.ub.r)*col2.ub.r)>>8;
-    ub.g = (ULONG(col1.ub.g)*col2.ub.g)>>8;
-    ub.b = (ULONG(col1.ub.b)*col2.ub.b)>>8;
-    ub.a = (ULONG(col1.ub.a)*col2.ub.a)>>8;
+    ub.r = (unsigned long(col1.ub.r)*col2.ub.r)>>8;
+    ub.g = (unsigned long(col1.ub.g)*col2.ub.g)>>8;
+    ub.b = (unsigned long(col1.ub.b)*col2.ub.b)>>8;
+    ub.a = (unsigned long(col1.ub.a)*col2.ub.a)>>8;
   }
 
   void MultiplyRGB( const GFXColor &col1, const GFXColor &col2) {
-    ub.r = (ULONG(col1.ub.r)*col2.ub.r)>>8;
-    ub.g = (ULONG(col1.ub.g)*col2.ub.g)>>8;
-    ub.b = (ULONG(col1.ub.b)*col2.ub.b)>>8;
+    ub.r = (unsigned long(col1.ub.r)*col2.ub.r)>>8;
+    ub.g = (unsigned long(col1.ub.g)*col2.ub.g)>>8;
+    ub.b = (unsigned long(col1.ub.b)*col2.ub.b)>>8;
   }
 
   void MultiplyRGBCopyA1( const GFXColor &col1, const GFXColor &col2) {
-    ub.r = (ULONG(col1.ub.r)*col2.ub.r)>>8;
-    ub.g = (ULONG(col1.ub.g)*col2.ub.g)>>8;
-    ub.b = (ULONG(col1.ub.b)*col2.ub.b)>>8;
+    ub.r = (unsigned long(col1.ub.r)*col2.ub.r)>>8;
+    ub.g = (unsigned long(col1.ub.g)*col2.ub.g)>>8;
+    ub.b = (unsigned long(col1.ub.b)*col2.ub.b)>>8;
     ub.a = col1.ub.a;
   }
 
-  void AttenuateRGB( ULONG ulA) {
-    ub.r = (ULONG(ub.r)*ulA)>>8;
-    ub.g = (ULONG(ub.g)*ulA)>>8;
-    ub.b = (ULONG(ub.b)*ulA)>>8;
+  void AttenuateRGB( unsigned long ulA) {
+    ub.r = (unsigned long(ub.r)*ulA)>>8;
+    ub.g = (unsigned long(ub.g)*ulA)>>8;
+    ub.b = (unsigned long(ub.b)*ulA)>>8;
   }
 
-  void AttenuateA( ULONG ulA) {
-    ub.a = (ULONG(ub.a)*ulA)>>8;
+  void AttenuateA( unsigned long ulA) {
+    ub.a = (unsigned long(ub.a)*ulA)>>8;
   }
 };
 
@@ -134,7 +134,7 @@ struct GFXColor
 struct GFXVertex4 {
   FLOAT x,y,z;
   struct GFXColor col;
-  SLONG shade;
+  long shade;
   void Clear(void) {};
 };
 
@@ -143,7 +143,7 @@ struct GFXVertex4 {
 struct GFXNormal4
 {
   FLOAT nx,ny,nz;
-  ULONG ul;
+  unsigned long ul;
 };
 
 

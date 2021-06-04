@@ -58,7 +58,7 @@ public:
 public:
   // client
   void Client_OpenLocal(void);
-  void Client_OpenNet_t(ULONG ulServerAddress);
+  void Client_OpenNet_t(unsigned long ulServerAddress);
   // update master UDP socket and route its messages
   void UpdateMasterBuffers(void);
 
@@ -81,22 +81,22 @@ public:
   // create an inet-family socket
   void CreateSocket_t();
   // bind socket to the given address
-  void Bind_t(ULONG ulLocalHost, ULONG ulLocalPort);
+  void Bind_t(unsigned long ulLocalHost, unsigned long ulLocalPort);
   // set socket to non-blocking mode
   void SetNonBlocking_t(void);
   // get generic socket error info string and last error
   CTString GetSocketError(INDEX iError);
 	// open an UDP socket at given port 
-  void OpenSocket_t(ULONG ulLocalHost, ULONG ulLocalPort);
+  void OpenSocket_t(unsigned long ulLocalHost, unsigned long ulLocalPort);
 
 	// get address of this host
-  void GetLocalAddress_t(ULONG &ulHost, ULONG &ulPort);
+  void GetLocalAddress_t(unsigned long &ulHost, unsigned long &ulPort);
   // get address of the peer host connected to this socket
-  void GetRemoteAddress_t(ULONG &ulHost, ULONG &ulPort);
+  void GetRemoteAddress_t(unsigned long &ulHost, unsigned long &ulPort);
 
   // broadcast communication
-  void Broadcast_Send(const void *pvSend, SLONG slSendSize,CAddress &adrDestination);
-  BOOL Broadcast_Receive(void *pvReceive, SLONG &slReceiveSize,CAddress &adrAddress);
+  void Broadcast_Send(const void *pvSend, long slSendSize,CAddress &adrDestination);
+  BOOL Broadcast_Receive(void *pvReceive, long &slReceiveSize,CAddress &adrAddress);
 	// here we receive connect requests
 	void Broadcast_Update_t(void);
 
@@ -109,27 +109,27 @@ public:
   BOOL Server_IsClientUsed(INDEX iClient);
   CTString Server_GetClientName(INDEX iClient);
 
-  void Server_Send_Reliable(INDEX iClient, const void *pvSend, SLONG slSendSize);
-  BOOL Server_Receive_Reliable(INDEX iClient, void *pvReceive, SLONG &slReceiveSize);
-  void Server_Send_Unreliable(INDEX iClient, const void *pvSend, SLONG slSendSize);
-  BOOL Server_Receive_Unreliable(INDEX iClient, void *pvReceive, SLONG &slReceiveSize);
+  void Server_Send_Reliable(INDEX iClient, const void *pvSend, long slSendSize);
+  BOOL Server_Receive_Reliable(INDEX iClient, void *pvReceive, long &slReceiveSize);
+  void Server_Send_Unreliable(INDEX iClient, const void *pvSend, long slSendSize);
+  BOOL Server_Receive_Unreliable(INDEX iClient, void *pvReceive, long &slReceiveSize);
 
   BOOL Server_Update(void);
 
   // Client
   void Client_Init_t(char* strServerName);
-  void Client_Init_t(ULONG ulServerAddress);
+  void Client_Init_t(unsigned long ulServerAddress);
   void Client_Close(void);
 
   void Client_Clear(void);
   BOOL Client_IsConnected(void);
 
-  void Client_Send_Reliable(const void *pvSend, SLONG slSendSize);
-  BOOL Client_Receive_Reliable(void *pvReceive, SLONG &slReceiveSize);
+  void Client_Send_Reliable(const void *pvSend, long slSendSize);
+  BOOL Client_Receive_Reliable(void *pvReceive, long &slReceiveSize);
   BOOL Client_Receive_Reliable(CTStream &strmReceive);
-  void Client_PeekSize_Reliable(SLONG &slExpectedSize,SLONG &slReceivedSize);
-  void Client_Send_Unreliable(const void *pvSend, SLONG slSendSize);
-  BOOL Client_Receive_Unreliable(void *pvReceive, SLONG &slReceiveSize);
+  void Client_PeekSize_Reliable(long &slExpectedSize,long &slReceivedSize);
+  void Client_Send_Unreliable(const void *pvSend, long slSendSize);
+  BOOL Client_Receive_Unreliable(void *pvReceive, long &slReceiveSize);
 
   BOOL Client_Update(void);
 };

@@ -379,7 +379,7 @@ static FLOAT GetExactHitLocation(CTerrain *ptrTerrain, const FLOAT3D &vHitBegin,
   // Chech quad where ray starts
   _fMinHeight = vHitBegin(2)-fEpsilonH;
   _fMaxHeight = vHitBegin(2)+fEpsilonH;
-  FLOAT fDistanceStart = HitCheckQuad((SLONG) floor(fX0),(SLONG) floor(fY0));
+  FLOAT fDistanceStart = HitCheckQuad((long) floor(fX0),(long) floor(fY0));
   if(fDistanceStart<fOldDistance) {
     return fDistanceStart;
   }
@@ -425,7 +425,7 @@ static FLOAT GetExactHitLocation(CTerrain *ptrTerrain, const FLOAT3D &vHitBegin,
   // Chech quad where ray ends
   _fMinHeight = vHitEnd(2)-fEpsilonH;
   _fMaxHeight = vHitEnd(2)+fEpsilonH;
-  FLOAT fDistanceEnd = HitCheckQuad((SLONG) floor(fX1), (SLONG) floor(fY1));
+  FLOAT fDistanceEnd = HitCheckQuad((long) floor(fX1), (long) floor(fY1));
   if(fDistanceEnd<fOldDistance) {
     return fDistanceEnd;
   }

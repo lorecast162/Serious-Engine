@@ -28,16 +28,16 @@ BOOL UNZIPFileExists(const CTFileName &fnm);
 // open a zip file entry for reading
 INDEX UNZIPOpen_t(const CTFileName &fnm);
 // get uncompressed size of a file
-SLONG UNZIPGetSize(INDEX iHandle);
+long UNZIPGetSize(INDEX iHandle);
 // get CRC of a file
-ULONG UNZIPGetCRC(INDEX iHandle);
+unsigned long UNZIPGetCRC(INDEX iHandle);
 // read a block from zip file
-void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen);
+void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, long slStart, long slLen);
 // close a zip file entry
 void UNZIPClose(INDEX iHandle);
 // get info on a zip file entry
 void UNZIPGetFileInfo(INDEX iHandle, CTFileName &fnmZip,
-  SLONG &slOffset, SLONG &slSizeCompressed, SLONG &slSizeUncompressed, 
+  long &slOffset, long &slSizeCompressed, long &slSizeUncompressed, 
   BOOL &bCompressed);
 // enumeration for all files in all zips
 INDEX UNZIPGetFileCount(void);

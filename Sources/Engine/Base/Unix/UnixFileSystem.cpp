@@ -28,8 +28,8 @@ class CUnixFileSystem : public CFileSystem
 public:
     CUnixFileSystem(const char *argv0, const char *gamename);
     virtual ~CUnixFileSystem(void);
-    virtual void GetExecutablePath(char *buf, ULONG bufSize);
-    virtual void GetUserDirectory(char *buf, ULONG bufSize);
+    virtual void GetExecutablePath(char *buf, unsigned long bufSize);
+    virtual void GetUserDirectory(char *buf, unsigned long bufSize);
     virtual CDynamicArray<CTString> *FindFiles(const char *dir,
                                                const char *wildcard);
 protected:
@@ -89,13 +89,13 @@ CUnixFileSystem::~CUnixFileSystem(void)
 }
 
 
-void CUnixFileSystem::GetExecutablePath(char *buf, ULONG bufSize)
+void CUnixFileSystem::GetExecutablePath(char *buf, unsigned long bufSize)
 {
     SDL_snprintf(buf, bufSize, "%s", exePath);
 }
 
 
-void CUnixFileSystem::GetUserDirectory(char *buf, ULONG bufSize)
+void CUnixFileSystem::GetUserDirectory(char *buf, unsigned long bufSize)
 {
     SDL_snprintf(buf, bufSize, "%s", userDir);
 }

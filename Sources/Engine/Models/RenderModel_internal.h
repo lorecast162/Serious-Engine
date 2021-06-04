@@ -22,8 +22,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CDrawPort *_pdp;
 extern CAnyProjection3D _aprProjection;
 extern UBYTE *_pubMask;
-extern SLONG _slMaskWidth;
-extern SLONG _slMaskHeight;
+extern long _slMaskWidth;
+extern long _slMaskHeight;
 
 
 #endif  /* include-once check. */

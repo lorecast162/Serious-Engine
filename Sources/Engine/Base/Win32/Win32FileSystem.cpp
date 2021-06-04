@@ -17,8 +17,8 @@ class CWin32FileSystem : public CFileSystem
 public:
     CWin32FileSystem(const char *argv0, const char *gamename);
     virtual ~CWin32FileSystem(void);
-    virtual void GetExecutablePath(char *buf, ULONG bufSize);
-    virtual void GetUserDirectory(char *buf, ULONG bufSize);
+    virtual void GetExecutablePath(char *buf, unsigned long bufSize);
+    virtual void GetUserDirectory(char *buf, unsigned long bufSize);
     virtual CDynamicArray<CTString> *FindFiles(const char *dir,
                                                const char *wildcard);
 
@@ -79,14 +79,14 @@ CWin32FileSystem::~CWin32FileSystem(void)
 }
 
 
-void CWin32FileSystem::GetExecutablePath(char *buf, ULONG bufSize)
+void CWin32FileSystem::GetExecutablePath(char *buf, unsigned long bufSize)
 {
     strncpy(buf, exePath, bufSize);
     buf[bufSize - 1] = '\0';  // just in case.
 }
 
 
-void CWin32FileSystem::GetUserDirectory(char *buf, ULONG bufSize)
+void CWin32FileSystem::GetUserDirectory(char *buf, unsigned long bufSize)
 {
     strncpy(buf, userDir, bufSize);
     buf[bufSize - 1] = '\0';  // just in case.

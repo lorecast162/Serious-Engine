@@ -27,7 +27,7 @@ public:
   CTString ci_strAddress;   // client address in human readable format
   CAddress ci_adrAddress;		// address this client is connected to (address, port, ID)
 	BOOL ci_bClientLocal;     // set for local clients
-	ULONG ci_ulSequence;			// sequence number for reliable packet confirmation
+	unsigned long ci_ulSequence;			// sequence number for reliable packet confirmation
 	
 	CPacketBuffer ci_pbOutputBuffer;					// output buffer
 	CPacketBuffer ci_pbWaitAckBuffer;					// buffer for reliable packets that need to be acknowledged
@@ -46,11 +46,11 @@ public:
   void SetLocal(CClientInterface *ci_pciOther);
 
   // send a message through the interface
-  void Send(const void *pvSend, SLONG slSize,BOOL bReliable);
-  void SendTo(const void *pvSend, SLONG slSize,const CAddress adrAdress,BOOL bReliable);
+  void Send(const void *pvSend, long slSize,BOOL bReliable);
+  void SendTo(const void *pvSend, long slSize,const CAddress adrAdress,BOOL bReliable);
   // receive a message from the interface
-  BOOL Receive(void *pvReceive, SLONG &slSize,BOOL bReliable);
-  BOOL ReceiveFrom(void *pvReceive, SLONG &slSize, CAddress *adrAdress,BOOL bReliable);
+  BOOL Receive(void *pvReceive, long &slSize,BOOL bReliable);
+  BOOL ReceiveFrom(void *pvReceive, long &slSize, CAddress *adrAdress,BOOL bReliable);
   BOOL Receive(CTStream &strmReceive,UBYTE bReliable);
 
 	// exchanges packets beetween this socket and it's local partner
@@ -70,9 +70,9 @@ public:
 	CPacket* GetPendingPacket(void);
 
 	// reads the expected size of realiable message in the reliable input buffer
-	SLONG GetExpectedReliableSize(void);
+	long GetExpectedReliableSize(void);
   // reads the current size of realiable message in the reliable input buffer
-  SLONG GetCurrentReliableSize(void);
+  long GetCurrentReliableSize(void);
 
 };
 

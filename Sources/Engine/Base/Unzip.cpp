@@ -45,9 +45,9 @@ struct LocalFileHeader {
   SWORD lfh_swCompressionMethod;
   SWORD lfh_swModFileTime;
   SWORD lfh_swModFileDate;
-  SLONG lfh_slCRC32;
-  SLONG lfh_slCompressedSize;
-  SLONG lfh_slUncompressedSize;
+  long lfh_slCRC32;
+  long lfh_slCompressedSize;
+  long lfh_slUncompressedSize;
   SWORD lfh_swFileNameLen;
   SWORD lfh_swExtraFieldLen;
 
@@ -60,9 +60,9 @@ struct LocalFileHeader {
 // this exists only if bit 3 in GPB flag is set
 #define SIGNATURE_DD 0x08074b50
 struct DataDescriptor {
-	SLONG dd_slCRC32;
-	SLONG dd_slCompressedSize;
-	SLONG dd_slUncompressedSize;
+	long dd_slCRC32;
+	long dd_slCompressedSize;
+	long dd_slUncompressedSize;
 };
 
 // one file in central dir
@@ -74,16 +74,16 @@ struct FileHeader {
   SWORD fh_swCompressionMethod;
   SWORD fh_swModFileTime;
   SWORD fh_swModFileDate;
-  SLONG fh_slCRC32;
-  SLONG fh_slCompressedSize;
-  SLONG fh_slUncompressedSize;
+  long fh_slCRC32;
+  long fh_slCompressedSize;
+  long fh_slUncompressedSize;
   SWORD fh_swFileNameLen;
   SWORD fh_swExtraFieldLen;
   SWORD fh_swFileCommentLen;
   SWORD fh_swDiskNoStart;
   SWORD fh_swInternalFileAttributes;
-  SLONG fh_swExternalFileAttributes;
-  SLONG fh_slLocalHeaderOffset;
+  long fh_swExternalFileAttributes;
+  long fh_slLocalHeaderOffset;
 
 // follows:
 //  filename (variable size)
@@ -98,8 +98,8 @@ struct EndOfDir {
   SWORD eod_swDirStartDiskNo;
   SWORD eod_swEntriesInDirOnThisDisk;
   SWORD eod_swEntriesInDir;
-  SLONG eod_slSizeOfDir;
-  SLONG eod_slDirOffsetInFile;
+  long eod_slSizeOfDir;
+  long eod_slDirOffsetInFile;
   SWORD eod_swCommentLength;
 // follows: 
 //  zipfile comment (variable size)
@@ -112,10 +112,10 @@ class CZipEntry {
 public:
   CTFileName *ze_pfnmArchive;   // path of the archive
   CTFileName ze_fnm;            // file name with path inside archive
-  SLONG ze_slCompressedSize;    // size of file in the archive
-  SLONG ze_slUncompressedSize;  // size when uncompressed
-  SLONG ze_slDataOffset;        // position of compressed data inside archive
-  ULONG ze_ulCRC;               // checksum of the file
+  long ze_slCompressedSize;    // size of file in the archive
+  long ze_slUncompressedSize;  // size when uncompressed
+  long ze_slDataOffset;        // position of compressed data inside archive
+  unsigned long ze_ulCRC;               // checksum of the file
   BOOL ze_bStored;              // set if file is not compressed, but stored
   BOOL ze_bMod;                 // set if from a mod's archive
 
@@ -234,7 +234,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
   }
   // start at the end of file, minus expected minimum overhead
   fseek(f, 0, SEEK_END);
-  int iPos = ftell(f)-sizeof(SLONG)-sizeof(EndOfDir)+2;
+  int iPos = ftell(f)-sizeof(long)-sizeof(EndOfDir)+2;
   // do not search more than 128k (should be around 65k at most)
   int iMinPos = iPos-128*1024;
   if (iMinPos<0) {
@@ -247,7 +247,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
   for(; iPos>iMinPos; iPos--) {
     // read signature
     fseek(f, iPos, SEEK_SET);
-    SLONG slSig;
+    long slSig;
     fread(&slSig, sizeof(slSig), 1, f);
     BYTESWAP(slSig);
     // if this is the sig
@@ -294,7 +294,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
   // for each file
   for (INDEX iFile=0; iFile<eod.eod_swEntriesInDir; iFile++) {
     // read the sig
-    SLONG slSig;
+    long slSig;
     fread(&slSig, sizeof(slSig), 1, f);
     BYTESWAP(slSig);
 
@@ -324,7 +324,7 @@ void ReadZIPDirectory_t(CTFileName *pfnmZip)
     READ_ZIPFIELD(f, fh.fh_slLocalHeaderOffset);
 
     // read the filename
-    const SLONG slMaxFileName = 512;
+    const long slMaxFileName = 512;
     char strBuffer[slMaxFileName+1];
     memset(strBuffer, 0, sizeof(strBuffer));
     if (fh.fh_swFileNameLen>slMaxFileName) {
@@ -544,7 +544,7 @@ INDEX UNZIPGetFileIndex(const CTFileName &fnm)
 
 // get info on a zip file entry
 void UNZIPGetFileInfo(INDEX iHandle, CTFileName &fnmZip, 
-  SLONG &slOffset, SLONG &slSizeCompressed, SLONG &slSizeUncompressed, 
+  long &slOffset, long &slSizeCompressed, long &slSizeUncompressed, 
   BOOL &bCompressed)
 {
   // check handle number
@@ -624,7 +624,7 @@ INDEX UNZIPOpen_t(const CTFileName &fnm)
   // seek to the local header of the entry
   fseek(zh.zh_fFile, zh.zh_zeEntry.ze_slDataOffset, SEEK_SET);
   // read the sig
-  SLONG slSig;
+  long slSig;
   fread(&slSig, sizeof(slSig), 1, zh.zh_fFile);
   BYTESWAP(slSig);
   // if this is not the expected sig
@@ -681,7 +681,7 @@ INDEX UNZIPOpen_t(const CTFileName &fnm)
 }
 
 // get uncompressed size of a file
-SLONG UNZIPGetSize(INDEX iHandle)
+long UNZIPGetSize(INDEX iHandle)
 {
   // check handle number
   if(iHandle<0 || iHandle>=_azhHandles.Count()) {
@@ -700,7 +700,7 @@ SLONG UNZIPGetSize(INDEX iHandle)
 }
 
 // get CRC of a file
-ULONG UNZIPGetCRC(INDEX iHandle)
+unsigned long UNZIPGetCRC(INDEX iHandle)
 {
   // check handle number
   if(iHandle<0 || iHandle>=_azhHandles.Count()) {
@@ -719,7 +719,7 @@ ULONG UNZIPGetCRC(INDEX iHandle)
 }
 
 // read a block from zip file
-void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
+void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, long slStart, long slLen)
 {
   // check handle number
   if(iHandle<0 || iHandle>=_azhHandles.Count()) {
@@ -768,7 +768,7 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
     // if zlib has no more input
     while(zh.zh_zstream.avail_in==0) {
       // read more to it
-      SLONG slRead = fread(zh.zh_pubBufIn, 1, BUF_SIZE, zh.zh_fFile);
+      long slRead = fread(zh.zh_pubBufIn, 1, BUF_SIZE, zh.zh_fFile);
       if (slRead<=0) {
         return; // !!!!
       }
@@ -780,7 +780,7 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
     #define DUMMY_SIZE 256
     UBYTE aubDummy[DUMMY_SIZE];
     // decode to output
-    zh.zh_zstream.avail_out = Min(SLONG(slStart-zh.zh_zstream.total_out), SLONG(DUMMY_SIZE));
+    zh.zh_zstream.avail_out = Min(long(slStart-zh.zh_zstream.total_out), long(DUMMY_SIZE));
     zh.zh_zstream.next_out = aubDummy;
     int ierr = inflate(&zh.zh_zstream, Z_SYNC_FLUSH);
     if (ierr!=Z_OK && ierr!=Z_STREAM_END) {
@@ -806,7 +806,7 @@ void UNZIPReadBlock_t(INDEX iHandle, UBYTE *pub, SLONG slStart, SLONG slLen)
     // if zlib has no more input
     while(zh.zh_zstream.avail_in==0) {
       // read more to it
-      SLONG slRead = fread(zh.zh_pubBufIn, 1, BUF_SIZE, zh.zh_fFile);
+      long slRead = fread(zh.zh_pubBufIn, 1, BUF_SIZE, zh.zh_fFile);
       if (slRead<=0) {
         return; // !!!!
       }

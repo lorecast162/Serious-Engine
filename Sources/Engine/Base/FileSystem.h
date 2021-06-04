@@ -44,7 +44,7 @@ public:
     //  (buf) is where to store the info, and (bufSize) is the size, in bytes,
     //  of what's pointed to by (buf). The buffer is always promised to be
     //  null-terminated.
-  virtual void GetExecutablePath(char *buf, ULONG bufSize) = 0;
+  virtual void GetExecutablePath(char *buf, unsigned long bufSize) = 0;
 
     // Get the user directory. This is the user's home directory on systems
     //  with that concept, and the base (buf) is where to store the info, and
@@ -53,7 +53,7 @@ public:
     //  with have a trailing dir separator. It is likely that you will have
     //  write permission in the user directory tree, and will NOT have write
     //  permission in the base directory. You have been warned.
-  virtual void GetUserDirectory(char *buf, ULONG bufSize) = 0;
+  virtual void GetUserDirectory(char *buf, unsigned long bufSize) = 0;
 
     // Get an array of CTStrings containing the names of files in (dir) that
     //  match (wildcard).

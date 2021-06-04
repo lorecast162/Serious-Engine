@@ -46,8 +46,8 @@ static FLOAT fDepthBufferFactor;
 //static BOOL  bBackFaced, bDoubleSided;
 static BOOL  bPerspective;
 static BOOL  b16BitCompression;
-static ULONG ulColorMask;
-static ULONG ulRenderFlags;
+static unsigned long ulColorMask;
+static unsigned long ulRenderFlags;
 static PIX   pixMipWidth, pixMipHeight;
 static INDEX iMipLevel;
 
@@ -70,7 +70,7 @@ static void RenderOneSide( CRenderModel &rm, const INDEX iVisibility)
   FOREACHINSTATICARRAY( mmiMip.mmpi_MappingSurfaces, MappingSurface, itms)
   {
     MappingSurface &ms = *itms;
-    ULONG ulFlags = ms.ms_ulRenderingFlags;
+    unsigned long ulFlags = ms.ms_ulRenderingFlags;
     // if surface is invisible or empty, skip it
     if( (ulFlags&SRF_INVISIBLE) || ms.ms_ctSrfVx==0) continue;
     // if rendering back side and surface is not double sided, skip entire surface
@@ -381,7 +381,7 @@ void CModelObject::RenderModel_Mask( CRenderModel &rm)
 
   // if texture is ok
   iMipLevel = 31;
-  ULONG *pulCurrentMipmap = NULL;
+  unsigned long *pulCurrentMipmap = NULL;
   if( rm.rm_rtRenderType & RT_TEXTURE) {
     // reload texture
     ptd->Force( TEX_STATIC);

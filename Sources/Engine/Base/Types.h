@@ -29,12 +29,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <stdint.h>
 // use the defined typesizes from MSDN to create an equivalent translation on
 // non windows platforms
-typedef int32_t SLONG;
+typedef int32_t long;
 typedef int16_t SWORD;
 typedef int8_t  SBYTE;
 typedef int32_t SINT;
 
-typedef uint32_t ULONG;
+typedef uint32_t unsigned long;
 typedef uint16_t UWORD;
 typedef uint8_t  UBYTE;
 typedef uint32_t UINT;
@@ -232,7 +232,7 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
         }
     }
 
-    inline ULONG _rotl(ULONG ul, int bits)
+    inline unsigned long _rotl(unsigned long ul, int bits)
     {
         #if (defined __GNU_INLINE_X86_32__)
             // This, on the other hand, is wicked fast.  :)
@@ -283,7 +283,7 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
     typedef void *HDC;  /* !!! FIXME this sucks. */
     typedef void *HGLRC;  /* !!! FIXME this sucks. */
     typedef void *HGLOBAL;  /* !!! FIXME this sucks. */
-    typedef ULONG COLORREF;  /* !!! FIXME this sucks. */
+    typedef unsigned long COLORREF;  /* !!! FIXME this sucks. */
 
     typedef struct
     {
@@ -315,19 +315,19 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
 #endif
 
 
-#define MAX_SLONG ((SLONG)0x7FFFFFFFL)
+#define MAX_long ((long)0x7FFFFFFFL)
 #define MAX_SWORD ((UWORD)0x7FFF)
 #define MAX_SBYTE ((SBYTE)0x7F)
 
-#define MIN_SLONG ((SLONG)0x80000000L)
+#define MIN_long ((long)0x80000000L)
 #define MIN_SWORD ((SWORD)0x8000)
 #define MIN_SBYTE ((SBYTE)0x80)
 
-#define MIN_ULONG ((ULONG)0x00000000L)
+#define MIN_unsigned long ((unsigned long)0x00000000L)
 #define MIN_UWORD ((UWORD)0x0000)
 #define MIN_UBYTE ((UBYTE)0x00)
 
-#define MAX_ULONG ((ULONG)0xFFFFFFFFL)
+#define MAX_unsigned long ((unsigned long)0xFFFFFFFFL)
 #define MAX_UWORD ((UWORD)0xFFFF)
 #define MAX_UBYTE ((UBYTE)0xFF)
 
@@ -372,15 +372,15 @@ typedef int32_t INDEX;     // for indexed values and quantities
 // standard types
 
 // simple types
-typedef SLONG   PIX;    // pixel coordinates
-typedef SLONG   TEX;    // texel coordinates
-typedef SLONG   MEX;    // texels in mip-level 0
+typedef long   PIX;    // pixel coordinates
+typedef long   TEX;    // texel coordinates
+typedef long   MEX;    // texels in mip-level 0
 typedef float   FLOAT;
 typedef double  DOUBLE;
 typedef float   ANGLE;
 typedef float   TIME;
 typedef FLOAT   RANGE;
-typedef ULONG   COLOR;  // color is always in 32 bit true-color format
+typedef unsigned long   COLOR;  // color is always in 32 bit true-color format
 
 // macros for windows/croteam true color conversion
 #define CLRF_CLR(clr) ( ((clr & 0xff000000) >> 24) | \
@@ -439,8 +439,8 @@ inline float UpperLimit(float x) { return +3E38f; }
 inline float LowerLimit(float x) { return -3E38f; }
 inline double UpperLimit(double x) { return +1E308; }
 inline double LowerLimit(double x) { return -1E308; }
-inline SLONG UpperLimit(SLONG x) { return MAX_SLONG; }
-inline SLONG LowerLimit(SLONG x) { return MIN_SLONG; }
+inline long UpperLimit(long x) { return MAX_long; }
+inline long LowerLimit(long x) { return MIN_long; }
 inline SWORD UpperLimit(SWORD x) { return MAX_SWORD; }
 inline SWORD LowerLimit(SWORD x) { return MIN_SWORD; }
 
@@ -688,7 +688,7 @@ inline UWORD BYTESWAP16_unsigned(UWORD x)
 #endif
 }
 
-inline ULONG BYTESWAP32_unsigned(ULONG x)
+inline unsigned long BYTESWAP32_unsigned(unsigned long x)
 {
 #ifdef __GNUC__ // GCC and clang have a builtin that hopefully does the most efficient thing
   return __builtin_bswap32(x);
@@ -702,8 +702,8 @@ inline uint64_t BYTESWAP64_unsigned(uint64_t x)
 #ifdef __GNUC__ // GCC and clang have a builtin that hopefully does the most efficient thing
   return __builtin_bswap64(x);
 #else
-  ULONG l = BYTESWAP32_unsigned((ULONG)(val & 0xFFFFFFFF));
-  ULONG h = BYTESWAP32_unsigned((ULONG)((val >> 32) & 0xFFFFFFFF));
+  unsigned long l = BYTESWAP32_unsigned((unsigned long)(val & 0xFFFFFFFF));
+  unsigned long h = BYTESWAP32_unsigned((unsigned long)((val >> 32) & 0xFFFFFFFF));
   return (((uint64_t)l) << 32) | ((uint64_t)h);
 #endif
 }
@@ -738,7 +738,7 @@ inline uint64_t BYTESWAP64_unsigned(uint64_t x)
         val = *((SWORD *) &uval);
     }
 
-    static inline void BYTESWAP(ULONG &val)
+    static inline void BYTESWAP(unsigned long &val)
     {
         #if __POWERPC__
         __asm__ __volatile__ (
@@ -751,18 +751,18 @@ inline uint64_t BYTESWAP64_unsigned(uint64_t x)
         #endif
     }
 
-    static inline void BYTESWAP(SLONG &val)
+    static inline void BYTESWAP(long &val)
     {
         // !!! FIXME: reinterpret_cast ?
-        ULONG uval = *((ULONG *) &val);
+        unsigned long uval = *((unsigned long *) &val);
         BYTESWAP(uval);
-        val = *((SLONG *) &uval);
+        val = *((long *) &uval);
     }
 
     static inline void BYTESWAP(BOOL &val)
     {
         // !!! FIXME: reinterpret_cast ?
-        ULONG uval = *((ULONG *) &val);
+        unsigned long uval = *((unsigned long *) &val);
         BYTESWAP(uval);
         val = *((BOOL *) &uval);
     }
@@ -770,15 +770,15 @@ inline uint64_t BYTESWAP64_unsigned(uint64_t x)
     static inline void BYTESWAP(FLOAT &val)
     {
         // !!! FIXME: reinterpret_cast ?
-        ULONG uval = *((ULONG *) &val);
+        unsigned long uval = *((unsigned long *) &val);
         BYTESWAP(uval);
         val = *((FLOAT *) &uval);
     }
 
 	static inline void BYTESWAP(uint64_t &val)
 	{
-		ULONG l = (ULONG) (val & 0xFFFFFFFF);
-		ULONG h = (ULONG) ((val >> 32) & 0xFFFFFFFF);
+		unsigned long l = (unsigned long) (val & 0xFFFFFFFF);
+		unsigned long h = (unsigned long) ((val >> 32) & 0xFFFFFFFF);
         BYTESWAP(l);
         BYTESWAP(h);
 	    val = ( (((uint64_t) (l)) << 32) |

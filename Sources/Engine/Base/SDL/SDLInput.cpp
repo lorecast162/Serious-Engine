@@ -946,7 +946,7 @@ BOOL CInput::ScanJoystick(INDEX iJoy, BOOL bPreScan)
       continue;
     }
     // read its state
-    SLONG slAxisReading = SDL_JoystickGetAxis(stick, iAxis);
+    long slAxisReading = SDL_JoystickGetAxis(stick, iAxis);
 
     // convert from min..max to -1..+1
     FLOAT fAxisReading = FLOAT(slAxisReading-cai.cai_slMin)/(cai.cai_slMax-cai.cai_slMin)*2.0f-1.0f;

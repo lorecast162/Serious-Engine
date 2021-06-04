@@ -57,13 +57,13 @@ class CTextureEffectSource {
 public:
   class CTextureEffectGlobal *tes_ptegGlobalEffect;  // global effect of this effect source
   inline void Clear(void) {};
-  ULONG tes_ulEffectSourceType;                 // effect source type
+  unsigned long tes_ulEffectSourceType;                 // effect source type
   struct TextureEffectSourceProperties tes_tespEffectSourceProperties;
   CStaticArray<struct TextureEffectPixel> tes_atepPixels;
 
   // Initialize the texture effect source.
   void Initialize(
-   class CTextureEffectGlobal *ptegGlobalEffect,ULONG ulEffectSourceType,
+   class CTextureEffectGlobal *ptegGlobalEffect,unsigned long ulEffectSourceType,
    PIX pixU0, PIX pixV0, PIX pixU1, PIX pixV1);
   // Animate the texture effect source.
   void Animate(void);
@@ -72,15 +72,15 @@ public:
 class CTextureEffectGlobal {
 public:
   CTextureData *teg_ptdTexture;  // texture of this global effect
-  ULONG teg_ulEffectType;
+  unsigned long teg_ulEffectType;
   CUpdateable teg_updTexture;   // when the texture was last updated
   CDynamicArray<CTextureEffectSource> teg_atesEffectSources;
 
   // Constructor.
-  CTextureEffectGlobal(CTextureData *ptdTexture, ULONG ulGlobalEffect);
+  CTextureEffectGlobal(CTextureData *ptdTexture, unsigned long ulGlobalEffect);
 
   // Add a new effect source.
-  ENGINE_API void AddEffectSource( ULONG ulEffectSourceType, PIX pixU0, PIX pixV0,
+  ENGINE_API void AddEffectSource( unsigned long ulEffectSourceType, PIX pixU0, PIX pixV0,
                                                              PIX pixU1, PIX pixV1);
   // animate effect texture
   void Animate(void);

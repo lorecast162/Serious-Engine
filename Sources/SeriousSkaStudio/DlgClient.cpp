@@ -133,7 +133,7 @@ void CFloatControl::AddControl(CTString strLabelText, FLOAT *pFloat)
   iCustomControlID++;
 }
 
-void CFlagControl::AddControl(CTString strLabelText, INDEX iFlagIndex, ULONG ulFlags)
+void CFlagControl::AddControl(CTString strLabelText, INDEX iFlagIndex, unsigned long ulFlags)
 {
   CRect rcParent;
   DLGSHADER.GetWindowRect(rcParent);

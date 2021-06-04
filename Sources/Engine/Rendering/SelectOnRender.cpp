@@ -54,7 +54,7 @@ void InitSelectOnRender(PIX pixSizeI, PIX pixSizeJ)
     return;
   }
 
-  SLONG slMaxOffset = pixSizeI*pixSizeJ-1;
+  long slMaxOffset = pixSizeI*pixSizeJ-1;
 
   // allocate lasso buffer
   _pubLassoBuffer = (UBYTE*)AllocMemory(_pixSizeI*_pixSizeJ);
@@ -98,7 +98,7 @@ void InitSelectOnRender(PIX pixSizeI, PIX pixSizeJ)
     // for each row
     for(PIX pixJ = pixJ0; pixJ<pixJ1; pixJ++) {
       // get offset
-      SLONG slOffset = pixJ*_pixSizeI+PIX(xI);
+      long slOffset = pixJ*_pixSizeI+PIX(xI);
       // if offset is valid
       if (slOffset>=0 && slOffset<=slMaxOffset) {
         // invert the pixel in that row

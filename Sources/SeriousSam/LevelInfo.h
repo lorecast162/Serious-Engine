@@ -23,7 +23,7 @@ public:
   CListNode li_lnNode;
   CTFileName li_fnLevel;
   CTString li_strName;
-  ULONG li_ulSpawnFlags;
+  unsigned long li_ulSpawnFlags;
 
   CLevelInfo(void);
   CLevelInfo(const CLevelInfo &li);
@@ -31,7 +31,7 @@ public:
 };
 
 // find all levels that match given flags
-void FilterLevels(ULONG ulSpawnFlags);
+void FilterLevels(unsigned long ulSpawnFlags);
 
 // init level-info subsystem
 void LoadLevelsList(void);
@@ -40,7 +40,7 @@ void ClearLevelsList(void);
 // get level info for its filename
 CLevelInfo FindLevelByFileName(const CTFileName &fnm);
 // if level doesn't support given flags, find one that does
-void ValidateLevelForFlags(CTString &fnm, ULONG ulSpawnFlags);
+void ValidateLevelForFlags(CTString &fnm, unsigned long ulSpawnFlags);
 
 // init list of autoplay demos
 void LoadDemosList(void);

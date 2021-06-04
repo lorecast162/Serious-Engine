@@ -52,7 +52,7 @@ extern const FLOAT *pfCosTable;
 static GfxAPIType _eAPI;
 
 static BOOL  _bForceTranslucency;    // force translucency of opaque/transparent surfaces (for model fading)
-static ULONG _ulMipLayerFlags;
+static unsigned long _ulMipLayerFlags;
 
 
 // mip arrays
@@ -91,12 +91,12 @@ static FLOAT       *pooqMipShad;
 static UWORD       *puwSrfToMip;
 
 // misc
-static ULONG _ulColorMask = 0;
+static unsigned long _ulColorMask = 0;
 static INDEX _ctAllMipVx  = 0;
 static INDEX _ctAllSrfVx  = 0;
 static BOOL  _bFlatFill   = FALSE;
-static SLONG _slLR=0, _slLG=0, _slLB=0;
-static SLONG _slAR=0, _slAG=0, _slAB=0;
+static long _slLR=0, _slLG=0, _slLB=0;
+static long _slAR=0, _slAG=0, _slAB=0;
 
 #if (defined __GNUC__)
 static const __int64 mmRounder = 0x007F007F007F007Fll;
@@ -430,7 +430,7 @@ static void PrepareModelMipForRendering( CModelData &md, INDEX iMip)
   INDEX ctMdlVx = md.md_VerticesCt;
   INDEX ctMipVx = 0;
   INDEX iMdlVx;
-  ULONG ulVxMask = 1UL<<iMip;
+  unsigned long ulVxMask = 1UL<<iMip;
   for( iMdlVx=0; iMdlVx<ctMdlVx; iMdlVx++) {
     if( md.md_VertexMipMask[iMdlVx] & ulVxMask) ctMipVx++;
   }
@@ -484,7 +484,7 @@ static void PrepareModelMipForRendering( CModelData &md, INDEX iMip)
       // just clear all its data
       ms.ms_ctSrfVx = 0;
       ms.ms_ctSrfEl = 0;
-      ms.ms_iSrfVx0 = MAX_SLONG;  // set to invalid to catch eventual bugs
+      ms.ms_iSrfVx0 = MAX_long;  // set to invalid to catch eventual bugs
       // proceed to next surface
       continue;
     }
@@ -827,7 +827,7 @@ static void SetRenderingParameters( SurfaceTranslucencyType stt)
 
 
 // render one side of a surface (return TRUE if any type of translucent surface has been rendered)
-static void RenderOneSide( CRenderModel &rm, BOOL bBackSide, ULONG ulLayerFlags)
+static void RenderOneSide( CRenderModel &rm, BOOL bBackSide, unsigned long ulLayerFlags)
 {
   _pfModelProfile.StartTimer( CModelProfile::PTI_VIEW_ONESIDE);
   _pfModelProfile.IncrementTimerAveragingCounter( CModelProfile::PTI_VIEW_ONESIDE);
@@ -851,7 +851,7 @@ static void RenderOneSide( CRenderModel &rm, BOOL bBackSide, ULONG ulLayerFlags)
   {FOREACHINSTATICARRAY( mmi.mmpi_MappingSurfaces, MappingSurface, itms)
   {
     const MappingSurface &ms = *itms;
-    const ULONG ulFlags = ms.ms_ulRenderingFlags;
+    const unsigned long ulFlags = ms.ms_ulRenderingFlags;
     // end rendering if surface is invisible or empty - these are the last surfaces in surface list
     if( (ulFlags&SRF_INVISIBLE) || ms.ms_ctSrfVx==0) break;
     // skip surface if ... 
@@ -923,7 +923,7 @@ static void RenderColors( CRenderModel &rm)
     }
     // set surface color
     COLOR srfCol; 
-    extern INDEX GetBit( ULONG ulSource);
+    extern INDEX GetBit( unsigned long ulSource);
     if( rm.rm_rtRenderType&RT_ON_COLORS) {
       srfCol = PaletteColorValues[GetBit(ms.ms_ulOnColor)]|CT_OPAQUE;
     } else if( rm.rm_rtRenderType&RT_OFF_COLORS) {
@@ -1074,8 +1074,8 @@ static void UnpackFrame( CRenderModel &rm, BOOL bKeepNormals)
     {
 #if (defined __MSVC_INLINE__)
       // for each vertex in mip
-      const SLONG fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
-      SLONG slTmp1, slTmp2, slTmp3;
+      const long fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
+      long slTmp1, slTmp2, slTmp3;
       __asm {
         mov     edi,D [pvtxMipBase]
         mov     ebx,D [pswMipCol]
@@ -1190,8 +1190,8 @@ vtxNext16:
     {
 #if (defined __MSVC_INLINE__)
       // for each vertex in mip
-      const SLONG fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
-      SLONG slTmp1, slTmp2, slTmp3;
+      const long fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
+      long slTmp1, slTmp2, slTmp3;
       __asm {
         mov     edi,D [pvtxMipBase]
         mov     ebx,D [pswMipCol]
@@ -1359,8 +1359,8 @@ vtxNext16L:
     {
 #if (defined __MSVC_INLINE__)
       // for each vertex in mip
-      const SLONG fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
-      SLONG slTmp1, slTmp2, slTmp3;
+      const long fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
+      long slTmp1, slTmp2, slTmp3;
       __asm {
         mov     edi,D [pvtxMipBase]
         mov     ebx,D [pswMipCol]
@@ -1457,8 +1457,8 @@ vtxNext8:
     else
     {
 #if (defined __MSVC_INLINE__)
-      const SLONG fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
-      SLONG slTmp1, slTmp2, slTmp3;
+      const long fixLerpRatio = FloatToInt(fLerpRatio*256.0f); // fix 8:8
+      long slTmp1, slTmp2, slTmp3;
       // re-adjust stretching factors because of fixint lerping (divide by 256)
       fStretchX*=0.00390625f;  fOffsetX*=256.0f;  
       fStretchY*=0.00390625f;  fOffsetY*=256.0f;
@@ -1692,7 +1692,7 @@ colEnd:
     // generate colors from shades
     for( INDEX iMipVx=0; iMipVx<_ctAllMipVx; iMipVx++) {
       GFXColor &col = pcolMipBase[iMipVx];
-      const SLONG slShade = Clamp( (SLONG)pswMipCol[iMipVx], 0, 255);
+      const long slShade = Clamp( (long)pswMipCol[iMipVx], 0, 255);
       col.ub.r = pubClipByte[_slAR + ((_slLR*slShade)>>8)];
       col.ub.g = pubClipByte[_slAG + ((_slLG*slShade)>>8)];
       col.ub.b = pubClipByte[_slAB + ((_slLB*slShade)>>8)];
@@ -2276,7 +2276,7 @@ diffColLoop:
   // if this model has detail mapping
   extern INDEX mdl_bRenderDetail;
   CTextureData *ptdBump = (CTextureData*)mo_toBump.GetData();
-  const ULONG ulTransAlpha = (rm.rm_colBlend&CT_AMASK)>>CT_ASHIFT;
+  const unsigned long ulTransAlpha = (rm.rm_colBlend&CT_AMASK)>>CT_ASHIFT;
   if( (_ulMipLayerFlags&(SRF_DETAIL|SRF_BUMP)) && mdl_bRenderDetail && ptdBump!=NULL && ulTransAlpha>192 && bAllLayers)
   {
     _pfModelProfile.StartTimer( CModelProfile::PTI_VIEW_INIT_BUMP_SURF);
@@ -2697,7 +2697,7 @@ specMipLoop:
         const INDEX iMipVx = puwSrfToMip[iSrfVx];
         // set specular texture and color
         ptexSrfBase[iSrfVx] = ptexMipBase[iMipVx];
-        const SLONG slShade = pcolMipBase[iMipVx].ub.a;
+        const long slShade = pcolMipBase[iMipVx].ub.a;
         pcolSrfBase[iSrfVx].ul.abgr =  (((colSrfSpec.ub.r)*slShade)>>8)
                                  |  (((colSrfSpec.ub.g)*slShade)&0x0000FF00)
                                  | ((((colSrfSpec.ub.b)*slShade)<<8)&0x00FF0000);
@@ -3244,7 +3244,7 @@ void CModelObject::AddSimpleShadow_View( CRenderModel &rm, const FLOAT fIntensit
 
   // prepare color
   ASSERT( fIntensity>=0 && fIntensity<=1);
-  ULONG ulAAAA = NormFloatToByte(fIntensity);
+  unsigned long ulAAAA = NormFloatToByte(fIntensity);
   ulAAAA |= (ulAAAA<<8) | (ulAAAA<<16); // alpha isn't needed
 
   // add to vertex arrays

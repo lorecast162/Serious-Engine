@@ -75,7 +75,7 @@ public:
   virtual void RemReference_internal(void);
 
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 
   // reference counting functions
   void AddReference(void);
@@ -125,7 +125,7 @@ class CAnimObject : public CChangeable {
 public:
   TIME ao_tmAnimStart;      // time when current anim was started
   INDEX ao_iCurrentAnim;	  // index of active animation
-  ULONG ao_ulFlags;         // flags
+  unsigned long ao_ulFlags;         // flags
   INDEX ao_iLastAnim;       // index of last animation (for smooth transition)
 
   /* Calculate frame that coresponds to given time. */
@@ -198,7 +198,7 @@ public:
   /* Start new animation -- obsolete. */
 	ENGINE_API void StartAnim(INDEX iNew);
   /* Start playing an animation. */
-	ENGINE_API void PlayAnim(INDEX iNew, ULONG ulFlags);
+	ENGINE_API void PlayAnim(INDEX iNew, unsigned long ulFlags);
   /* Seamlessly continue playing another animation from same point. */
 	ENGINE_API void SwitchToAnim(INDEX iNew);
   /* Set new animation but doesn't starts it. */

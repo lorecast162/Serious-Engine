@@ -39,7 +39,7 @@ void CRenderer::AddAddListToActiveList(INDEX iScanLine)
   {
     LISTITER(CAddEdge, ade_lnInAdd) itadeAdd(lhAdd);
     FIX16_16 xLastI;
-    xLastI.slHolder = MIN_SLONG;
+    xLastI.slHolder = MIN_long;
     while(!itadeAdd.IsPastEnd()) {
       CAddEdge &adeAdd = *itadeAdd;
       ASSERT(adeAdd.ade_xI==adeAdd.ade_psedEdge->sed_xI);
@@ -527,7 +527,7 @@ BOOL CRenderer::AddPolygonToSurfaceStack(CScreenPolygon &spo)
       itspo->spo_pgOoK.pg_fDOverDI*fScanI -
       itspo->spo_pgOoK.pg_fDOverDJ*fScanJ;
 
-    if (((SLONG &)fDelta) < 0) {
+    if (((long &)fDelta) < 0) {
       do {
         // the polygon in stack must not be far sentinel
         ASSERT(&*itspo != &re_spoFarSentinel);
@@ -537,7 +537,7 @@ BOOL CRenderer::AddPolygonToSurfaceStack(CScreenPolygon &spo)
           itspo->spo_pgOoK.pg_f00 -
           itspo->spo_pgOoK.pg_fDOverDI*fScanI -
           itspo->spo_pgOoK.pg_fDOverDJ*fScanJ;
-      } while (((SLONG &)fDelta) < 0);
+      } while (((long &)fDelta) < 0);
     }
   }
 

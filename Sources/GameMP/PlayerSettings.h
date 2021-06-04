@@ -40,7 +40,7 @@ public:
 #define PSF_COMPSINGLECLICK (1L<<4)   // invoke computer with single click, not double clicks
 #define PSF_SHARPTURNING    (1L<<5)   // use prescanning to eliminate mouse lag
 #define PSF_NOBOBBING       (1L<<6)   // view bobbing on/off (for people with motion sickness problems)
-  ULONG ps_ulFlags;   // various flags
+  unsigned long ps_ulFlags;   // various flags
 
   // get filename for model
   CTFileName GetModelFilename(void) const

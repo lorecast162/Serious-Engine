@@ -139,7 +139,7 @@ public:
   /* Project 3D object point into 3D view space, before clipping. */
   virtual void PreClip(const FLOAT3D &v3dObjectPoint, FLOAT3D &v3dTransformedPoint) const = 0;
   /* Clip a line. */
-  virtual ULONG ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const = 0;
+  virtual unsigned long ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const = 0;
   /* Project 3D object point into 3D view space, after clipping. */
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT3D &v3dViewPoint) const = 0;
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT fTransformedR,
@@ -211,7 +211,7 @@ public:
   /* Project 3D object point into 3D view space, before clipping. */
   virtual void PreClip(const FLOAT3D &v3dObjectPoint, FLOAT3D &v3dTransformedPoint) const;
   /* Clip a line. */
-  virtual ULONG ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
+  virtual unsigned long ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
   /* Project 3D object point into 3D view space, after clipping. */
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT3D &v3dViewPoint) const;
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT fTransformedR,
@@ -272,7 +272,7 @@ public:
   /* Project 3D object point into 3D view space, before clipping. */
   virtual void PreClip(const FLOAT3D &v3dObjectPoint, FLOAT3D &v3dTransformedPoint) const;
   /* Clip a line. */
-  virtual ULONG ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
+  virtual unsigned long ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
   /* Project 3D object point into 3D view space, after clipping. */
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT3D &v3dViewPoint) const;
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT fTransformedR,
@@ -330,7 +330,7 @@ public:
   /* Project 3D object point into 3D view space, before clipping. */
   virtual void PreClip(const FLOAT3D &v3dObjectPoint, FLOAT3D &v3dTransformedPoint) const;
   /* Clip a line. */
-  virtual ULONG ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
+  virtual unsigned long ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
   /* Project 3D object point into 3D view space, after clipping. */
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT3D &v3dViewPoint) const;
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT fTransformedR,
@@ -389,7 +389,7 @@ public:
   /* Project 3D object point into 3D view space, before clipping. */
   virtual void PreClip(const FLOAT3D &v3dObjectPoint, FLOAT3D &v3dTransformedPoint) const;
   /* Clip a line. */
-  virtual ULONG ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
+  virtual unsigned long ClipLine(FLOAT3D &v3dPoint0, FLOAT3D &v3dPoint1) const;
   /* Project 3D object point into 3D view space, after clipping. */
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT3D &v3dViewPoint) const;
   virtual void PostClip(const FLOAT3D &v3dTransformedPoint, FLOAT fTransformedR,

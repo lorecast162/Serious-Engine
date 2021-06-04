@@ -69,7 +69,7 @@ public:
   // Release array holder
   void Clear(void);
   // Count used memory
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 
 public:
   CTerrain *ah_ptrTerrain; // Terrain that owns this array holder

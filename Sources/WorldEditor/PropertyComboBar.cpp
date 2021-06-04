@@ -188,8 +188,8 @@ void CPropertyComboBar::DoDataExchange(CDataExchange* pDX)
     if( ppidProperty != NULL)
     {
       // reset selection entities spawn on and off masks
-      ULONG ulSpawnOn = MAX_ULONG;
-      ULONG ulSpawnOff = MAX_ULONG;
+      unsigned long ulSpawnOn = MAX_unsigned long;
+      unsigned long ulSpawnOff = MAX_unsigned long;
       // for each of the selected entities
       FOREACHINDYNAMICCONTAINER(pDoc->m_selEntitySelection, CEntity, iten)
       {
@@ -286,7 +286,7 @@ void CPropertyComboBar::DoDataExchange(CDataExchange* pDX)
             // discard old entity settings
             iten->End();
             // set new flag value
-            m_ctrlEditFlags.ApplyChange( ENTITYPROPERTY( &*iten, penpProperty->ep_slOffset, ULONG));
+            m_ctrlEditFlags.ApplyChange( ENTITYPROPERTY( &*iten, penpProperty->ep_slOffset, unsigned long));
             // apply new entity settings
             iten->Initialize();
           }
@@ -532,8 +532,8 @@ void CPropertyComboBar::DoDataExchange(CDataExchange* pDX)
       case CEntityProperty::EPT_SPAWNFLAGS:
         {
           // obtain spawn on and off masks
-          ULONG ulBitsToClear = MAX_ULONG;
-          ULONG ulBitsToSet = 0;
+          unsigned long ulBitsToClear = MAX_unsigned long;
+          unsigned long ulBitsToSet = 0;
 
 #define GET_SPAWN_MASKS( flag, ctrl) \
           if( ctrl.GetCheck() == 0) ulBitsToClear &= ~(flag); \
@@ -953,12 +953,12 @@ void CPropertyComboBar::ArrangeControls()
           iFlags = SW_SHOW;
           CEntity *pen = pDoc->m_selEntitySelection.GetFirstInSelection();
           CEntityProperty *penpProperty = pen->PropertyForName( ppidProperty->pid_strName);
-          m_ctrlEditFlags.SetFlags( ENTITYPROPERTY( pen, penpProperty->ep_slOffset, ULONG));
+          m_ctrlEditFlags.SetFlags( ENTITYPROPERTY( pen, penpProperty->ep_slOffset, unsigned long));
 
           // obtain enum property description object
           CEntityPropertyEnumType *epEnum = penpProperty->ep_pepetEnumType;
           // create mask of editable bits
-          ULONG ulEditable=0;
+          unsigned long ulEditable=0;
           // for all enumerated members
           for( INDEX iEnum = 0; iEnum<epEnum->epet_ctValues; iEnum++)
           {
@@ -977,7 +977,7 @@ void CPropertyComboBar::ArrangeControls()
             // obtain property ptr
             CEntityProperty *penpProperty = iten->PropertyForName( ppidProperty->pid_strName);
             // it is, get string as one that others will compare with
-            m_ctrlEditFlags.MergeFlags( ENTITYPROPERTY( &*iten, penpProperty->ep_slOffset, ULONG));
+            m_ctrlEditFlags.MergeFlags( ENTITYPROPERTY( &*iten, penpProperty->ep_slOffset, unsigned long));
           }
           break;
         }
@@ -1127,7 +1127,7 @@ void CPropertyComboBar::ArrangeControls()
                   iAddedAs = m_EditEnumComboBox.AddString( L"Unnamed");
                 }
                 // set entity ptr as item's data
-                m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) &*iten);
+                m_EditEnumComboBox.SetItemData( iAddedAs, (unsigned long) &*iten);
               }
             }}
 
@@ -1213,7 +1213,7 @@ void CPropertyComboBar::ArrangeControls()
                 // add animation to combo
                 INDEX iAddedAs = m_EditEnumComboBox.AddString( CString(aiInfo.ai_AnimName));
                 // set animation number as item's data
-                m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) iAnimation);
+                m_EditEnumComboBox.SetItemData( iAddedAs, (unsigned long) iAnimation);
               }
             }
 
@@ -1282,7 +1282,7 @@ void CPropertyComboBar::ArrangeControls()
               // add illumination type to combo
               INDEX iAddedAs = m_EditEnumComboBox.AddString( CString(strIlluminationName));
               // set illumination type number as item's data
-              m_EditEnumComboBox.SetItemData( iAddedAs, (ULONG) iIllumination);
+              m_EditEnumComboBox.SetItemData( iAddedAs, (unsigned long) iIllumination);
             }
 
             // lock selection's dynamic container

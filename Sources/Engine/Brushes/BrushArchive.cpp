@@ -259,8 +259,8 @@ void CBrushArchive::ReadPortalSectorLinks_t( CTStream &strm)  // throw char *
   strm>>iVersion;
   ASSERT(iVersion==1);
   // read chunk size
-  SLONG slChunkSizePos = strm.GetPos_t();
-  SLONG slChunkSize;
+  long slChunkSizePos = strm.GetPos_t();
+  long slChunkSize;
   strm>>slChunkSize;
 
   // repeat
@@ -325,8 +325,8 @@ void CBrushArchive::ReadEntitySectorLinks_t( CTStream &strm)  // throw char *
   strm>>iVersion;
   ASSERT(iVersion==1);
   // read chunk size
-  SLONG slChunkSizePos = strm.GetPos_t();
-  SLONG slChunkSize;
+  long slChunkSizePos = strm.GetPos_t();
+  long slChunkSize;
   strm>>slChunkSize;
 
   // repeat
@@ -375,8 +375,8 @@ void CBrushArchive::WritePortalSectorLinks_t( CTStream &strm) // throw char *
   strm.WriteID_t("PSLS");   // portal-sector links
   strm<<INDEX(1);
   // leave room for chunk size
-  SLONG slChunkSizePos = strm.GetPos_t();
-  strm<<SLONG(0);
+  long slChunkSizePos = strm.GetPos_t();
+  strm<<long(0);
 
   // for each sector
   {FOREACHINDYNAMICARRAY(ba_abrBrushes, CBrush3D, itbr) {
@@ -404,9 +404,9 @@ void CBrushArchive::WritePortalSectorLinks_t( CTStream &strm) // throw char *
   strm<<INDEX(-1);
 
   // write back the chunk size
-  SLONG slEndPos = strm.GetPos_t();
+  long slEndPos = strm.GetPos_t();
   strm.SetPos_t(slChunkSizePos);
-  strm<<SLONG(slEndPos-slChunkSizePos-sizeof(INDEX));
+  strm<<long(slEndPos-slChunkSizePos-sizeof(INDEX));
   strm.SetPos_t(slEndPos);
 
   // write end id for checking
@@ -422,8 +422,8 @@ void CBrushArchive::WriteEntitySectorLinks_t( CTStream &strm) // throw char *
   strm.WriteID_t("ESL2");   // entity-sector links v2
   strm<<INDEX(1);
   // leave room for chunk size
-  SLONG slChunkSizePos = strm.GetPos_t();
-  strm<<SLONG(0);
+  long slChunkSizePos = strm.GetPos_t();
+  strm<<long(0);
 
   // for each sector
   {FOREACHINDYNAMICARRAY(ba_abrBrushes, CBrush3D, itbr) {
@@ -451,9 +451,9 @@ void CBrushArchive::WriteEntitySectorLinks_t( CTStream &strm) // throw char *
   strm<<INDEX(-1);
 
   // write back the chunk size
-  SLONG slEndPos = strm.GetPos_t();
+  long slEndPos = strm.GetPos_t();
   strm.SetPos_t(slChunkSizePos);
-  strm<<SLONG(slEndPos-slChunkSizePos-sizeof(INDEX));
+  strm<<long(slEndPos-slChunkSizePos-sizeof(INDEX));
   strm.SetPos_t(slEndPos);
   // write end id for checking
   strm.WriteID_t("ESLE");   // entity-sector links end

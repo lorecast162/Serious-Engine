@@ -29,7 +29,7 @@ class ENGINE_API CSoundData : public CSerial {
 public:
   // Sound Mode Aware class (notify class when sound mode change)
   CListNode   sd_Node;        // for linking in list
-  ULONG sd_ulFlags;           // flags
+  unsigned long sd_ulFlags;           // flags
 
 //private:
 public:
@@ -45,7 +45,7 @@ public:
   // Sound Buffer
   WAVEFORMATEX sd_wfeFormat;     // primary sound buffer format
   SWORD *sd_pswBuffer;           // pointer on buffer
-  SLONG  sd_slBufferSampleSize;  // buffer sample size
+  long  sd_slBufferSampleSize;  // buffer sample size
   double sd_dSecondsLength;      // sound length in seconds
 
   // free Buffer (and all linked Objects)
@@ -75,7 +75,7 @@ public:
   // check if this kind of objects is auto-freed
   virtual BOOL IsAutoFreed(void);
   // get amount of memory used by this object
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 };
 
 

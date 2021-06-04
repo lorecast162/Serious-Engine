@@ -188,7 +188,7 @@ void CTimer_TimerFunc_internal(void)
 // !!! FIXME : rcg10192001 Abstract this!
 #if (!defined SINGLE_THREADED)
 #ifdef PLATFORM_WIN32
-void __stdcall CTimer_TimerFunc(UINT uID, UINT uMsg, ULONG dwUser, ULONG dw1, ULONG dw2)
+void __stdcall CTimer_TimerFunc(UINT uID, UINT uMsg, unsigned long dwUser, unsigned long dw1, unsigned long dw2)
 {
   // access to the list of handlers must be locked
   CTSingleLock slHooks(&_pTimer->tm_csHooks, TRUE);
@@ -278,9 +278,9 @@ static __int64 GetCPUSpeedHz(void)
   }
 
   // keep readout speed and read speed from registry
-  const SLONG slSpeedRead = _aiTries[0];
-  SLONG slSpeedReg = 0;
-  BOOL bFoundInReg = REG_GetLong("HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0\\~MHz", (ULONG&)slSpeedReg);
+  const long slSpeedRead = _aiTries[0];
+  long slSpeedReg = 0;
+  BOOL bFoundInReg = REG_GetLong("HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0\\~MHz", (unsigned long&)slSpeedReg);
 
   // if not found in registry
   if( !bFoundInReg) {
@@ -419,7 +419,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
    #ifdef PLATFORM_WIN32
 
     tm_TimerID = timeSetEvent(
-      ULONG(TickQuantum*1000.0f),	  // period value [ms]
+      unsigned long(TickQuantum*1000.0f),	  // period value [ms]
       0,	                          // resolution (0==max. possible)
       &CTimer_TimerFunc,	          // callback
       0,                            // user
@@ -431,7 +431,7 @@ CTimer::CTimer(BOOL bInterrupt /*=TRUE*/)
    #else
 
     if (SDL_Init(SDL_INIT_TIMER) == -1) FatalError(TRANS("Cannot initialize multimedia timer!"));
-    tm_TimerID = SDL_AddTimer(ULONG(TickQuantum*1000.0f), CTimer_TimerFunc_SDL, NULL);
+    tm_TimerID = SDL_AddTimer(unsigned long(TickQuantum*1000.0f), CTimer_TimerFunc_SDL, NULL);
     if( tm_TimerID==NULL) FatalError(TRANS("Cannot initialize multimedia timer!"));
    #endif
 
@@ -464,7 +464,7 @@ CTimer::~CTimer(void)
   // destroy timer
   if (tm_bInterrupt) {
     ASSERT(tm_TimerID);
-    ULONG rval = timeKillEvent(tm_TimerID);
+    unsigned long rval = timeKillEvent(tm_TimerID);
     ASSERT(rval == TIMERR_NOERROR);
   }
   // check that all handlers have been removed

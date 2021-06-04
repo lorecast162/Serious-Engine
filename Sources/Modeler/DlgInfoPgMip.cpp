@@ -171,7 +171,7 @@ BOOL CDlgInfoPgMip::OnIdle(LONG lCount)
   return TRUE;
 }
 
-void CDlgInfoPgMip::ToggleMipFlag( ULONG ulFlag)
+void CDlgInfoPgMip::ToggleMipFlag( unsigned long ulFlag)
 {
   CModelerView *pModelerView = CModelerView::GetActiveMappingNormalView();
   ASSERT(pModelerView != NULL);

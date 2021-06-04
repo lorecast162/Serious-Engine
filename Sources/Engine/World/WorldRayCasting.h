@@ -37,7 +37,7 @@ public:
   };
 public:
   BOOL cr_bAllowOverHit;                // set if the ray can hit behind its target
-  ULONG cr_ulPassablePolygons;          // flags mask for pass-through testing
+  unsigned long cr_ulPassablePolygons;          // flags mask for pass-through testing
   CBrushPolygon *cr_pbpoIgnore;         // polygon that is origin of the continuted ray (is never hit by the ray)
   CEntity *cr_penIgnore;                // entity that is origin of the continuted ray (is never hit by the ray)
 

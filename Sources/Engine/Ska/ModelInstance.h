@@ -115,7 +115,7 @@ struct PlayedAnim
   FLOAT pa_fStartTime; // Time when this animation was started
   FLOAT pa_fSpeedMul;  // Speed multiplier
   INDEX pa_iAnimID;    // Animation id
-  ULONG pa_ulFlags;    // Animation flags
+  unsigned long pa_ulFlags;    // Animation flags
   FLOAT pa_Strength;   // Animation strength
   INDEX pa_GroupID;    // Group ID
 };
@@ -188,7 +188,7 @@ public:
   const INDEX &GetID();
 
   // Add animation to last anim queue
-  void AddAnimation(INDEX iAnimID, ULONG ulFlags, FLOAT fStrength, INDEX iGroupID, FLOAT fSpeedMul = 1.0f);
+  void AddAnimation(INDEX iAnimID, unsigned long ulFlags, FLOAT fStrength, INDEX iGroupID, FLOAT fSpeedMul = 1.0f);
   // Remove all animations before last animation that has fully faded in
   void RemovePassedAnimsFromQueue(void);
   // Remove animation from anim queue
@@ -208,7 +208,7 @@ public:
   // Check if given animation is currently playing
   BOOL IsAnimationPlaying(INDEX iAnimID);
   // Add flags to animation playing in anim queue
-  BOOL AddFlagsToPlayingAnim(INDEX iAnimID, ULONG ulFlags);
+  BOOL AddFlagsToPlayingAnim(INDEX iAnimID, unsigned long ulFlags);
 
   // Model color
   COLOR &GetModelColor(void);
@@ -243,7 +243,7 @@ public:
   // Flag for parser to remember source file names (used only in ska studio)
   static void EnableSrcRememberFN(BOOL bEnable);
   // Count used memory
-  SLONG GetUsedMemory(void);
+  long GetUsedMemory(void);
 
 public:
   CSkeleton *mi_psklSkeleton;                     // pointer to skeleton object

@@ -151,10 +151,10 @@ public:
   void UpdateTopMap(INDEX iTileIndex, Rect *prcDest = NULL);
 
   // Terrain flags handling
-  inline ULONG &GetFlags(void)         { return tr_ulTerrainFlags; }
-  inline void SetFlags(ULONG ulFlags)  { tr_ulTerrainFlags  = ulFlags; }
-  inline void AddFlag(ULONG ulFlag)    { tr_ulTerrainFlags |= ulFlag; }
-  inline void RemoveFlag(ULONG ulFlag) { tr_ulTerrainFlags &= ~ulFlag; }
+  inline unsigned long &GetFlags(void)         { return tr_ulTerrainFlags; }
+  inline void SetFlags(unsigned long ulFlags)  { tr_ulTerrainFlags  = ulFlags; }
+  inline void AddFlag(unsigned long ulFlag)    { tr_ulTerrainFlags |= ulFlag; }
+  inline void RemoveFlag(unsigned long ulFlag) { tr_ulTerrainFlags &= ~ulFlag; }
 
   // get first quad tree node bounding box (all tiles box)
   void GetAllTerrainBBox(FLOATaabbox3D &bbox);
@@ -269,7 +269,7 @@ public:
 
   INDEX   tr_ctQuadsInTileRow;    // Count of quads in one row in tile
   INDEX   tr_ctVerticesInTileRow; // Count of vertices in one row in tile
-  ULONG   tr_ulTerrainFlags;      // Terrain flags
+  unsigned long   tr_ulTerrainFlags;      // Terrain flags
   FLOAT3D tr_vTerrainSize;        // Terrain size in metars
 
   INDEX   tr_iSelectedLayer;      // Selected layer in we

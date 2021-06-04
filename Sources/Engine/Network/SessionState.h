@@ -48,7 +48,7 @@ class CSyncCheck {
 public:
   TIME sc_tmTick;       // time of snapshot
   INDEX sc_iSequence;   // sequence number last processed before this checksum
-  ULONG sc_ulCRC;       // checksum
+  unsigned long sc_ulCRC;       // checksum
   INDEX sc_iLevel;  // checksum of level filename
   CSyncCheck(void) { sc_tmTick = -1.0f; sc_iSequence = -1; sc_ulCRC = 0; sc_iLevel = 0; }
   void Clear(void) { sc_tmTick = -1.0f; sc_iSequence = -1; sc_ulCRC = 0; sc_iLevel = 0; }
@@ -58,9 +58,9 @@ public:
 class CPredictedEvent {
 public:
   TIME pe_tmTick;
-  ULONG pe_ulEntityID;
-  ULONG pe_ulTypeID;
-  ULONG pe_ulEventID;
+  unsigned long pe_ulEntityID;
+  unsigned long pe_ulTypeID;
+  unsigned long pe_ulEventID;
 
   CPredictedEvent(void);
   void Clear(void) {};
@@ -101,8 +101,8 @@ public:
   CTimerValue ses_tvMessageReceived;  // exact moment when the session state was started
 
   TIME ses_tmLastDemoSequence;    // synchronization timer for demo playing
-  ULONG ses_ulRandomSeed;         // seed for pseudo-random number generation
-  ULONG ses_ulSpawnFlags;         // spawn flags for current game
+  unsigned long ses_ulRandomSeed;         // seed for pseudo-random number generation
+  unsigned long ses_ulSpawnFlags;         // spawn flags for current game
   TIME ses_tmSyncCheckFrequency;  // frequency of sync-checking
   BOOL ses_iExtensiveSyncCheck;   // set if syncheck should be extensive - for debugging purposes
 
@@ -138,7 +138,7 @@ public:
   BOOL IsDisconnected(void);
 
   // print an incoming chat message to console
-  void PrintChatMessage(ULONG ulFrom, const CTString &strFrom, const CTString &strMessage);
+  void PrintChatMessage(unsigned long ulFrom, const CTString &strFrom, const CTString &strMessage);
 public:
   /* Constructor. */
   CSessionState(void);
@@ -146,7 +146,7 @@ public:
   ~CSessionState(void);
 
   // get a pseudo-random number (safe for network gaming)
-  ULONG Rnd(void);
+  unsigned long Rnd(void);
 
   /* Stop the session state. */
   void Stop(void);
@@ -183,12 +183,12 @@ public:
   const FLOAT3D &GetPlayerPredictorPosition(INDEX iPlayer);
 
   // check an event for prediction, returns true if already predicted
-  BOOL CheckEventPrediction(CEntity *pen, ULONG ulTypeID, ULONG ulEventID);
+  BOOL CheckEventPrediction(CEntity *pen, unsigned long ulTypeID, unsigned long ulEventID);
 
   // make synchronization test message and send it to server (if client), or add to buffer (if server)
   void MakeSynchronisationCheck(void);
   // create a checksum value for sync-check
-  void ChecksumForSync(ULONG &ulCRC, INDEX iExtensiveSyncCheck);
+  void ChecksumForSync(unsigned long &ulCRC, INDEX iExtensiveSyncCheck);
   // dump sync data to text file
   void DumpSync_t(CTStream &strm, INDEX iExtensiveSyncCheck);  // throw char *
 

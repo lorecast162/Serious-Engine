@@ -38,7 +38,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 
 // we need array for Direct3D mipmaps that are lower than N*1 or 1*N
-static ULONG _aulLastMipmaps[(INDEX)(1024*1.334)];
+static unsigned long _aulLastMipmaps[(INDEX)(1024*1.334)];
 static CTexParams *_tpCurrent;
 static _D3DTEXTUREFILTERTYPE _eLastMipFilter;
 
@@ -47,7 +47,7 @@ extern INDEX GFX_iActiveTexUnit;
 
 // conversion from OpenGL's RGBA color format to one of D3D color formats
 extern void SetInternalFormat_D3D( D3DFORMAT d3dFormat);
-extern void UploadMipmap_D3D( ULONG *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip);
+extern void UploadMipmap_D3D( unsigned long *pulSrc, LPDIRECT3DTEXTURE8 ptexDst, PIX pixWidth, PIX pixHeight, INDEX iMip);
 
 
 // unpacks texture filtering from one INDEX to two GLenums (and eventually re-adjust input INDEX)
@@ -93,7 +93,7 @@ extern void MimicTexParams_D3D( CTexParams &tpLocal)
     if( tpLocal.tp_bSingleMipmap) {
 #ifndef NDEBUG
       // paranoid!
-      hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_MIPFILTER, (ULONG*)&eMipFilter);
+      hr = _pGfx->gl_pd3dDevice->GetTextureStageState( GFX_iActiveTexUnit, D3DTSS_MIPFILTER, (unsigned long*)&eMipFilter);
       D3D_CHECKERROR(hr);
       ASSERT( eMipFilter==D3DTEXF_POINT || eMipFilter==D3DTEXF_LINEAR);
 #endif // set it
@@ -133,7 +133,7 @@ extern void MimicTexParams_D3D( CTexParams &tpLocal)
 
 // upload context for current texture to accelerator's memory
 // (returns format in which texture was really uploaded)
-extern void UploadTexture_D3D( LPDIRECT3DTEXTURE8 *ppd3dTexture, ULONG *pulTexture,
+extern void UploadTexture_D3D( LPDIRECT3DTEXTURE8 *ppd3dTexture, unsigned long *pulTexture,
                                PIX pixSizeU, PIX pixSizeV, D3DFORMAT eInternalFormat, BOOL bDiscard)
 {
   // safeties
@@ -178,8 +178,8 @@ extern void UploadTexture_D3D( LPDIRECT3DTEXTURE8 *ppd3dTexture, ULONG *pulTextu
   { // prepare variables
     PIX pixSize = Max(pixSizeU,pixSizeV);
     ASSERT( pixSize<=2048);
-    ULONG *pulSrc = pulTexture+pixOffset-pixSize*2;
-    ULONG *pulDst = _aulLastMipmaps;
+    unsigned long *pulSrc = pulTexture+pixOffset-pixSize*2;
+    unsigned long *pulDst = _aulLastMipmaps;
     // loop thru mipmaps
     while( pixSizeU>0 || pixSizeV>0)
     { // make next mipmap

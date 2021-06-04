@@ -316,7 +316,7 @@ BOOL CDS_SetMode( PIX pixSizeI, PIX pixSizeJ, enum DisplayDepth dd)
     devmode.dmDisplayFrequency = gap_iRefreshRate;
   }
   // determine bits per pixel to try to set
-  SLONG slBPP2 = 0;
+  long slBPP2 = 0;
   switch(dd) {
   case DD_16BIT:
     devmode.dmBitsPerPel = 16;

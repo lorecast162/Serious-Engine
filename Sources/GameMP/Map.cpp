@@ -555,7 +555,7 @@ void ReleaseMapData(void)
   _toMapBcgRUFE.SetData(NULL);
 }
 
-void RenderMap( CDrawPort *pdp, ULONG ulLevelMask, CProgressHookInfo *pphi)
+void RenderMap( CDrawPort *pdp, unsigned long ulLevelMask, CProgressHookInfo *pphi)
 {
   if( !ObtainMapData())
   {
