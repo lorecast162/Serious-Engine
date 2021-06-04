@@ -261,7 +261,7 @@ MY_STATIC_ASSERT(size_tSize, sizeof(size_t) == sizeof(void*));
         #endif
     }
 
-    typedef uint64_t __uint64;
+    typedef uint64_t uint64_t;
     #if (!defined __INTEL_COMPILER)
       typedef int64_t __int64;
     #endif
@@ -697,14 +697,14 @@ inline ULONG BYTESWAP32_unsigned(ULONG x)
 #endif
 }
 
-inline __uint64 BYTESWAP64_unsigned(__uint64 x)
+inline uint64_t BYTESWAP64_unsigned(uint64_t x)
 {
 #ifdef __GNUC__ // GCC and clang have a builtin that hopefully does the most efficient thing
   return __builtin_bswap64(x);
 #else
   ULONG l = BYTESWAP32_unsigned((ULONG)(val & 0xFFFFFFFF));
   ULONG h = BYTESWAP32_unsigned((ULONG)((val >> 32) & 0xFFFFFFFF));
-  return (((__uint64)l) << 32) | ((__uint64)h);
+  return (((uint64_t)l) << 32) | ((uint64_t)h);
 #endif
 }
 
@@ -775,20 +775,20 @@ inline __uint64 BYTESWAP64_unsigned(__uint64 x)
         val = *((FLOAT *) &uval);
     }
 
-	static inline void BYTESWAP(__uint64 &val)
+	static inline void BYTESWAP(uint64_t &val)
 	{
 		ULONG l = (ULONG) (val & 0xFFFFFFFF);
 		ULONG h = (ULONG) ((val >> 32) & 0xFFFFFFFF);
         BYTESWAP(l);
         BYTESWAP(h);
-	    val = ( (((__uint64) (l)) << 32) |
-		         ((__uint64) (h)) );
+	    val = ( (((uint64_t) (l)) << 32) |
+		         ((uint64_t) (h)) );
 	}
 
     static inline void BYTESWAP(__int64 &val)
     {
         // !!! FIXME: reinterpret_cast ?
-        __uint64 uval = *((__uint64 *) &val);
+        uint64_t uval = *((uint64_t *) &val);
         BYTESWAP(uval);
         val = *((__int64 *) &uval);
     }
@@ -796,7 +796,7 @@ inline __uint64 BYTESWAP64_unsigned(__uint64 x)
     static inline void BYTESWAP(DOUBLE &val)
     {
         // !!! FIXME: reinterpret_cast ?
-        __uint64 uval = *((__uint64 *) &val);
+        uint64_t uval = *((uint64_t *) &val);
         BYTESWAP(uval);
         val = *((DOUBLE *) &uval);
     }

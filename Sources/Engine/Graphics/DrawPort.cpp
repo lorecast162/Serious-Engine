@@ -222,7 +222,7 @@ ULONG CDrawPort::GetID(void)
   ULONG ulCRC;
   CRC_Start(   ulCRC);
 #ifdef PLATFORM_64BIT
-  CRC_AddLONGLONG( ulCRC, (__uint64)(size_t)dp_Raster);
+  CRC_AddLONGLONG( ulCRC, (uint64_t)(size_t)dp_Raster);
 #else
   CRC_AddLONG( ulCRC, (ULONG)(size_t)dp_Raster);
 #endif
