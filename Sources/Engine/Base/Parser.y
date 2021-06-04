@@ -71,7 +71,7 @@ BOOL MatchTypes(value &v1, value &v2)
 }
 
 void Declaration(
-  ULONG ulQualifiers, INDEX istType, CShellSymbol &ssNew,
+  unsigned long ulQualifiers, INDEX istType, CShellSymbol &ssNew,
   INDEX (*pPreFunc)(INDEX), void (*pPostFunc)(INDEX))
 {
   // if external
@@ -197,7 +197,7 @@ void DoComparison(value &vRes, value &v0, value &v1, int token)
 %union {
   value val;                  // for constants and expressions
   arguments arg;               // for function input arguments
-  ULONG ulFlags;              // for declaration qualifiers
+  unsigned long ulFlags;              // for declaration qualifiers
   INDEX istType;              // for types
   CShellSymbol *pssSymbol;    // for symbols
   struct LValue lvLValue;

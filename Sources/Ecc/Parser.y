@@ -626,7 +626,7 @@ property_type
   | k_FLAGS identifier {
     _strCurrentPropertyPropertyType = "CEntityProperty::EPT_FLAGS"; 
     _strCurrentPropertyEnumType = (SType("&")+$2+"_enum").strString; 
-    _strCurrentPropertyDataType = "ULONG";
+    _strCurrentPropertyDataType = "unsigned long";
   }
   | k_CTString {
     _strCurrentPropertyPropertyType = "CEntityProperty::EPT_STRING"; 
